@@ -1,6 +1,7 @@
 /** Implementation of an edge class (for graphs), could be directed or not.
  */
-public class WEdge implements Comparable{
+//TODO: generics, is <GVertex> needed?
+public class WEdge<GVertex> implements Comparable<GVertex>{
 
     /** Starting vertex of an edge. */
     private GVertex source;
