@@ -1,6 +1,6 @@
 /** Implementation of an edge class (for graphs), could be directed or not.
  */
-public class WEdge {
+public class WEdge implements Comparable{
 
     /** Starting vertex of an edge. */
     private GVertex source;
@@ -48,12 +48,13 @@ public class WEdge {
     public double weight() {
         return this.weight;
     }
-    
+
     /** Create a string representation of the edge.
      *  @return the string as (source,end)
      */
     public String toString() {
-        return "(" + this.source + "," + this.end + ")";
+        //TODO: need decimal formatting?
+        return "(" + this.source + "," + this.end + "," + this.weight + ")";
     }
 
     /** Check if two edges are the same.
@@ -82,6 +83,29 @@ public class WEdge {
         }
         return false;
     }
+
+
+    /** Compares two edges based on weights.
+     *  @return the hashCode
+     */
+    @Override
+    public int compareTo(Object other) {
+        //TODO: what to return when not WEdge?
+        if (other instanceof WEdge) {
+            WEdge e = (WEdge) other;
+            if (this.weight < e.weight) {
+                return -1;
+            } else if (this.weight > e.weight) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        System.out.println("ERROR: " + other.toString() + " is not a WEdge object!");
+        return -2;
+    }
+
+
 
     /** Make a hashCode based on the toString.
      *  @return the hashCode
