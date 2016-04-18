@@ -42,6 +42,13 @@ public class WEdge {
         return this.end;
     }
 
+    /** Get the weight of the edge.
+     *  @return the weight
+     */
+    public double weight() {
+        return this.weight;
+    }
+    
     /** Create a string representation of the edge.
      *  @return the string as (source,end)
      */
