@@ -1,5 +1,6 @@
 /** Implementation of an edge class (for graphs), could be directed or not.
  */
+//git test cupcakes
 public class Edge {
 
     /** Starting vertex of an edge. */
