@@ -18,7 +18,7 @@ public class GVertex<D> implements Comparable<GVertex<D>> {
      *  @param d the data to store in the node
      *  @param id the unique id of the node
      */
-    public GVertex(D d, int id) {
+    public GVertex (D d, int id) {
         this.data = d;
         this.num = id;
     }
