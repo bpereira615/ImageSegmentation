@@ -14,10 +14,10 @@ public class WGraphP4<VT> implements WGraph<VT> {
 	private int nextID;
 
 	/** The list of vertices */
-	private ArrayList<GVertex> vertices;
+	private ArrayList<GVertex<VT>> vertices;
 
 	/** The list of edges for each vertex */
-	private LinkedList<ArrayList<WEdge>> edges;
+	private LinkedList<ArrayList<WEdge<VT>>> edges;
 
 
 	/** Constructor for weighted graph implementation */
@@ -168,14 +168,14 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @param v the vertex to check
      *  @return true if v is an endpoint of edge e
      */
-    public boolean areIncident(WEdge e, GVertex<VT> v) {
+    public boolean areIncident(WEdge<VT> e, GVertex<VT> v) {
     	return false;
     }
 
     /** Return a list of all the edges.  
      *  @return the list
      */
-    public List<WEdge> allEdges() {
+    public List<WEdge<VT>> allEdges() {
     	return null;
     }
 
@@ -183,7 +183,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the list
      */
     public List<GVertex<VT>> allVertices() {
-    	return null;
+    	return vertices;
     }
 
     /** Return a list of all the vertices that can be reached from v,
@@ -200,7 +200,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @param v the starting vertex
      *  @return the incident edges
      */
-    public List<WEdge> incidentEdges(GVertex<VT> v) {
+    public List<WEdge<VT>> incidentEdges(GVertex<VT> v) {
     	return null;
     }
 
@@ -208,7 +208,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  implementing Kruskal's algorithm using fast union/finds.
      *  @return a list of the edges in the minimum spanning forest
      */
-    public List<WEdge> kruskals() {
+    public List<WEdge<VT>> kruskals() {
     	return null;
     }
 }

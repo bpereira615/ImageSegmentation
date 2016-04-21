@@ -26,9 +26,10 @@ public interface PriorityQueue<T extends Comparable<? super T>> {
     
     /** Remove "best" value. This value is the "best" value in the
      *  queue as determined by the comparator for the queue.
+     *  @return the value that was removed
      *  @throws QueueEmptyException If queue is empty.
      */
-    void remove() throws QueueEmptyException;
+    T remove() throws QueueEmptyException;
     
     /** Get the "best" value. This value is the "best" value in the
      *  queue as determined by the comparator for the queue.  [Note,

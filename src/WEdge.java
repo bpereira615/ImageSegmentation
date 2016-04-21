@@ -1,12 +1,12 @@
 /** Implementation of an edge class (for graphs), could be directed or not.
  */
-//TODO: generics, is <GVertex> needed?
-public class WEdge<GVertex> implements Comparable<GVertex>{
+//TODO: generics defined in WGraph interface
+public class WEdge<VT> implements Comparable<VT>{
 
     /** Starting vertex of an edge. */
-    private GVertex source;
+    private GVertex<VT> source;
     /** Ending vertex of an edge. */
-    private GVertex end;
+    private GVertex<VT> end;
     /** Weight of edge */
     private double weight;
 
@@ -14,7 +14,7 @@ public class WEdge<GVertex> implements Comparable<GVertex>{
      *  @param u the start
      *  @param v the end
      */
-    public WEdge(GVertex u, GVertex v, double w) {
+    public WEdge(GVertex<VT> u, GVertex<VT> v, double w) {
         this.source = u;
         this.end = v;
         this.weight = w;
@@ -25,21 +25,21 @@ public class WEdge<GVertex> implements Comparable<GVertex>{
      *  @param v the vertex
      *  @return true if source or end, false otherwise
      */
-    public boolean isIncident(GVertex v) {
+    public boolean isIncident(GVertex<VT> v) {
         return this.source.equals(v) || this.end.equals(v);
     }
 
     /** Get the starting endpoint vertex.
      *  @return the vertex
      */
-    public GVertex source() {
+    public GVertex<VT> source() {
         return this.source;
     }
 
     /** Get the ending endpoint vertex.
      *  @return the vertex
      */
-    public GVertex end() {
+    public GVertex<VT> end() {
         return this.end;
     }
 
