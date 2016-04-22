@@ -224,14 +224,14 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return true if v is an endpoint of edge e
      */
     public boolean areIncident(WEdge<VT> e, GVertex<VT> v) {
-    	return false;
+    	return e.isIncident(v);
     }
 
     /** Return a list of all the edges.  
      *  @return the list
      */
     public List<WEdge<VT>> allEdges() {
-    	return null;
+    	return edges;
     }
 
     /** Return a list of all the vertices.  
