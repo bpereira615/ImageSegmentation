@@ -36,7 +36,7 @@ public interface WGraph<VT> {
      *  @param e the edge to add
      *  @return false if already there, true if added
      */
-    boolean addEdge(WEdge e);
+    boolean addEdge(WEdge<VT> e);
 
     /** Add a weighted edge, may also add vertices. 
      *  @param v the starting vertex
@@ -77,12 +77,12 @@ public interface WGraph<VT> {
      *  @param v the vertex to check
      *  @return true if v is an endpoint of edge e
      */
-    boolean areIncident(WEdge e, GVertex<VT> v);
+    boolean areIncident(WEdge<VT> e, GVertex<VT> v);
 
     /** Return a list of all the edges.  
      *  @return the list
      */
-    List<WEdge> allEdges();
+    List<WEdge<VT>> allEdges();
 
     /** Return a list of all the vertices.  
      *  @return the list
@@ -101,12 +101,12 @@ public interface WGraph<VT> {
      *  @param v the starting vertex
      *  @return the incident edges
      */
-    List<WEdge> incidentEdges(GVertex<VT> v);
+    List<WEdge<VT>> incidentEdges(GVertex<VT> v);
 
     /** Return a list of edges in a minimum spanning forest by
      *  implementing Kruskal's algorithm using fast union/finds.
      *  @return a list of the edges in the minimum spanning forest
      */
-    List<WEdge> kruskals();
+    List<WEdge<VT>> kruskals();
     
 }
