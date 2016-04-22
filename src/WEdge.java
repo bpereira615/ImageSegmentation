@@ -20,7 +20,6 @@ public class WEdge<VT> implements Comparable<VT>{
         this.weight = w;
     }
 
-
     /** Is a vertex incident to this edge.
      *  @param v the vertex
      *  @return true if source or end, false otherwise

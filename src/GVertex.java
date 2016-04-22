@@ -36,6 +36,16 @@ public class GVertex<D> implements Comparable<GVertex<D>> {
         return this.num;
     }
 
+    /**
+     * Change the ID number of a vertex.
+     * @param  id new identification number
+     * @return    true if change was successful.
+     */
+    public boolean setId(int id) {
+        this.num = id;
+        return (this.id() == id);
+    }
+
     /** Get a string representation of the vertex.
      *  @return the string 
      */

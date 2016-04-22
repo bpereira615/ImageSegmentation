@@ -18,7 +18,7 @@ public class Partition {
     public Partition(int num) {
         this.size = num;
         this.parent = new int[num];
-	this.weight = new int[num];
+	    this.weight = new int[num];
         for (int i = 0; i < this.size; i++) {
             this.parent[i] = -1;
             this.weight[i] = 1;

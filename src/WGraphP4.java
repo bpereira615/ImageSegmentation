@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.PriorityQueue;
 
 public class WGraphP4<VT> implements WGraph<VT> {
 
@@ -264,6 +265,30 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return a list of the edges in the minimum spanning forest
      */
     public List<WEdge<VT>> kruskals() {
-    	return null;
+        // first renumber all vertices, pray that objects are linked in edges
+        int i = 0;
+        for (GVertex<VT> curr : this.vertices) {
+            curr.setId(i);
+            i++;
+        }
+        // create a partition
+        Partition P = new Partition(this.vertices.size());
+        // create a priority heap, fill with edges
+        // TODO: add edge weight comparator
+        PriorityQueue<WEdge<VT>> Q = new PriorityQueue(this.edges.size());
+        // fill priority heap with edges
+        for (WEdge<VT> e : this.edges) {
+            Q.add(e);
+        }
+        // create list of output edges == minimum spanning tree
+        ArrayList<WEdge<VT>> mst = new ArrayList();
+        // perform Kruskal's on everything
+        while(!Q.isEmpty()){
+            WEdge<VT> currE = Q.poll();
+            GVertex<VT> v = currE.source();
+            GVertex<VT> u = currE.end();
+            // check if v & u are in same partition
+        }
+    return mst;
     }
 }
