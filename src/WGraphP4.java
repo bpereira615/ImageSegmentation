@@ -1,10 +1,11 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Iterator;
 
 public class WGraphP4<VT> implements WGraph<VT> {
 
-	/** The number of edges in graph */
+	/** The number of unique edges in graph */
 	private int numEdges;
 
 	/** The number of vertices in graph */
@@ -16,8 +17,8 @@ public class WGraphP4<VT> implements WGraph<VT> {
 	/** The list of vertices */
 	private ArrayList<GVertex<VT>> vertices;
 
-	/** The list of edges for each vertex */
-	private LinkedList<ArrayList<WEdge<VT>>> edges;
+	/** The list of unique edges */
+	private ArrayList<WEdge<VT>> edges;
 
 
 	/** Constructor for weighted graph implementation */
@@ -26,7 +27,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 		this.numVerts = 0;
 		this.nextID = 0;
 		this.vertices = new ArrayList<>();
-		this.edges = new LinkedList<>();
+		this.edges = new ArrayList<>();
 	}
 
 	/** Get the number of edges. 
@@ -74,6 +75,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
     		return false;
     	}
     	this.vertices.add(v);
+    	this.numVerts++;
     	return true;
     }
 
@@ -82,7 +84,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return false if already there, true if added
      */
     public boolean addEdge(WEdge e) {
-    	return false;
+    	boolean added = false;
+        added = addEdge(e.source(), e.end(), e.weight());
+        return added;
     }
 
     /** Add a weighted edge, may also add vertices. 
@@ -108,17 +112,20 @@ public class WGraphP4<VT> implements WGraph<VT> {
         // both vertices, so only need to check one
 
         WEdge<VT> add = new WEdge<VT>(v, u, weight);
+        edges.add(add);
 
         // check if edge is already in lists, look in shorter vertex list
         if (this.degree(v) <= this.degree(u)) {
         	if (v.getEdges().contains(add)) {
         		v.addEdge(add);
         		u.addEdge(add);
+        		this.numEdges++;
         	}
         } else {
         	if (u.getEdges().contains(add)) {
         		v.addEdge(add);
         		u.addEdge(add);
+        		this.numEdges++;
         	}
         }
         return false;  // was already there
@@ -130,7 +137,31 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return true if delete, false if wasn't there
      */
     public boolean deleteEdge(GVertex<VT> v, GVertex<VT> u) {
-    	return false;
+
+    	//if either vertex not present, do not look for edge
+    	if (!vertices.contains(v) || !vertices.contains(u)) {
+    		return false;
+    	}
+
+    	// edge will be in both lists, check list of smaller vertex degree
+        if (this.degree(v) <= this.degree(u)) {
+
+        	Iterator<WEdge<VT>> it = v.getEdges().iterator();
+        	WEdge<VT> w;
+ 			while (it.hasNext()) {
+ 				w = it.next();
+ 				//TODO: is this correct/efficient?
+ 				if (w.isIncident(v) && w.isIncident(u)) {
+ 					it.remove();
+ 					return true;
+ 				}
+ 			}
+
+        } else {
+
+        }
+        //edges was not there
+        return false;
     }
 
     /** Return true if there is an edge between v and u. 
