@@ -47,7 +47,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the id
      */
     public int nextID() {
-    	return nextID;
+    	return nextID++;
     }
 
     /** Create and add a vertex to the graph.
@@ -56,14 +56,10 @@ public class WGraphP4<VT> implements WGraph<VT> {
      */
     public boolean addVertex(VT d) {
     	//TODO: when would this fail?
-    	try {
-    		vertices.add(new GVertex<VT>(d, nextID()));
-    		this.numVerts++;
-    		this.nextID++;
-    		return true;
-    	} catch (Exception e) {
-    		return false;
-    	}
+		vertices.add(new GVertex<VT>(d, nextID()));
+		this.numVerts++;
+		return true;
+
     }
 
     /** Add a vertex if it doesn't exist yet. 
@@ -74,10 +70,10 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	//TODO: what happens if v has same ID as already present vertex?
 
     	//check if the vertex is there
-    	if (vertices.get(v.id()) == null) {
+    	if (this.vertices.contains(v)) {
     		return false;
     	}
-
+    	this.vertices.add(v);
     	return true;
     }
 
@@ -96,7 +92,36 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return false if already there, true if added
      */
     public boolean addEdge(GVertex<VT> v, GVertex<VT> u, double weight) {
-    	return false;
+    	boolean success = true;
+        if (!this.vertices.contains(v)) {
+            success = this.addVertex(v);
+        }
+        if (success && !this.vertices.contains(u)) {
+            success = this.addVertex(u);
+        }
+        if (!success) {
+        	//when one of vertices cannot be added, edge cannot be added
+            return false;
+        }
+
+        // put the edge in, if not already there, will be added to lists of
+        // both vertices, so only need to check one
+
+        WEdge<VT> add = new WEdge<VT>(v, u, weight);
+
+        // check if edge is already in lists, look in shorter vertex list
+        if (this.degree(v) <= this.degree(u)) {
+        	if (v.getEdges().contains(add)) {
+        		v.addEdge(add);
+        		u.addEdge(add);
+        	}
+        } else {
+        	if (u.getEdges().contains(add)) {
+        		v.addEdge(add);
+        		u.addEdge(add);
+        	}
+        }
+        return false;  // was already there
     }
 
     /** Remove an edge if there.  
@@ -119,13 +144,13 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	//search the list of edges of vertex with lesser degree
 
     	//if either vertex not present, do not check
-    	if (vertices.get(v.id()) == null || vertices.get(u.id()) == null) {
+    	if (!vertices.contains(v) || !vertices.contains(u)) {
     		return false;
     	}
 
     	//v has lesser degree
-    	if (degree(v) <= degree(u)) {
-    		for (WEdge w : edges.get(v.id())) {
+    	if (this.degree(v) <= this.degree(u)) {
+    		for (WEdge<VT> w : v.getEdges()) {
     			if (w.isIncident(u)) {
     				//incident edge found
     				return true;
@@ -134,7 +159,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
     		//incident edge not found
     		return false;
     	} else {
-    		for (WEdge w : edges.get(u.id())) {
+    		for (WEdge<VT> w : u.getEdges()) {
     			if (w.isIncident(v)) {
     				//incident edge found
     				return true;
@@ -159,8 +184,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      */
     public int degree(GVertex<VT> v) {
     	//degree is defined as number of edges on given vertex
-    	int verId = v.id();
-    	return edges.get(verId).size();
+    	return v.getEdges().size();
     }
 
     /** See if an edge and vertex are incident to each other.
