@@ -146,23 +146,25 @@ public class WGraphP4<VT> implements WGraph<VT> {
         // both vertices, so only need to check one
 
         WEdge<VT> add = new WEdge<VT>(v, u, weight);
-        edges.add(add);
+        
 
         // check if edge is already in lists, look in shorter vertex list
         if (this.degree(v) <= this.degree(u)) {
         	if (v.getEdges().contains(add)) {
-        		v.addEdge(add);
-        		u.addEdge(add);
-        		this.numEdges++;
+        		// edge already exists
+        		return false;
         	}
         } else {
         	if (u.getEdges().contains(add)) {
-        		v.addEdge(add);
-        		u.addEdge(add);
-        		this.numEdges++;
+        		//edge already exists
+        		return false;
         	}
         }
-        return false;  // was already there
+        edges.add(add);
+        v.addEdge(add);
+        u.addEdge(add);
+        this.numEdges++;
+        return true;
     }
 
     /** Remove an edge if there.  
