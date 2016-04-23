@@ -242,7 +242,19 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the neighboring vertices
      */
     public List<GVertex<VT>> neighbors(GVertex<VT> v) {
-    	return null;
+    	HashSet<GVertex<VT>> neighbors = new HashSet<>();
+
+    	//add all vertices to set, then remove original vertex
+    	for (WEdge<VT> edge : v.getEdges()) {
+    		neighbors.add(edge.source());
+    		neighbors.add(edge.end());
+    	}
+
+    	neighbors.remove(v);
+
+    	LinkedList<GVertex<VT>> list = new LinkedList<>();
+    	list.addAll(neighbors);
+    	return list;
     }
 
     /** Return the number of edges incident to v.  

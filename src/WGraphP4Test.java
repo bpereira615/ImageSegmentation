@@ -316,13 +316,93 @@ public class WGraphP4Test {
 	}
 
 
-/*
+
 //--------------------  areAdjacent() --------------------
+
+	@Test
+	public void areAdjacentNew() {
+		GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+		double weight = (double) 1;
+
+		WEdge<Integer> wInt = new WEdge<>(gInt1, gInt2, weight);
+		WEdge<String> wStr = new WEdge<>(gStr1, gStr2, weight);
+
+
+		//edge not inserted, return false
+        assertFalse(intGraph.areAdjacent(gInt1, gInt2));
+        assertFalse(strGraph.areAdjacent(gStr1, gStr2));
+
+		intGraph.addEdge(wInt);
+        strGraph.addEdge(wStr);
+
+        assertTrue(intGraph.areAdjacent(gInt1, gInt2));
+        assertTrue(strGraph.areAdjacent(gStr1, gStr2));
+	}
+
+	@Test
+	public void areAdjacentRemoved() {
+		GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+		double weight = (double) 1;
+
+		WEdge<Integer> wInt = new WEdge<>(gInt1, gInt2, weight);
+		WEdge<String> wStr = new WEdge<>(gStr1, gStr2, weight);
+
+		intGraph.addEdge(wInt);
+        strGraph.addEdge(wStr);
+
+        assertTrue(intGraph.areAdjacent(gInt1, gInt2));
+        assertTrue(strGraph.areAdjacent(gStr1, gStr2));
+
+
+        intGraph.deleteEdge(gInt1, gInt2);
+        strGraph.deleteEdge(gStr1, gStr2);
+
+       	//edge not inserted, return false
+        assertFalse(intGraph.areAdjacent(gInt1, gInt2));
+        assertFalse(strGraph.areAdjacent(gStr1, gStr2));
+
+	}
+
 
 
 //--------------------  neighbors() --------------------
+	@Test
+	public void neighborsAddEdge() {
+		GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+		double weight = (double) 1;
 
+		WEdge<Integer> wInt = new WEdge<>(gInt1, gInt2, weight);
+		WEdge<String> wStr = new WEdge<>(gStr1, gStr2, weight);
 
+		assertTrue(intGraph.addEdge(wInt));
+        assertTrue(strGraph.addEdge(wStr));
+
+        GVertex<Integer> gInt3 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr3 = new GVertex<>("three", strGraph.nextID());
+        GVertex<Integer> gInt4 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr4 = new GVertex<>("three", strGraph.nextID());
+
+		WEdge<Integer> wInt2 = new WEdge<>(gInt3, gInt4, weight);
+		WEdge<String> wStr2 = new WEdge<>(gStr3, gStr4, weight);
+
+		assertTrue(intGraph.addEdge(wInt2));
+        assertTrue(strGraph.addEdge(wStr2));
+
+        //edge already added, should return false
+        assertFalse(intGraph.addEdge(wInt));
+        assertFalse(strGraph.addEdge(wStr));
+	}
+
+/*
 //--------------------  degree() --------------------
 
 
