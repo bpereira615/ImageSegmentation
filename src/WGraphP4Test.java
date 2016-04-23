@@ -52,13 +52,14 @@ public class WGraphP4Test {
     }
 
 
-//--------------------  hasVertex() --------------------
+//--------------------  hasData() --------------------
+
     @Test
     public void hasVertexNew() {
     	GVertex<Integer> gInt = new GVertex<>((Integer) 1, 1);
         GVertex<String> gStr = new GVertex<>("one", 1);
-    	assertFalse(intGraph.hasVertex(gInt));
-    	assertFalse(strGraph.hasVertex(gStr));
+    	assertFalse(intGraph.hasData((Integer) 1));
+    	assertFalse(strGraph.hasData("one"));
     }
 
     @Test
@@ -67,21 +68,22 @@ public class WGraphP4Test {
         GVertex<String> gStr = new GVertex<>("one", strGraph.nextID());
         intGraph.addVertex(gInt);
         strGraph.addVertex(gStr);
-    	assertTrue(intGraph.hasVertex(gInt));
-    	assertTrue(strGraph.hasVertex(gStr));
+    	assertTrue(intGraph.hasData((Integer) 1));
+    	assertTrue(strGraph.hasData("one"));
 
     	intGraph.addVertex((Integer) 2);
     	strGraph.addVertex("two");
-    	assertTrue(intGraph.hasVertex(gInt));
-    	assertTrue(strGraph.hasVertex(gStr));
+    	assertTrue(intGraph.hasData((Integer) 1));
+    	assertTrue(strGraph.hasData("one"));
 
     	gInt = new GVertex<>((Integer) 2, 1);
         gStr = new GVertex<>("two", 1);
-    	assertTrue(intGraph.hasVertex(gInt));
-    	assertTrue(strGraph.hasVertex(gStr));
+    	assertTrue(intGraph.hasData((Integer) 2));
+    	assertTrue(strGraph.hasData("two"));
+
+    	assertFalse(intGraph.hasData((Integer) 3));
+    	assertFalse(strGraph.hasData("three"));
     }
-
-
 
 
 
@@ -129,7 +131,6 @@ public class WGraphP4Test {
 
     @Test
     public void numVertsRemove() {
-    	//TODO: no removeVertex method?
     	//check after removing vertex
     	
     	intGraph.addVertex((Integer) 0);
@@ -169,32 +170,45 @@ public class WGraphP4Test {
     public void addVertexNew() {
     	assertTrue(intGraph.addVertex((Integer) 0));
     	assertTrue(strGraph.addVertex("zro"));
+    	assertTrue(intGraph.hasData((Integer) 0));
+    	assertTrue(strGraph.hasData("zro"));
+
     }
 
-    @Test
-    public void addVertexContained() {
-    	
-    }
 
-/*
 
 //--------------------  addVertex(GVertex<VT> v) --------------------
     @Test
-    public void addVertexNew() {
-    	assertTrue(intGraph.addVertex((Integer) 0));
-    	assertTrue(strGraph.addVertex("zro"));
+    public void addVertexObjectNew() {
+    	GVertex<Integer> gInt = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr = new GVertex<>("one", strGraph.nextID());
+        assertTrue(intGraph.addVertex(gInt));
+        assertTrue(strGraph.addVertex(gStr));
+        assertTrue(intGraph.hasData((Integer) 1));
+    	assertTrue(strGraph.hasData("one"));
+
     }
 
     @Test
-    public void addVertexContained() {
-    	assertTrue(intGraph.addVertex((Integer) 0));
-    	assertTrue(strGraph.addVertex("zro"));
-    	assertFalse(intGraph.addVertex((Integer) 0));
-    	assertFalse(strGraph.addVertex("zro"));
+    public void addVertexObjectContained() {
+    	GVertex<Integer> gInt = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr = new GVertex<>("one", strGraph.nextID());
+
+    	assertTrue(intGraph.addVertex(gInt));
+    	assertTrue(strGraph.addVertex(gStr));
+
+    	//vertices with the same ID as other vertices already contained cannot be added
+    	assertFalse(intGraph.addVertex(gInt));
+    	assertFalse(strGraph.addVertex(gStr));
     }
+
+
+
+
 //--------------------  addEdge(WEdge e) --------------------
+	
 
-
+/*
 //--------------------  addEdge(GVertex<VT> v, GVertex<VT> u, double weight) --------------------
 
 

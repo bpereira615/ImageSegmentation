@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.HashSet;
 
 public class WGraphP4<VT> implements WGraph<VT> {
 
@@ -15,7 +16,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 	private int nextID;
 
 	/** The list of vertices */
-	private ArrayList<GVertex<VT>> vertices;
+	private HashSet<GVertex<VT>> vertices;
 
 	/** The list of unique edges */
 	private ArrayList<WEdge<VT>> edges;
@@ -26,7 +27,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 		this.numEdges = 0;
 		this.numVerts = 0;
 		this.nextID = 0;
-		this.vertices = new ArrayList<>();
+		this.vertices = new HashSet<>();
 		this.edges = new ArrayList<>();
 	}
 
@@ -51,31 +52,17 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	return nextID++;
     }
 
-    /** Checks if vertex is in graph based on ID
-     *  @return true if contained, false if not
+
+    /** Check vertices for given data.
+     *  @param d data to be searched for
+     *  @return true if data contained, false if not
      */
-    public boolean hasVertex(GVertex<VT> v) {
-
-    	//TODO: can ID be seen as index of vertices array?
-
-    	int vID = v.id();
-    	int currID;
-
-    	//IDs are not necessarily sequential, need to search for all
-    	for (GVertex<VT> curr : this.vertices) {
-    		currID = curr.id();
-
-    		if (currID == vID) {
+    public boolean hasData(VT d) {
+    	for (GVertex<VT> v : vertices) {
+    		if (v.getData().equals(d)) {
     			return true;
     		}
-
-    		//ID's are sequential, if current ID is greater then not contained
- 			if (currID > vID) {
- 				return false;
- 			}
     	}
-
-    	//not contained
     	return false;
     }
 
@@ -84,9 +71,12 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return true if successful, false otherwise
      */
     public boolean addVertex(VT d) {
+
+    	//TODO: what sorts of tests should this have?
+
     	GVertex<VT> add = new GVertex<VT>(d, nextID());
     	//check if the vertex is there
-    	if (this.hasVertex(add)) {
+    	if (this.vertices.contains(add)) {
     		return false;
     	}
 
@@ -282,7 +272,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the list
      */
     public List<GVertex<VT>> allVertices() {
-    	return vertices;
+    	LinkedList<GVertex<VT>> list = new LinkedList<>();
+    	list.addAll(vertices);
+    	return list;
     }
 
     /** Return a list of all the vertices that can be reached from v,

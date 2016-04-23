@@ -89,7 +89,7 @@ public class GVertex<D> implements Comparable<GVertex<D>> {
     /** Add edge to list of incident edges for this vertex
      *  @param e the edge to be added
      */
-    public boolean removeEdge(WEdge<D> e) {
+    public boolean removeEdgey(WEdge<D> e) {
         //TODO: when should this fail?
         edges.add(e);
         return true;
