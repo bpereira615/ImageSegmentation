@@ -51,13 +51,46 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	return nextID++;
     }
 
+    /** Checks if vertex is in graph based on ID
+     *  @return true if contained, false if not
+     */
+    public boolean hasVertex(GVertex<VT> v) {
+
+    	//TODO: can ID be seen as index of vertices array?
+
+    	int vID = v.id();
+    	int currID;
+
+    	//IDs are not necessarily sequential, need to search for all
+    	for (GVertex<VT> curr : this.vertices) {
+    		currID = curr.id();
+
+    		if (currID == vID) {
+    			return true;
+    		}
+
+    		//ID's are sequential, if current ID is greater then not contained
+ 			if (currID > vID) {
+ 				return false;
+ 			}
+    	}
+
+    	//not contained
+    	return false;
+    }
+
     /** Create and add a vertex to the graph.
      *  @param d the data to store in the vertex
      *  @return true if successful, false otherwise
      */
     public boolean addVertex(VT d) {
-    	//TODO: when would this fail?
-		vertices.add(new GVertex<VT>(d, nextID()));
+    	GVertex<VT> add = new GVertex<VT>(d, nextID());
+    	//check if the vertex is there
+    	if (this.hasVertex(add)) {
+    		return false;
+    	}
+
+		vertices.add(add);
 		this.numVerts++;
 		return true;
 
@@ -78,6 +111,17 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	this.numVerts++;
     	return true;
     }
+
+
+
+
+    //TODO: no deleteVertex method?
+
+
+
+
+
+
 
     /** Add a weighted edge, may also add the incident vertices. 
      *  @param e the edge to add

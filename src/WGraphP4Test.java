@@ -52,6 +52,39 @@ public class WGraphP4Test {
     }
 
 
+//--------------------  hasVertex() --------------------
+    @Test
+    public void hasVertexNew() {
+    	GVertex<Integer> gInt = new GVertex<>((Integer) 1, 1);
+        GVertex<String> gStr = new GVertex<>("one", 1);
+    	assertFalse(intGraph.hasVertex(gInt));
+    	assertFalse(strGraph.hasVertex(gStr));
+    }
+
+    @Test
+    public void hasVertexAdd() {
+    	GVertex<Integer> gInt = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr = new GVertex<>("one", strGraph.nextID());
+        intGraph.addVertex(gInt);
+        strGraph.addVertex(gStr);
+    	assertTrue(intGraph.hasVertex(gInt));
+    	assertTrue(strGraph.hasVertex(gStr));
+
+    	intGraph.addVertex((Integer) 2);
+    	strGraph.addVertex("two");
+    	assertTrue(intGraph.hasVertex(gInt));
+    	assertTrue(strGraph.hasVertex(gStr));
+
+    	gInt = new GVertex<>((Integer) 2, 1);
+        gStr = new GVertex<>("two", 1);
+    	assertTrue(intGraph.hasVertex(gInt));
+    	assertTrue(strGraph.hasVertex(gStr));
+    }
+
+
+
+
+
 
 
 
@@ -70,11 +103,40 @@ public class WGraphP4Test {
     	strGraph.addVertex("zro");
     	assertEquals(1, intGraph.numVerts());
         assertEquals(1, strGraph.numVerts());
+
+        GVertex<Integer> gInt = new GVertex<>((Integer) 1, 1);
+        GVertex<String> gStr = new GVertex<>("one", 1);
+        intGraph.addVertex(gInt);
+        strGraph.addVertex(gStr);
+        assertEquals(2, intGraph.numVerts());
+        assertEquals(2, strGraph.numVerts());
+    }
+
+    @Test
+    public void numVertsAddContained() {
+        GVertex<Integer> gInt = new GVertex<>((Integer) 1, 1);
+        GVertex<String> gStr = new GVertex<>("one", 1);
+        intGraph.addVertex(gInt);
+        strGraph.addVertex(gStr);
+    	assertEquals(1, intGraph.numVerts());
+        assertEquals(1, strGraph.numVerts());
+
+        intGraph.addVertex(gInt);
+        strGraph.addVertex(gStr);
+    	assertEquals(1, intGraph.numVerts());
+        assertEquals(1, strGraph.numVerts());
     }
 
     @Test
     public void numVertsRemove() {
+    	//TODO: no removeVertex method?
     	//check after removing vertex
+    	
+    	intGraph.addVertex((Integer) 0);
+    	strGraph.addVertex("zro");
+    	assertEquals(1, intGraph.numVerts());
+        assertEquals(1, strGraph.numVerts());
+        
     }
 
 
@@ -90,13 +152,15 @@ public class WGraphP4Test {
 
     @Test
     public void nextIDAdd() {
-    	//check ID after adding vertex
-    }
+	   	//check ID after adding vertex
+	    GVertex<Integer> gInt = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr = new GVertex<>("one", strGraph.nextID());
+        intGraph.addVertex(gInt);
+        strGraph.addVertex(gStr);
+        assertEquals(1, intGraph.nextID());
+        assertEquals(1, strGraph.nextID());
+    	}
 
-    @Test
-    public void nextIDRemove() {
-    	//check ID after removing vertex
-    }
 
 
 
@@ -107,10 +171,27 @@ public class WGraphP4Test {
     	assertTrue(strGraph.addVertex("zro"));
     }
 
+    @Test
+    public void addVertexContained() {
+    	
+    }
 
+/*
 
 //--------------------  addVertex(GVertex<VT> v) --------------------
+    @Test
+    public void addVertexNew() {
+    	assertTrue(intGraph.addVertex((Integer) 0));
+    	assertTrue(strGraph.addVertex("zro"));
+    }
 
+    @Test
+    public void addVertexContained() {
+    	assertTrue(intGraph.addVertex((Integer) 0));
+    	assertTrue(strGraph.addVertex("zro"));
+    	assertFalse(intGraph.addVertex((Integer) 0));
+    	assertFalse(strGraph.addVertex("zro"));
+    }
 //--------------------  addEdge(WEdge e) --------------------
 
 
@@ -147,4 +228,9 @@ public class WGraphP4Test {
 
 //--------------------  kruskals() --------------------
 
+
+
+
+
+*/
 }
