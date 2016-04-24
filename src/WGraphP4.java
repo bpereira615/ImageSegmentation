@@ -201,7 +201,6 @@ public class WGraphP4<VT> implements WGraph<VT> {
         		break;
         	}
         }
-
         for (WEdge<VT> e : u.getEdges()) {
         	if (e.isIncident(v)) {
         		v.removeEdge(e);
@@ -229,23 +228,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
     	//v has lesser degree
     	if (this.degree(v) <= this.degree(u)) {
-    		for (WEdge<VT> w : v.getEdges()) {
-    			if (w.isIncident(u)) {
-    				//incident edge found
-    				return true;
-    			}
-    		}
-    		//incident edge not found
-    		return false;
+    		return v.getNeighbors().contains(u);
     	} else {
-    		for (WEdge<VT> w : u.getEdges()) {
-    			if (w.isIncident(v)) {
-    				//incident edge found
-    				return true;
-    			}
-    		}
-    		//incident edge not found
-    		return false;
+    		return u.getNeighbors().contains(v);
     	}
     }
 
