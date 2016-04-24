@@ -49,7 +49,7 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
      *  @return the string 
      */
     public String toString() {
-        return this.num + "";
+        return "(" + this.data + " - ID:" + this.num + ")";
     }
 
     /** Check if two vertices are the same based on ID.

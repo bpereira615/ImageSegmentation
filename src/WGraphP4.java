@@ -300,11 +300,15 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
     	while (!stack.isEmpty()) {
     		GVertex<VT> curr = stack.pop();
+    		System.out.println("current vertex: " + curr);
     		if (!curr.isVisited()) {
     			curr.markVisited();
-    			result.add(v);
+    			result.add(curr);
     			for (GVertex<VT> ver : curr.getNeighbors()){
-    				stack.push(ver);
+    				if (!ver.isVisited()) {
+    					stack.push(ver);
+    				}
+    				
     			}
     		}
 

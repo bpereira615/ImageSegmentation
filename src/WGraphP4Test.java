@@ -620,7 +620,7 @@ public class WGraphP4Test {
 		intGraph.addEdge(wInt5);
 		strGraph.addEdge(wStr5);
 
-		//System.out.println(intGraph.depthFirst(gInt1));
+		System.out.println(intGraph.depthFirst(gInt1));
 	}
 
 //--------------------  incidentEdges() --------------------
