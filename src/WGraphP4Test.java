@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.LinkedList;
+
 /** JUnit tests for the MaxPriorityQueue interface.
  */
 public class WGraphP4Test {
@@ -32,6 +34,10 @@ public class WGraphP4Test {
 		intGraph = new WGraphP4<>();
     	strGraph = new WGraphP4<>();
     }
+
+
+
+
 
 
 //--------------------  numEdges() --------------------
@@ -391,16 +397,102 @@ public class WGraphP4Test {
         GVertex<Integer> gInt4 = new GVertex<>((Integer) 3, intGraph.nextID());
         GVertex<String> gStr4 = new GVertex<>("three", strGraph.nextID());
 
-		WEdge<Integer> wInt2 = new WEdge<>(gInt3, gInt4, weight);
-		WEdge<String> wStr2 = new WEdge<>(gStr3, gStr4, weight);
+
+        WEdge<Integer> wInt2 = new WEdge<>(gInt1, gInt3, weight);
+		WEdge<String> wStr2 = new WEdge<>(gStr1, gStr3, weight);
 
 		assertTrue(intGraph.addEdge(wInt2));
         assertTrue(strGraph.addEdge(wStr2));
 
-        //edge already added, should return false
-        assertFalse(intGraph.addEdge(wInt));
-        assertFalse(strGraph.addEdge(wStr));
+        WEdge<Integer> wInt3 = new WEdge<>(gInt1, gInt4, weight);
+		WEdge<String> wStr3 = new WEdge<>(gStr1, gStr4, weight);
+
+		assertTrue(intGraph.addEdge(wInt3));
+        assertTrue(strGraph.addEdge(wStr3));
+
+        LinkedList<GVertex<Integer>> list = new LinkedList<>();
+        list.add(gInt2);
+        list.add(gInt3);
+        list.add(gInt4);
+
+        assertEquals(list, intGraph.neighbors(gInt1));
 	}
+
+
+
+
+
+
+
+
+	
+
+	@Test
+	public void neighborsRemoveEdge() {
+		GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+		double weight = (double) 1;
+
+		WEdge<Integer> wInt = new WEdge<>(gInt1, gInt2, weight);
+		WEdge<String> wStr = new WEdge<>(gStr1, gStr2, weight);
+
+		assertTrue(intGraph.addEdge(wInt));
+        assertTrue(strGraph.addEdge(wStr));
+
+        GVertex<Integer> gInt3 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr3 = new GVertex<>("three", strGraph.nextID());
+        GVertex<Integer> gInt4 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr4 = new GVertex<>("three", strGraph.nextID());
+
+
+        WEdge<Integer> wInt2 = new WEdge<>(gInt1, gInt3, weight);
+		WEdge<String> wStr2 = new WEdge<>(gStr1, gStr3, weight);
+
+		assertTrue(intGraph.addEdge(wInt2));
+        assertTrue(strGraph.addEdge(wStr2));
+
+        WEdge<Integer> wInt3 = new WEdge<>(gInt1, gInt4, weight);
+		WEdge<String> wStr3 = new WEdge<>(gStr1, gStr4, weight);
+
+		assertTrue(intGraph.addEdge(wInt3));
+        assertTrue(strGraph.addEdge(wStr3));
+
+        LinkedList<GVertex<Integer>> iList = new LinkedList<>();
+        LinkedList<GVertex<String>> sList = new LinkedList<>();
+        iList.add(gInt2);
+        iList.add(gInt3);
+        iList.add(gInt4);
+        sList.add(gStr2);
+        sList.add(gStr3);
+        sList.add(gStr4);
+
+
+        assertEquals(iList, intGraph.neighbors(gInt1));
+        assertEquals(sList, strGraph.neighbors(gStr1));
+
+        //delete ende and check neighbors
+       	assertTrue(intGraph.deleteEdge(gInt1, gInt4));
+        assertTrue(strGraph.deleteEdge(gStr1, gStr4));
+
+        iList.remove(gInt4);
+        sList.remove(gStr4);
+
+        assertEquals(iList, intGraph.neighbors(gInt1));
+        assertEquals(sList, strGraph.neighbors(gStr1));
+
+
+	}
+
+
+
+
+
+
+
+
+
 
 /*
 //--------------------  degree() --------------------

@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.HashSet;
 
 public class WGraphP4<VT> implements WGraph<VT> {
@@ -179,25 +179,37 @@ public class WGraphP4<VT> implements WGraph<VT> {
     		return false;
     	}
 
+
     	// edge will be in both lists, check list of smaller vertex degree
         if (this.degree(v) <= this.degree(u)) {
-
-        	Iterator<WEdge<VT>> it = v.getEdges().iterator();
-        	WEdge<VT> w;
- 			while (it.hasNext()) {
- 				w = it.next();
- 				//TODO: is this correct/efficient?
- 				if (w.isIncident(v) && w.isIncident(u)) {
- 					it.remove();
- 					return true;
- 				}
- 			}
-
+        	//if the vertices are not neighbors, do not try to remove
+        	if (!v.getNeighbors().contains(u)) {
+        		return false;
+        	}
         } else {
-
+        	//if the vertices are not neighbors, do not try to remove
+        	if (!u.getNeighbors().contains(v)) {
+        		return false;
+        	}
         }
-        //edges was not there
-        return false;
+
+
+        //remove edge from both lists
+        for (WEdge<VT> e : v.getEdges()) {
+        	if (e.isIncident(u)) {
+        		v.removeEdge(e);
+        		break;
+        	}
+        }
+
+        for (WEdge<VT> e : u.getEdges()) {
+        	if (e.isIncident(v)) {
+        		v.removeEdge(e);
+        		break;
+        	}
+        }
+        return true;
+        
     }
 
     /** Return true if there is an edge between v and u. 
@@ -242,6 +254,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the neighboring vertices
      */
     public List<GVertex<VT>> neighbors(GVertex<VT> v) {
+    	/*
     	HashSet<GVertex<VT>> neighbors = new HashSet<>();
 
     	//add all vertices to set, then remove original vertex
@@ -251,9 +264,10 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	}
 
     	neighbors.remove(v);
-
+		*/
     	LinkedList<GVertex<VT>> list = new LinkedList<>();
-    	list.addAll(neighbors);
+    	list.addAll(v.getNeighbors());
+    	
     	return list;
     }
 
@@ -306,7 +320,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the incident edges
      */
     public List<WEdge<VT>> incidentEdges(GVertex<VT> v) {
-    	return null;
+    	return v.getEdges();
     }
 
     /** Return a list of edges in a minimum spanning forest by

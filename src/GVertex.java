@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.HashSet;
 
 /** 
  * Class to represent a vertex (in a graph).
@@ -6,7 +7,7 @@ import java.util.LinkedList;
  *
  */
 
-public class GVertex<D> implements Comparable<GVertex<D>> {
+public class GVertex<VT> implements Comparable<GVertex<VT>> {
 
     /* Note that the nextID variable had to be moved to the graph class. */
 
@@ -14,19 +15,23 @@ public class GVertex<D> implements Comparable<GVertex<D>> {
     private int num;
 
     /** Data stored in the vertex. */
-    private D data;
+    private VT data;
 
     /** List of edges incident to this vertex */
-    private LinkedList<WEdge<D>> edges;
+    private LinkedList<WEdge<VT>> edges;
+
+    /** Set of vertices that are neighbors to this vertex */
+    private HashSet<GVertex<VT>> neighbors;
 
     /** Create a new vertex.
      *  @param d the data to store in the node
      *  @param id the unique id of the node
      */
-    public GVertex (D d, int id) {
+    public GVertex (VT d, int id) {
         this.data = d;
         this.num = id;
         this.edges = new LinkedList<>();
+        this.neighbors = new HashSet<>();
     }
 
     /** Get the id of this vertex.
@@ -66,39 +71,56 @@ public class GVertex<D> implements Comparable<GVertex<D>> {
      *  @param other the vertex to compare to this
      *  @return negative if this < other, 0 if equal, positive if this > other
      */
-    public int compareTo(GVertex<D> other) {
+    public int compareTo(GVertex<VT> other) {
         return this.num - other.id();
     }
 
     /** Return the value of data stored.
      *  @return negative if this < other, 0 if equal, positive if this > other
      */
-    public D getData() {
+    public VT getData() {
         return this.data;
     }
 
     /** Add edge to list of incident edges for this vertex
      *  @param e the edge to be added
      */
-    public boolean addEdge(WEdge<D> e) {
+    public boolean addEdge(WEdge<VT> e) {
         //TODO: when should this fail?
         edges.add(e);
+        if (e.source().id() == this.num) {
+            neighbors.add(e.end());
+        } else {
+            neighbors.add(e.source());
+        }
         return true;
     }
 
     /** Add edge to list of incident edges for this vertex
      *  @param e the edge to be added
      */
-    public boolean removeEdgey(WEdge<D> e) {
+    public boolean removeEdge(WEdge<VT> e) {
         //TODO: when should this fail?
-        edges.add(e);
+        edges.remove(e);
+        if (e.source().id() == this.num) {
+            neighbors.remove(e.end());
+        } else {
+            neighbors.remove(e.source());
+        }
         return true;
     }
 
     /** Return list of edges
      *  @return list of edges
      */
-    public LinkedList<WEdge<D>> getEdges() {
+    public LinkedList<WEdge<VT>> getEdges() {
         return this.edges;
+    }
+
+    /** Return set of neighbors
+     *  @return set of neighbors
+     */
+    public HashSet<GVertex<VT>> getNeighbors() {
+        return this.neighbors;
     }
 }
