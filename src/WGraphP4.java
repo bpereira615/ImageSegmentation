@@ -345,7 +345,12 @@ public class WGraphP4<VT> implements WGraph<VT> {
         // empty graph case
         if (this.numVerts() == 0) {
             return null;
+        } 
+        // unconnected graph case
+        if (this.numEdges() == 0) {
+            return null;
         }
+
         // first renumber all vertices, pray that objects are linked in edges
         int i = 0;
         for (GVertex<VT> curr : this.vertices) {
