@@ -342,13 +342,15 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return a list of the edges in the minimum spanning forest
      */
     public List<WEdge<VT>> kruskals() {
+        // create list of output edges == minimum spanning tree
+        ArrayList<WEdge<VT>> mst = new ArrayList<WEdge<VT>>();
         // empty graph case
         if (this.numVerts() == 0) {
-            return null;
+            return mst;
         } 
         // unconnected graph case
         if (this.numEdges() == 0) {
-            return null;
+            return mst;
         }
 
         // first renumber all vertices, pray that objects are linked in edges
@@ -366,8 +368,6 @@ public class WGraphP4<VT> implements WGraph<VT> {
         for (WEdge<VT> e : this.edges) {
             Q.add(e);
         }
-        // create list of output edges == minimum spanning tree
-        ArrayList<WEdge<VT>> mst = new ArrayList<WEdge<VT>>();
         // perform Kruskal's on everything
         while(!Q.isEmpty()){
             WEdge<VT> currE = Q.poll();
