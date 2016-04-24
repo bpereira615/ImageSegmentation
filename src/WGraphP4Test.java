@@ -494,9 +494,70 @@ public class WGraphP4Test {
 
 
 
-/*
+
 //--------------------  degree() --------------------
 
+	@Test
+	public void degreeNew() {
+		GVertex<Integer> gInt = new GVertex<>((Integer) 1, 1);
+        GVertex<String> gStr = new GVertex<>("one", 1);
+
+        intGraph.addVertex(gInt);
+        strGraph.addVertex(gStr);
+
+        assertEquals(0, intGraph.degree(gInt));
+        assertEquals(0, strGraph.degree(gStr));
+	}
+
+	@Test
+	public void degreeAdd() {
+		GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+		double weight = (double) 1;
+
+		WEdge<Integer> wInt1 = new WEdge<>(gInt1, gInt2, weight);
+		WEdge<String> wStr1 = new WEdge<>(gStr1, gStr2, weight);
+
+		int i = 0;
+
+		assertEquals(i, intGraph.degree(gInt1));
+        assertEquals(i, strGraph.degree(gStr1));
+
+
+		assertTrue(intGraph.addEdge(wInt1));
+        assertTrue(strGraph.addEdge(wStr1));
+        i++;
+
+        assertEquals(i, intGraph.degree(gInt1));
+        assertEquals(i, strGraph.degree(gStr1));
+
+        GVertex<Integer> gInt3 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr3 = new GVertex<>("three", strGraph.nextID());
+        GVertex<Integer> gInt4 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr4 = new GVertex<>("three", strGraph.nextID());
+
+		WEdge<Integer> wInt2 = new WEdge<>(gInt1, gInt3, weight);
+		WEdge<String> wStr2 = new WEdge<>(gStr1, gStr3, weight);
+
+		WEdge<Integer> wInt3 = new WEdge<>(gInt1, gInt4, weight);
+		WEdge<String> wStr3 = new WEdge<>(gStr1, gStr4, weight);
+
+		assertTrue(intGraph.addEdge(wInt2));
+        assertTrue(strGraph.addEdge(wStr2));
+        i++;
+
+        assertTrue(intGraph.addEdge(wInt3));
+        assertTrue(strGraph.addEdge(wStr3));
+        i++;
+
+        assertEquals(i, intGraph.degree(gInt1));
+        assertEquals(i, strGraph.degree(gStr1));
+
+
+
+	}
 
 //--------------------  areIncident() --------------------
 
@@ -510,6 +571,57 @@ public class WGraphP4Test {
 
 //--------------------  depthFirst() --------------------
 
+@Test
+	public void depthFirst() {
+		GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+		double weight = (double) 1;
+
+		WEdge<Integer> wInt = new WEdge<>(gInt1, gInt2, weight);
+		WEdge<String> wStr = new WEdge<>(gStr1, gStr2, weight);
+
+		assertTrue(intGraph.addEdge(wInt));
+        assertTrue(strGraph.addEdge(wStr));
+
+        GVertex<Integer> gInt3 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr3 = new GVertex<>("three", strGraph.nextID());
+        GVertex<Integer> gInt4 = new GVertex<>((Integer) 4, intGraph.nextID());
+        GVertex<String> gStr4 = new GVertex<>("four", strGraph.nextID());
+
+
+        WEdge<Integer> wInt2 = new WEdge<>(gInt1, gInt3, weight);
+		WEdge<String> wStr2 = new WEdge<>(gStr1, gStr3, weight);
+
+		assertTrue(intGraph.addEdge(wInt2));
+        assertTrue(strGraph.addEdge(wStr2));
+
+        WEdge<Integer> wInt3 = new WEdge<>(gInt1, gInt4, weight);
+		WEdge<String> wStr3 = new WEdge<>(gStr1, gStr4, weight);
+
+		assertTrue(intGraph.addEdge(wInt3));
+        assertTrue(strGraph.addEdge(wStr3));
+
+        GVertex<Integer> gInt5 = new GVertex<>((Integer) 5, intGraph.nextID());
+        GVertex<String> gStr5 = new GVertex<>("six", strGraph.nextID());
+        GVertex<Integer> gInt6 = new GVertex<>((Integer) 6, intGraph.nextID());
+        GVertex<String> gStr6 = new GVertex<>("five", strGraph.nextID());
+
+        WEdge<Integer> wInt4 = new WEdge<>(gInt2, gInt5, weight);
+		WEdge<String> wStr4 = new WEdge<>(gStr2, gStr5, weight);
+
+
+		WEdge<Integer> wInt5 = new WEdge<>(gInt3, gInt6, weight);
+		WEdge<String> wStr5 = new WEdge<>(gStr3, gStr6, weight);
+
+		intGraph.addEdge(wInt4);
+		strGraph.addEdge(wStr4);
+		intGraph.addEdge(wInt5);
+		strGraph.addEdge(wStr5);
+
+		//System.out.println(intGraph.depthFirst(gInt1));
+	}
 
 //--------------------  incidentEdges() --------------------
 
@@ -521,5 +633,5 @@ public class WGraphP4Test {
 
 
 
-*/
+
 }

@@ -23,6 +23,9 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
     /** Set of vertices that are neighbors to this vertex */
     private HashSet<GVertex<VT>> neighbors;
 
+    /** Flag for traversals */
+    private boolean visited;
+
     /** Create a new vertex.
      *  @param d the data to store in the node
      *  @param id the unique id of the node
@@ -32,6 +35,7 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
         this.num = id;
         this.edges = new LinkedList<>();
         this.neighbors = new HashSet<>();
+        this.visited = false;
     }
 
     /** Get the id of this vertex.
@@ -123,4 +127,26 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
     public HashSet<GVertex<VT>> getNeighbors() {
         return this.neighbors;
     }
+
+
+    /** Checks if vertex has been visited
+     *  @return true if visited, false if not
+     */
+    public boolean isVisited() {
+        return this.visited;
+    }
+
+
+    /** Mark vertex as visited
+     */
+    public void markVisited() {
+        this.visited = true;
+    }
+
+    /** Set flag to not visited
+     */
+    public void clearVisited() {
+        this.visited = false;
+    }
+
 }

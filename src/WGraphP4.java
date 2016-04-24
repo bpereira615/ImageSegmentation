@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.HashSet;
+import java.util.Stack;
 
 public class WGraphP4<VT> implements WGraph<VT> {
 
@@ -239,17 +240,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the neighboring vertices
      */
     public List<GVertex<VT>> neighbors(GVertex<VT> v) {
-    	/*
-    	HashSet<GVertex<VT>> neighbors = new HashSet<>();
 
-    	//add all vertices to set, then remove original vertex
-    	for (WEdge<VT> edge : v.getEdges()) {
-    		neighbors.add(edge.source());
-    		neighbors.add(edge.end());
-    	}
-
-    	neighbors.remove(v);
-		*/
     	LinkedList<GVertex<VT>> list = new LinkedList<>();
     	list.addAll(v.getNeighbors());
     	
@@ -297,7 +288,29 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the list of reachable vertices
      */
     public List<GVertex<VT>> depthFirst(GVertex<VT> v) {
-    	return null;
+    	//reset the visited flags for all vertices
+    	for (GVertex<VT> ver : this.vertices) {
+    		ver.clearVisited();
+    	}
+
+    	Stack<GVertex<VT>> stack = new Stack<>();
+    	LinkedList<GVertex<VT>> result = new LinkedList<>();
+
+    	stack.push(v);
+
+    	while (!stack.isEmpty()) {
+    		GVertex<VT> curr = stack.pop();
+    		if (!curr.isVisited()) {
+    			curr.markVisited();
+    			result.add(v);
+    			for (GVertex<VT> ver : curr.getNeighbors()){
+    				stack.push(ver);
+    			}
+    		}
+
+    	}
+
+    	return result;
     }
 
     /** Return a list of all the edges incident on vertex v.  
