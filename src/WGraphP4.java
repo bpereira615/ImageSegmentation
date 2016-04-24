@@ -1,14 +1,15 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
-<<<<<<< HEAD
+//<<<<<<< HEAD              
+//TODO: Ben/Ryan wtf is this shit????
 import java.util.Iterator;
 import java.util.PriorityQueue;
-=======
+//=======
 import java.util.ListIterator;
 import java.util.HashSet;
 import java.util.Stack;
->>>>>>> b85a4bfe10d9ea0312554aa966364007a4732a32
+//>>>>>>> b85a4bfe10d9ea0312554aa966364007a4732a32
 
 public class WGraphP4<VT> implements WGraph<VT> {
 
@@ -70,6 +71,10 @@ public class WGraphP4<VT> implements WGraph<VT> {
     		}
     	}
     	return false;
+    }
+
+    public boolean hasVertex(GVertex<VT> curr) {
+        return (this.vertices.contains(curr));
     }
 
     /** Create and add a vertex to the graph.
@@ -136,7 +141,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return false if already there, true if added
      */
     public boolean addEdge(GVertex<VT> v, GVertex<VT> u, double weight) {
-    	boolean success = true;
+    	boolean success = true; 
+        // TODO: might need to initialize false, what if both vertices
+        // are already in the graph????
         if (!this.vertices.contains(v)) {
             success = this.addVertex(v);
         }
@@ -351,13 +358,18 @@ public class WGraphP4<VT> implements WGraph<VT> {
             Q.add(e);
         }
         // create list of output edges == minimum spanning tree
-        ArrayList<WEdge<VT>> mst = new ArrayList();
+        ArrayList<WEdge<VT>> mst = new ArrayList<WEdge<VT>>();
         // perform Kruskal's on everything
         while(!Q.isEmpty()){
             WEdge<VT> currE = Q.poll();
             GVertex<VT> v = currE.source();
             GVertex<VT> u = currE.end();
             // check if v & u are in same partition
+            // if not, add current edge to spanning tree
+            if (P.find(v.id()) != P.find(u.id())) {
+                mst.add(currE);
+                P.union(v.id(), u.id());
+            }
         }
     return mst;
     }
