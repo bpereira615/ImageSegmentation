@@ -1,8 +1,14 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
+<<<<<<< HEAD
 import java.util.Iterator;
 import java.util.PriorityQueue;
+=======
+import java.util.ListIterator;
+import java.util.HashSet;
+import java.util.Stack;
+>>>>>>> b85a4bfe10d9ea0312554aa966364007a4732a32
 
 public class WGraphP4<VT> implements WGraph<VT> {
 
@@ -16,7 +22,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 	private int nextID;
 
 	/** The list of vertices */
-	private ArrayList<GVertex<VT>> vertices;
+	private HashSet<GVertex<VT>> vertices;
 
 	/** The list of unique edges */
 	private ArrayList<WEdge<VT>> edges;
@@ -27,7 +33,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 		this.numEdges = 0;
 		this.numVerts = 0;
 		this.nextID = 0;
-		this.vertices = new ArrayList<>();
+		this.vertices = new HashSet<>();
 		this.edges = new ArrayList<>();
 	}
 
@@ -52,13 +58,35 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	return nextID++;
     }
 
+
+    /** Check vertices for given data.
+     *  @param d data to be searched for
+     *  @return true if data contained, false if not
+     */
+    public boolean hasData(VT d) {
+    	for (GVertex<VT> v : vertices) {
+    		if (v.getData().equals(d)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+
     /** Create and add a vertex to the graph.
      *  @param d the data to store in the vertex
      *  @return true if successful, false otherwise
      */
     public boolean addVertex(VT d) {
-    	//TODO: when would this fail?
-		vertices.add(new GVertex<VT>(d, nextID()));
+
+    	//TODO: what sorts of tests should this have?
+
+    	GVertex<VT> add = new GVertex<VT>(d, nextID());
+    	//check if the vertex is there
+    	if (this.vertices.contains(add)) {
+    		return false;
+    	}
+
+		vertices.add(add);
 		this.numVerts++;
 		return true;
 
@@ -79,6 +107,17 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	this.numVerts++;
     	return true;
     }
+
+
+
+
+    //TODO: no deleteVertex method?
+
+
+
+
+
+
 
     /** Add a weighted edge, may also add the incident vertices. 
      *  @param e the edge to add
@@ -113,23 +152,25 @@ public class WGraphP4<VT> implements WGraph<VT> {
         // both vertices, so only need to check one
 
         WEdge<VT> add = new WEdge<VT>(v, u, weight);
-        edges.add(add);
+        
 
         // check if edge is already in lists, look in shorter vertex list
         if (this.degree(v) <= this.degree(u)) {
         	if (v.getEdges().contains(add)) {
-        		v.addEdge(add);
-        		u.addEdge(add);
-        		this.numEdges++;
+        		// edge already exists
+        		return false;
         	}
         } else {
         	if (u.getEdges().contains(add)) {
-        		v.addEdge(add);
-        		u.addEdge(add);
-        		this.numEdges++;
+        		//edge already exists
+        		return false;
         	}
         }
-        return false;  // was already there
+        edges.add(add);
+        v.addEdge(add);
+        u.addEdge(add);
+        this.numEdges++;
+        return true;
     }
 
     /** Remove an edge if there.  
@@ -144,25 +185,36 @@ public class WGraphP4<VT> implements WGraph<VT> {
     		return false;
     	}
 
+
     	// edge will be in both lists, check list of smaller vertex degree
         if (this.degree(v) <= this.degree(u)) {
-
-        	Iterator<WEdge<VT>> it = v.getEdges().iterator();
-        	WEdge<VT> w;
- 			while (it.hasNext()) {
- 				w = it.next();
- 				//TODO: is this correct/efficient?
- 				if (w.isIncident(v) && w.isIncident(u)) {
- 					it.remove();
- 					return true;
- 				}
- 			}
-
+        	//if the vertices are not neighbors, do not try to remove
+        	if (!v.getNeighbors().contains(u)) {
+        		return false;
+        	}
         } else {
-
+        	//if the vertices are not neighbors, do not try to remove
+        	if (!u.getNeighbors().contains(v)) {
+        		return false;
+        	}
         }
-        //edges was not there
-        return false;
+
+
+        //remove edge from both lists
+        for (WEdge<VT> e : v.getEdges()) {
+        	if (e.isIncident(u)) {
+        		v.removeEdge(e);
+        		break;
+        	}
+        }
+        for (WEdge<VT> e : u.getEdges()) {
+        	if (e.isIncident(v)) {
+        		v.removeEdge(e);
+        		break;
+        	}
+        }
+        return true;
+        
     }
 
     /** Return true if there is an edge between v and u. 
@@ -182,23 +234,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
     	//v has lesser degree
     	if (this.degree(v) <= this.degree(u)) {
-    		for (WEdge<VT> w : v.getEdges()) {
-    			if (w.isIncident(u)) {
-    				//incident edge found
-    				return true;
-    			}
-    		}
-    		//incident edge not found
-    		return false;
+    		return v.getNeighbors().contains(u);
     	} else {
-    		for (WEdge<VT> w : u.getEdges()) {
-    			if (w.isIncident(v)) {
-    				//incident edge found
-    				return true;
-    			}
-    		}
-    		//incident edge not found
-    		return false;
+    		return u.getNeighbors().contains(v);
     	}
     }
 
@@ -207,7 +245,11 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the neighboring vertices
      */
     public List<GVertex<VT>> neighbors(GVertex<VT> v) {
-    	return null;
+
+    	LinkedList<GVertex<VT>> list = new LinkedList<>();
+    	list.addAll(v.getNeighbors());
+    	
+    	return list;
     }
 
     /** Return the number of edges incident to v.  
@@ -239,7 +281,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the list
      */
     public List<GVertex<VT>> allVertices() {
-    	return vertices;
+    	LinkedList<GVertex<VT>> list = new LinkedList<>();
+    	list.addAll(vertices);
+    	return list;
     }
 
     /** Return a list of all the vertices that can be reached from v,
@@ -249,7 +293,33 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the list of reachable vertices
      */
     public List<GVertex<VT>> depthFirst(GVertex<VT> v) {
-    	return null;
+    	//reset the visited flags for all vertices
+    	for (GVertex<VT> ver : this.vertices) {
+    		ver.clearVisited();
+    	}
+
+    	Stack<GVertex<VT>> stack = new Stack<>();
+    	LinkedList<GVertex<VT>> result = new LinkedList<>();
+
+    	stack.push(v);
+
+    	while (!stack.isEmpty()) {
+    		GVertex<VT> curr = stack.pop();
+    		System.out.println("current vertex: " + curr);
+    		if (!curr.isVisited()) {
+    			curr.markVisited();
+    			result.add(curr);
+    			for (GVertex<VT> ver : curr.getNeighbors()){
+    				if (!ver.isVisited()) {
+    					stack.push(ver);
+    				}
+    				
+    			}
+    		}
+
+    	}
+
+    	return result;
     }
 
     /** Return a list of all the edges incident on vertex v.  
@@ -257,7 +327,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the incident edges
      */
     public List<WEdge<VT>> incidentEdges(GVertex<VT> v) {
-    	return null;
+    	return v.getEdges();
     }
 
     /** Return a list of edges in a minimum spanning forest by
