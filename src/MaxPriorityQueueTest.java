@@ -438,6 +438,18 @@ public class MaxPriorityQueueTest {
         assertEquals(3, intEmpty.size());
     }
 
+    @Test
+    public void bubbleRoot() {
+        for (int i = 4; i < 15; i++) {
+            intEmpty.insert(i * 2);
+        }
+        intEmpty.insert(2);
+        assertEquals(2, (int) intEmpty.peek());
+        intEmpty.insert(1);
+        assertEquals(1, (int) intEmpty.peek());
+        assertEquals(1, (int) intEmpty.remove());
+    }
+
 //---------------------------------------------------
 
 
