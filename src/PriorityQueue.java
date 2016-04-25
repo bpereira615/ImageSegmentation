@@ -1,6 +1,6 @@
 import java.util.Collection;
 
-/** This is specifies a general Priority Queues of ordered values.
+/** This specifies a general Priority Queues of ordered values.
 
     Note that the interface does not include methods to obtain
     minimum or maximum explicitly, but of course we want to be
