@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /** JUnit tests for the MaxPriorityQueue interface.
  */
@@ -21,6 +22,12 @@ public class WGraphP4Test {
     static WGraphP4<String> strGraph;
     static Integer[] iray = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //size = 11
     static String[] sray = {"zro", "one", "two", "tre", "for", "fyv", "six", "svn", "ate", "nyn", "ten"};
+    static GVertex<String> s1;
+    static GVertex<String> s2;
+    static GVertex<String> s3;
+    static GVertex<Integer> i1;
+    static GVertex<Integer> i2;
+    static GVertex<Integer> i3;
 
     @BeforeClass
     public static void init() {
@@ -33,6 +40,10 @@ public class WGraphP4Test {
     	//fresh graphes for each test
 		intGraph = new WGraphP4<>();
     	strGraph = new WGraphP4<>();
+        // string vertices
+        s1 = new GVertex<>("a",strGraph.nextID());
+        s2 = new GVertex<>("b", strGraph.nextID());
+        s3 = new GVertex<>("c", strGraph.nextID());
     }
 
 
@@ -42,7 +53,7 @@ public class WGraphP4Test {
 
 //--------------------  numEdges() --------------------
     @Test
-    public void numEdgesNew() {
+    public void numEdgesEmpty() {
         assertEquals(0, intGraph.numEdges());
         assertEquals(0, strGraph.numEdges());
     }
@@ -75,8 +86,19 @@ public class WGraphP4Test {
     }
 
     @Test
-    public void numEdgesRemove() {
-    	//check after removing edge
+    public void numEdgesAddRemove() {
+        int edges = strGraph.numEdges();
+        // add something to graph
+        strGraph.addEdge(s1,s2,0.8);
+        edges++;
+        // check that add was successful
+        assertEquals(strGraph.numEdges(),edges); // # edges
+        assertTrue(strGraph.hasVertex(s1)); // has s1
+        assertTrue(strGraph.hasVertex(s2)); // has s2
+        // now remove and check for decrement
+    	strGraph.deleteEdge(s1,s2);
+        edges--;
+        assertEquals(strGraph.numEdges(), edges);
     }
 
 
@@ -121,7 +143,7 @@ public class WGraphP4Test {
 
 //--------------------  numVerts() --------------------
 	@Test
-    public void numVertsNew() {
+    public void numVertsEmpty() {
         assertEquals(0, intGraph.numVerts());
         assertEquals(0, strGraph.numVerts());
     }
@@ -273,6 +295,19 @@ public class WGraphP4Test {
 
 //--------------------  addEdge(GVertex<VT> v, GVertex<VT> u, double weight) --------------------
 
+public void addEdgeFromVertsDuplicate() {
+    // should be able to add vertices
+    double weight = 1.0;
+    strGraph.addEdge(s1,s2,weight);
+    // check that vertices are included
+    assertTrue(strGraph.hasVertex(s1));
+    assertTrue(strGraph.hasVertex(s2));
+    // check that edge is connecting them
+    assertTrue(strGraph.areAdjacent(s1,s2));
+    // try to add edge again, should fail
+    assertFalse(strGraph.addEdge(s1,s2,weight));
+}
+
 
 //--------------------  deleteEdge() --------------------
 	@Test
@@ -379,6 +414,16 @@ public class WGraphP4Test {
 
 //--------------------  neighbors() --------------------
 	@Test
+    public void neighborsEmptyList(){
+        strGraph.addVertex(s1);
+        strGraph.addVertex(s2);
+        LinkedList<GVertex<String>> nbs = new LinkedList<GVertex<String>>();
+        assertEquals(nbs, strGraph.neighbors(s1));
+        assertTrue(strGraph.hasVertex(s1));
+        assertEquals(nbs, strGraph.neighbors(s2));
+        assertTrue(strGraph.hasVertex(s2));
+    }
+    @Test
 	public void neighborsAddEdge() {
 		GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
         GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
@@ -417,13 +462,6 @@ public class WGraphP4Test {
 
         assertEquals(list, intGraph.neighbors(gInt1));
 	}
-
-
-
-
-
-
-
 
 	
 
@@ -554,19 +592,70 @@ public class WGraphP4Test {
 
         assertEquals(i, intGraph.degree(gInt1));
         assertEquals(i, strGraph.degree(gStr1));
-
-
-
 	}
 
-//--------------------  areIncident() --------------------
+    @Test
+    public void degreeRemove() {
+        GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+        double weight = (double) 1;
 
+        WEdge<Integer> wInt1 = new WEdge<>(gInt1, gInt2, weight);
+        WEdge<String> wStr1 = new WEdge<>(gStr1, gStr2, weight);
+
+        int i = 0;
+
+        assertEquals(i, intGraph.degree(gInt1));
+        assertEquals(i, strGraph.degree(gStr1));
+
+
+        assertTrue(intGraph.addEdge(wInt1));
+        assertTrue(strGraph.addEdge(wStr1));
+        i++;
+
+        assertEquals(i, intGraph.degree(gInt1));
+        assertEquals(i, strGraph.degree(gStr1));
+
+        GVertex<Integer> gInt3 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr3 = new GVertex<>("three", strGraph.nextID());
+        GVertex<Integer> gInt4 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr4 = new GVertex<>("three", strGraph.nextID());
+
+        WEdge<Integer> wInt2 = new WEdge<>(gInt1, gInt3, weight);
+        WEdge<String> wStr2 = new WEdge<>(gStr1, gStr3, weight);
+
+        WEdge<Integer> wInt3 = new WEdge<>(gInt1, gInt4, weight);
+        WEdge<String> wStr3 = new WEdge<>(gStr1, gStr4, weight);
+
+        assertTrue(intGraph.addEdge(wInt2));
+        assertTrue(strGraph.addEdge(wStr2));
+        i++;
+
+        assertTrue(intGraph.addEdge(wInt3));
+        assertTrue(strGraph.addEdge(wStr3));
+        i++;
+
+        assertEquals(i, intGraph.degree(gInt1));
+        assertEquals(i, strGraph.degree(gStr1));
+
+        // now remove stuff
+        assertTrue(intGraph.deleteEdge(wInt3.source(), wInt3.end()));
+        assertTrue(strGraph.deleteEdge(wStr3.source(), wStr3.end()));
+        i--;
+        // check that degree decremented
+        assertEquals(i, intGraph.degree(gInt1));
+        assertEquals(i, strGraph.degree(gStr1));
+    }
+//--------------------  areIncident() --------------------
+// this is covered by the edge class
 
 //--------------------  allEdges() --------------------
-
+// not sure how we would even check this
 
 //--------------------  allVertices() --------------------
-
+// same problem
 
 
 //--------------------  depthFirst() --------------------

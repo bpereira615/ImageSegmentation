@@ -77,4 +77,10 @@ public class WGraphKruskalsTest {
     	assertEquals(myEdge,wInt);
 
     }
+
+    public void testMinimumEdgeChosen() {
+    	// add 3 edges & 3 vertices
+    	// check that 2 edges of least weight are returned
+    	
+    }
 }
