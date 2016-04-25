@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import java.util.ArrayList;
-
+import java.util.Collections;
 /** JUnit tests for the MaxPriorityQueue interface.
  */
 public class MaxPriorityQueueTest {
@@ -85,11 +85,11 @@ public class MaxPriorityQueueTest {
         assertEquals(1, intEmpty.size());
         for (int i = 1; i <= 5; i++ ) {
             intEmpty.insert(2*i);
-            System.out.println(intEmpty.toString() + "\n");
+            //System.out.println(intEmpty.toString() + "\n");
         }
         assertEquals(6, intEmpty.size());
         intEmpty.insert(1);
-        System.out.println(intEmpty.toString() + "\n");
+        //System.out.println(intEmpty.toString() + "\n");
 
         strEmpty.insert("zro");
         assertEquals(1, strEmpty.size());
@@ -439,7 +439,7 @@ public class MaxPriorityQueueTest {
     }
 
     @Test
-    public void bubbleRoot() {
+    public void insertBubbleRoot() {
         for (int i = 4; i < 15; i++) {
             intEmpty.insert(i * 2);
         }
@@ -468,6 +468,20 @@ public class MaxPriorityQueueTest {
         strFull.init(svalsEmpty);
         assertEquals(0, strFull.size());
         assertTrue(strFull.isEmpty());
+    }
+
+    @Test
+    public void reverseInit() {
+        Collections.reverse(ivals);
+        intEmpty.init(ivals);
+        System.out.println(intEmpty.toString());
+        for (int i = 11; i > 0; i--) { //called 11 times
+            assertEquals(i, intEmpty.size());
+            assertEquals(11 - i, (int) intEmpty.remove());
+            assertEquals(i - 1, intEmpty.size());
+            System.out.println(intEmpty.toString() + "\n");
+        }     
+        assertTrue(intEmpty.isEmpty());
     }
     //non-empty init basically tested throughout above tests.
 
