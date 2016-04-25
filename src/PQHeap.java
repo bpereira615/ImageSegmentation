@@ -48,7 +48,7 @@ public class PQHeap<T extends Comparable<? super T>>
      * Insert a value. Duplicate values <b>do</b> end up in the
      *  queue, so inserting X three times means it has to be removed
      *  three times before it's gone again.
-     *  @param t Value to add.
+     * @param t Value to add.
      */
     public void insert(T t) {
         int index = this.location;
@@ -82,8 +82,8 @@ public class PQHeap<T extends Comparable<? super T>>
     /** 
      * Remove "best" value. This value is the "best" value in the
      *  queue as determined by the comparator for the queue.
-     *  @return the value that was removed
-     *  @throws QueueEmptyException If queue is empty.
+     * @return the value that was removed
+     * @throws QueueEmptyException If queue is empty.
      */
     public T remove() throws QueueEmptyException { //
         if (this.location == 1) {
@@ -96,18 +96,21 @@ public class PQHeap<T extends Comparable<? super T>>
             this.list.set(1, temp); //overwrite root with saved last node val
 
             int index = 1;
+            T currentVal;
             T childVal;
             int newIndex;
             T left;
+            int leftIndex;
             T right;
+            int rightIndex;
 
             //while there is a left child, not @ end of branch
             while (index * 2 <= this.location - 1) { 
-                T currentVal = this.list.get(index);
-                int leftIndex = index * 2;
-                int rightIndex = index * 2 + 1;
+                currentVal = this.list.get(index);
+                leftIndex = index * 2;
+                rightIndex = index * 2 + 1;
 
-                // need to determine if current index has 1 or 2 children
+                //need to determine if current index has 1 or 2 children
                 if (rightIndex > this.location - 1) { //only left child
                     newIndex = leftIndex;
                     childVal = this.list.get(newIndex);
@@ -115,25 +118,25 @@ public class PQHeap<T extends Comparable<? super T>>
                     left = this.list.get(leftIndex); 
                     right = this.list.get(rightIndex);
 
-                    // left is smaller or equal
+                    //left is smaller or equal
                     if (this.comp.compare(left, right) <= 0) { 
                         childVal = left;
                         newIndex = leftIndex;
-                    } else { // right is smaller
+                    } else { //right is smaller
                         childVal = right;
                         newIndex = rightIndex;
                     }
                 }
 
-                // compare "best child" (above) w/ current and switch
-                // //current > child
+                //compare "best child" (above) w/ current and switch
+                //if current > child (larger above smaller)
                 if (this.comp.compare(currentVal, childVal) > 0) { 
                     //switch current to child val
                     this.list.set(index, childVal); 
                     //push current val to child
                     this.list.set(newIndex, currentVal); 
                     index = newIndex;
-                } else {
+                } else { //if child > current, in the right place
                     return root;
                 }
             }
@@ -157,7 +160,7 @@ public class PQHeap<T extends Comparable<? super T>>
     
     /** 
      * No elements?
-     *  @return True if queue is empty, false otherwise.
+     * @return True if queue is empty, false otherwise.
      */
     public boolean isEmpty() {
         return this.location == 1;
@@ -165,7 +168,7 @@ public class PQHeap<T extends Comparable<? super T>>
 
     /** 
      * Get the number of elements in the queue.
-     *  @return the numbers
+     * @return the numbers
      */
     public int size() {
         return this.location - 1;
@@ -183,7 +186,7 @@ public class PQHeap<T extends Comparable<? super T>>
     /** 
      * Initialize a priority queue from a container of values.
      * Assumes PQHeap already exists--will clear if values present already.
-     *  @param values the collection of starting values
+     * @param values the collection of starting values
      */
     public void init(Collection<T> values) {
         if (this.location != 1) { //if values present, clear/ create new array
@@ -200,12 +203,16 @@ public class PQHeap<T extends Comparable<? super T>>
      */
     public String toString() {
         String output = "";
-        int i = 0;
-        for (T t: this.list) {
-            if (i != 0) { //first will be null, don't print
-                output += t + "|" + i + "; ";
+        if (this.isEmpty()) {
+            output += "Empty!";
+        } else {
+            int i = 0;
+            for (T t: this.list) {
+                if (i != 0) { //first will be null, don't print
+                    output += t + "|" + i + "; ";
+                }
+                i++;
             }
-            i++;
         }
         return output;
     }
