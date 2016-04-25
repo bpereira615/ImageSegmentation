@@ -15,6 +15,7 @@ import java.util.Collection;
 /**
  * Priority heap: root is "best" as determined by comparator.
  * Final version: passes all tests.
+ * @param <T> the data type that is being heaped (edge, int, etc)
  */
 public class PQHeap<T extends Comparable<? super T>> 
             implements PriorityQueue<T> {
@@ -26,12 +27,19 @@ public class PQHeap<T extends Comparable<? super T>>
     /** Keeps track of current index in ArrayList. */
     private int location;
     
+    /**
+     * Constructor for new PQHeap: uses default comparator supplied by T.
+     */
     public PQHeap() {
         this.clear();
-        this.comp = new DefaultComparator<T>(); //---------------------------------------------------------------------------------------------------
+        this.comp = new DefaultComparator<T>(); 
     }
 
-    public PQHeap(Comparator<T> c){
+    /**
+     * Constructor for new PQHeap: uses comparator supplied in parameter.
+     * @param  c Comparator supplied by user if different than default for T
+     */
+    public PQHeap(Comparator<T> c) {
         this.clear();
         this.comp = c;
     }
@@ -77,7 +85,7 @@ public class PQHeap<T extends Comparable<? super T>>
      *  @return the value that was removed
      *  @throws QueueEmptyException If queue is empty.
      */
-    public T remove() throws QueueEmptyException{ //
+    public T remove() throws QueueEmptyException { //
         if (this.location == 1) {
             throw new QueueEmptyException();
         }
@@ -94,7 +102,7 @@ public class PQHeap<T extends Comparable<? super T>>
             T right;
 
             //while there is a left child, not @ end of branch
-            while (index * 2 <= this.location - 1){ 
+            while (index * 2 <= this.location - 1) { 
                 T currentVal = this.list.get(index);
                 int leftIndex = index * 2;
                 int rightIndex = index * 2 + 1;
@@ -106,20 +114,24 @@ public class PQHeap<T extends Comparable<? super T>>
                 } else { //both present, need to choose which to switch
                     left = this.list.get(leftIndex); 
                     right = this.list.get(rightIndex);
-                    if (this.comp.compare(left, right) <= 0) { // left is smaller or equal
+
+                    // left is smaller or equal
+                    if (this.comp.compare(left, right) <= 0) { 
                         childVal = left;
                         newIndex = leftIndex;
-                    }
-                    else { // right is smaller
+                    } else { // right is smaller
                         childVal = right;
                         newIndex = rightIndex;
                     }
                 }
 
-                // compare previously determined "best child" w/ current and switch
-                if (this.comp.compare(currentVal, childVal) > 0) { //current > child
-                    this.list.set(index, childVal); //switch current to child val
-                    this.list.set(newIndex, currentVal); //push current val to child
+                // compare "best child" (above) w/ current and switch
+                // //current > child
+                if (this.comp.compare(currentVal, childVal) > 0) { 
+                    //switch current to child val
+                    this.list.set(index, childVal); 
+                    //push current val to child
+                    this.list.set(newIndex, currentVal); 
                     index = newIndex;
                 } else {
                     return root;
@@ -136,7 +148,7 @@ public class PQHeap<T extends Comparable<? super T>>
      *  @return best value in the queue.
      *  @throws QueueEmptyException If queue is empty.
      */
-    public T peek() throws QueueEmptyException{
+    public T peek() throws QueueEmptyException {
         if (this.location == 1) {
             throw new QueueEmptyException();
         }
@@ -147,7 +159,7 @@ public class PQHeap<T extends Comparable<? super T>>
      * No elements?
      *  @return True if queue is empty, false otherwise.
      */
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return this.location == 1;
     }
 
@@ -155,14 +167,14 @@ public class PQHeap<T extends Comparable<? super T>>
      * Get the number of elements in the queue.
      *  @return the numbers
      */
-    public int size(){
+    public int size() {
         return this.location - 1;
     }
 
     /** 
      * Dump the contents of the priority queue.
      */
-    public void clear(){
+    public void clear() {
         this.list = new ArrayList<T>();
         this.list.add(null); //fills 1st slot, never accessed
         this.location = 1;
@@ -173,7 +185,7 @@ public class PQHeap<T extends Comparable<? super T>>
      * Assumes PQHeap already exists--will clear if values present already.
      *  @param values the collection of starting values
      */
-    public void init(Collection<T> values){
+    public void init(Collection<T> values) {
         if (this.location != 1) { //if values present, clear/ create new array
             this.clear();
         }
@@ -182,10 +194,14 @@ public class PQHeap<T extends Comparable<? super T>>
         }
     }
 
-    public String toString(){
+    /**
+     * Creates a string of the current heap for better visualization.
+     * @return string representation of heap w/ array index
+     */
+    public String toString() {
         String output = "";
         int i = 0;
-        for(T t: this.list){
+        for (T t: this.list) {
             if (i != 0) { //first will be null, don't print
                 output += t + "|" + i + "; ";
             }
@@ -195,7 +211,8 @@ public class PQHeap<T extends Comparable<? super T>>
     }
 
     /**
-     * Default Comparator to use if comparator not passed as optional argument
+     * Default Comparator to use if comparator not passed as optional argument.
+     * @param  <T> the data type that is being heaped (edge, int, etc)
      */
     private static class DefaultComparator<T extends Comparable<? super T>> 
                                                 implements Comparator<T> {    
