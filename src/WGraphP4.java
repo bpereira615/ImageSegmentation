@@ -220,6 +220,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
         		break;
         	}
         }
+        numEdges--;
         return true;
         
     }
