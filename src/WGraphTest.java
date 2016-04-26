@@ -14,9 +14,9 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
-/** JUnit tests for the MaxPriorityQueue interface.
+/** JUnit tests for the WGraph interface.
  */
-public class WGraphP4Test {
+public class WGraphTest {
 
     static WGraphP4<Integer> intGraph;
     static WGraphP4<String> strGraph;
@@ -197,12 +197,19 @@ public class WGraphP4Test {
 //--------------------  nextID() --------------------
 	@Test
     public void nextIDNew() {
+    	//fresh graphes for test
+		intGraph = new WGraphP4<>();
+    	strGraph = new WGraphP4<>();
         assertEquals(0, intGraph.nextID());
         assertEquals(0, strGraph.nextID());
     }
 
     @Test
     public void nextIDAdd() {
+    	//fresh graphes for test
+		intGraph = new WGraphP4<>();
+    	strGraph = new WGraphP4<>();
+
 	   	//check ID after adding vertex
 	    GVertex<Integer> gInt = new GVertex<>((Integer) 1, intGraph.nextID());
         GVertex<String> gStr = new GVertex<>("one", strGraph.nextID());
@@ -709,18 +716,40 @@ public void addEdgeFromVertsDuplicate() {
 		intGraph.addEdge(wInt5);
 		strGraph.addEdge(wStr5);
 
-		System.out.println(intGraph.depthFirst(gInt1));
+		//System.out.println(intGraph.depthFirst(gInt1));
 	}
 
+
+	@Test
+	public void depthFirstAdvanced() {
+		GVertex<String> a = new GVertex<>("a", strGraph.nextID());
+		GVertex<String> b = new GVertex<>("b", strGraph.nextID());
+		GVertex<String> c = new GVertex<>("c", strGraph.nextID());
+		GVertex<String> d = new GVertex<>("d", strGraph.nextID());
+		GVertex<String> e = new GVertex<>("e", strGraph.nextID());
+		GVertex<String> f = new GVertex<>("f", strGraph.nextID());
+		GVertex<String> g = new GVertex<>("g", strGraph.nextID());
+		double w = (double) 1;
+		assertTrue(strGraph.addEdge(a, b, w));
+		assertTrue(strGraph.addEdge(a, d, w));
+		assertTrue(strGraph.addEdge(a, e, w));
+		assertTrue(strGraph.addEdge(b, d, w));
+		assertTrue(strGraph.addEdge(b, e, w));
+		assertTrue(strGraph.addEdge(d, e, w));
+		assertTrue(strGraph.addEdge(a, c, w));
+		assertTrue(strGraph.addEdge(c, f, w));
+		assertTrue(strGraph.addEdge(c, g, w));
+		assertTrue(strGraph.addEdge(f, g, w));
+
+		String output = "[(a - ID:3), (e - ID:7), (d - ID:6), (b - ID:4), (c - ID:5), (g - ID:9), (f - ID:8)]";
+		assertEquals(output, strGraph.depthFirst(a).toString());
+       
+        
+	}
 //--------------------  incidentEdges() --------------------
 
 
 
 //--------------------  kruskals() --------------------
-
-
-
-
-
 
 }
