@@ -19,6 +19,13 @@ public class P4C {
      *  @return the graph that was created
      */
     static WGraph<Pixel> imageToGraph(BufferedImage image, PixelDistance pd) {
+            // make a background image to put a segment into
+            for (int i = 0; i < image.getHeight(); i++) {
+                for (int j = 0; j < image.getWidth(); j++) {
+                    
+                }
+            }
+
         //TODO: Distance<Pixel> confusion as second parameter
         return null;
     }
