@@ -135,6 +135,7 @@ public class WGraphKruskalsTest {
         intGraph.addEdge(e01);
         intGraph.addEdge(e23);
         intGraph.addEdge(e04);
+        intGraph.addEdge(e41);
         // get Kruskal;s
         mstInt = intGraph.kruskals();
         // check that e23, e04, and e41 included

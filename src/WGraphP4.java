@@ -364,13 +364,14 @@ public class WGraphP4<VT> implements WGraph<VT> {
         Partition P = new Partition(this.vertices.size());
         // create a priority heap, fill with edges
         // TODO: incorporate Ryan's PQHeap
-        PriorityQueue<WEdge<VT>> Q = new PriorityQueue(this.edges.size());
+        PriorityQueue<WEdge<VT>> Q = new PriorityQueue<>(this.edges.size());
+        //PQHeap<WEdge<VT>> Q = new PQHeap<>(this.edges.size());
         // fill priority heap with edges
         for (WEdge<VT> e : this.edges) {
             Q.add(e);
         }
         // perform Kruskal's on everything
-        while(!Q.isEmpty()){
+        while(!Q.isEmpty()) {
             WEdge<VT> currE = Q.poll();
             GVertex<VT> v = currE.source();
             GVertex<VT> u = currE.end();
