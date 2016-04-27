@@ -96,6 +96,11 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
         return this.data;
     }
 
+    //TODO: fix this 
+    public VT data() {
+        return this.data;
+    }
+
     /** Add edge to list of incident edges for this vertex
      *  @param e the edge to be added
      */

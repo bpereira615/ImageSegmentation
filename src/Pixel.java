@@ -1,5 +1,3 @@
-import java.awt.Color;
-
 public class Pixel {
 	/** Row index of pixel */
 	private int row;
@@ -24,33 +22,28 @@ public class Pixel {
 		this.row = row;
 		this.col = col;
 		this.val = val;
-		setRGBVals(val);
+		this.blue = val & 0xFF;
+        this.green = (val >> 8) & 0xFF;
+        this.red = (val >> 16) & 0xFF;
 	}
 
-	/** Extract the red value from total */
-	private void setRGBVals(int val) {
-		//TODO: credit to stack overflow?
-
-		Color c = new Color(val);
-		this.red = c.getRed();
-		this.green = c.getGreen();
-		this.blue = c.getBlue();
-	}
-
-	public int getRow() {
+	public int row() {
 		return this.row;
 	}
 
-	public int getCol() {
+	public int col() {
 		return this.col;
 	}
-	public int getRed() {
+	public int value() {
+		return this.val;
+	}
+	public int r() {
 		return this.red;
 	}
-	public int getGreen() {
+	public int g() {
 		return this.green;
 	}
-	public int getBlue() {
+	public int b() {
 		return this.blue;
 	}
 
