@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 
 public class P4C {
@@ -165,14 +166,72 @@ public class P4C {
         Partition P = new Partition(g.allVertices().size());
         // create a priority queue
         // TODO: implement Ryan's PQHeap
-        // 
+        PriorityQueue<WEdge<Pixel>> Q = new PriorityQueue<>(g.numEdges());
+        // fill priority heap with edges
+        for (WEdge<Pixel> e : g.allEdges()) {
+            Q.add(e);
+        }
+        // initialize list of lists to track vertex partitions
+        ArrayList<ArrayList<GVertex<Pixel>>> megaList = new ArrayList<>();
         // details: need mega list of lists<vertex<pixel>>
         // how to quickly find which list contains u1/v1?
         
         // while PQ not empty
-            // check if u,v in same partition. if so, done. if not, cont
-            // find(u) --> u1, find(v) --> v1
-            // find lists with u1, v1
+        while (!Q.isEmpty()) {
+            WEdge<Pixel> currE = Q.poll();
+            GVertex<Pixel> u = currE.source();
+            GVertex<Pixel> v = currE.end();
+            // get clouds that u and v are in
+            int u1 = P.find(u.id());
+            int v1 = P.find(v.id());
+            // if u1 = v1, done
+            // else, find vertices with given IDs
+            // TODO: can we make this quicker? quadratic time
+            if (u1 != v1) {
+                // iterate through mega-lists 
+                int megaIndexU = -1;
+                int megaIndexV = -1;
+                i = 0; // initialize counter
+                for (ArrayList<GVertex<Pixel>> list : megaList) {
+                    // iterate through sublist
+                    for (GVertex<Pixel> elem : list) {
+                        // if elem is u1, report
+                        if (elem.id() == u1) {
+                            megaIndexU = i;
+                            list.add(u);
+                        }
+                        // if elem is v1, report
+                        if (elem.id() == v1) {
+                            megaIndexV = i;
+                            list.add(v);
+                        }
+                    }
+                    i++;
+                }
+                // decide where to put u and v
+                // if u1 not found, new list
+                if (megaIndexU == -1) {
+                    ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
+                    newList.add(u);
+                    megaList.add(i, newList);
+                    megaIndexU = i;
+                    i++; // increment counter
+                }
+                // if v1 not found, new list
+                if (megaIndexV == -1) {
+                    ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
+                    newList.add(v);
+                    megaList.add(i, newList);
+                    megaIndexV = i;
+                    i++;
+                }
+                // now you know which lists contain u and v
+                // decide if those lists pass joining conditions
+            }
+        }
+            // check if u,v in same partition. if so, done. if not, cont DONE
+            // find(u) --> u1, find(v) --> v1 DONE
+            // find lists with u1, v1 DONE
             // check joining criteria (formula from Selinski)
             // if pass joining criteria, union, add edge to mst
             
