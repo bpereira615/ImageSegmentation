@@ -313,6 +313,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
     	while (!stack.isEmpty()) {
     		GVertex<VT> curr = stack.pop();
+    		System.out.println("current vertex: " + curr);
     		if (!curr.isVisited()) {
     			curr.markVisited();
     			result.add(curr);
@@ -364,7 +365,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
         // create a priority heap, fill with edges
         // TODO: incorporate Ryan's PQHeap
         PriorityQueue<WEdge<VT>> Q = new PriorityQueue<>(this.edges.size());
-        //PQHeap<WEdge<VT>> Q = new PQHeap<>(this.edges.size());
+        //PQHeap<WEdge<VT>> Q = new PQHeap<>();
         // fill priority heap with edges
         for (WEdge<VT> e : this.edges) {
             Q.add(e);

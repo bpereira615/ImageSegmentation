@@ -145,7 +145,38 @@ public class P4C {
      */
 
     static List<WEdge<Pixel>> segmenter(WGraph<Pixel> g, double kvalue) {
-        return null;
+        // create list of output edges == minimum spanning tree
+        ArrayList<WEdge<Pixel>> mst = new ArrayList<WEdge<Pixel>>();
+        // empty graph case
+        if (g.numVerts() == 0) {
+            return mst;
+        }
+        // unconnected graph case
+        if (g.numEdges() == 0) {
+            return mst;
+        }
+        // renumber all vertices in graph
+        int i = 0;
+        for (GVertex<Pixel> curr : g.allVertices()) {
+            curr.setId(i);
+            i++;
+        }
+        // create a partition to track unions
+        Partition P = new Partition(g.allVertices().size());
+        // create a priority queue
+        // TODO: implement Ryan's PQHeap
+        // 
+        // details: need mega list of lists<vertex<pixel>>
+        // how to quickly find which list contains u1/v1?
+        
+        // while PQ not empty
+            // check if u,v in same partition. if so, done. if not, cont
+            // find(u) --> u1, find(v) --> v1
+            // find lists with u1, v1
+            // check joining criteria (formula from Selinski)
+            // if pass joining criteria, union, add edge to mst
+            
+        return mst;
     }
 
     public static void main(String[] args) {
