@@ -13,6 +13,11 @@ import java.util.PriorityQueue;
 public class P4C {
 
 
+    static int [] Diff(ArrayList<GVertex<Pixel>> list) {
+        
+        return null;
+    }
+
     /** Convert an image to a graph of Pixels with edges between
      *  north, south, east and west neighboring pixels.
      *  @param image the image to convert
