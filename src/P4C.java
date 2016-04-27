@@ -59,6 +59,9 @@ public class P4C {
         Partition P = new Partition(g.allVertices().size());
         // create a priority queue
         // TODO: implement Ryan's PQHeap
+        // 
+        // details: need mega list of lists<vertex<pixel>>
+        // how to quickly find which list contains u1/v1?
         
         // while PQ not empty
             // check if u,v in same partition. if so, done. if not, cont
