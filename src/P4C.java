@@ -34,7 +34,6 @@ public class P4C {
             ArrayList<GVertex<Pixel>> row = new ArrayList<GVertex<Pixel>>();
             for (int j = 0; j < x; j++) {
 
-                System.out.println(i + " " + j + "\n");
                 rgb = image.getRGB(j, i);
                 Pixel pix = new Pixel(j, i, rgb);
                 GVertex<Pixel> ver = new GVertex<>(pix, graph.nextID());
@@ -60,65 +59,60 @@ public class P4C {
                     GVertex<Pixel> lower = grid.get(i+1).get(j);
                     GVertex<Pixel> right = grid.get(i).get(j+1);
 
-                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
-                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
                 } else if (i == y-1 && j == x-1) {
                     GVertex<Pixel> upper = grid.get(i-1).get(j);
                     GVertex<Pixel> left = grid.get(i).get(j-1);
-
-                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+    
+                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
                 } else if (i == 0 && j == x-1) {
                     GVertex<Pixel> lower = grid.get(i+1).get(j);
                     GVertex<Pixel> left = grid.get(i).get(j-1);
 
-                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
-                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
                 } else if (i == y-1 && j == 0) {
                     GVertex<Pixel> upper = grid.get(i-1).get(j);
                     GVertex<Pixel> right = grid.get(i).get(j+1);
 
-                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
                 } else if (i == 0) {
                     
-
-
-
-
-
 
                     GVertex<Pixel> left = grid.get(i).get(j-1);
                     GVertex<Pixel> right = grid.get(i).get(j+1);
                     GVertex<Pixel> lower = grid.get(i+1).get(j);
 
-                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
                 } else if (j == 0) {
                     GVertex<Pixel> upper = grid.get(i-1).get(j);
                     GVertex<Pixel> right = grid.get(i).get(j+1);
                     GVertex<Pixel> lower = grid.get(i+1).get(j);
 
-                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
                 } else if (i == y-1) {
                     GVertex<Pixel> upper = grid.get(i-1).get(j);
                     GVertex<Pixel> left = grid.get(i).get(j-1);
                     GVertex<Pixel> right = grid.get(i).get(j+1);
 
-                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
                 } else if (j == x-1) {
                     GVertex<Pixel> upper = grid.get(i-1).get(j);
                     GVertex<Pixel> left = grid.get(i).get(j-1);
                     GVertex<Pixel> lower = grid.get(i+1).get(j);
 
-                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
                 } else {
                     //general case
 
@@ -127,11 +121,10 @@ public class P4C {
                     GVertex<Pixel> right = grid.get(i).get(j+1);
                     GVertex<Pixel> lower = grid.get(i+1).get(j);
 
-                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
-
+                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
 
                 }
             }
