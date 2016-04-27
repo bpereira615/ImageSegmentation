@@ -19,15 +19,128 @@ public class P4C {
      *  @return the graph that was created
      */
     static WGraph<Pixel> imageToGraph(BufferedImage image, PixelDistance pd) {
-            // make a background image to put a segment into
-            for (int i = 0; i < image.getHeight(); i++) {
-                for (int j = 0; j < image.getWidth(); j++) {
+
+        WGraphP4<Pixel> graph = new WGraphP4<Pixel>();
+
+        
+
+        int y = image.getHeight();
+        int x = image.getWidth();
+        ArrayList<ArrayList<GVertex<Pixel>>> grid = new ArrayList<ArrayList<GVertex<Pixel>>>(); 
+
+        int rgb;
+        //make gird of pixels
+        for (int i = 0; i < y; i++) {
+            ArrayList<GVertex<Pixel>> row = new ArrayList<GVertex<Pixel>>();
+            for (int j = 0; j < x; j++) {
+
+                System.out.println(i + " " + j + "\n");
+                rgb = image.getRGB(j, i);
+                Pixel pix = new Pixel(j, i, rgb);
+                GVertex<Pixel> ver = new GVertex<>(pix, graph.nextID());
+                row.add(ver);
+            }
+            grid.add(row);
+        }
+
+
+
+        System.out.println("vertices: " + graph.numVerts() + "\tedges: " + graph.numEdges());
+    
+
+
+
+        //add edges
+        for (int i = 0; i < y; i++) {
+            for (int j = 0; j < x; j++) {
+                GVertex<Pixel> curr = grid.get(i).get(j);
+
+                //edge cases 
+                if (i == 0 && j == 0) {
+                    GVertex<Pixel> lower = grid.get(i+1).get(j);
+                    GVertex<Pixel> right = grid.get(i).get(j+1);
+
+                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                } else if (i == y-1 && j == x-1) {
+                    GVertex<Pixel> upper = grid.get(i-1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j-1);
+
+                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                } else if (i == 0 && j == x-1) {
+                    GVertex<Pixel> lower = grid.get(i+1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j-1);
+
+                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                } else if (i == y-1 && j == 0) {
+                    GVertex<Pixel> upper = grid.get(i-1).get(j);
+                    GVertex<Pixel> right = grid.get(i).get(j+1);
+
+                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                } else if (i == 0) {
                     
+
+
+
+
+
+
+                    GVertex<Pixel> left = grid.get(i).get(j-1);
+                    GVertex<Pixel> right = grid.get(i).get(j+1);
+                    GVertex<Pixel> lower = grid.get(i+1).get(j);
+
+                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                } else if (j == 0) {
+                    GVertex<Pixel> upper = grid.get(i-1).get(j);
+                    GVertex<Pixel> right = grid.get(i).get(j+1);
+                    GVertex<Pixel> lower = grid.get(i+1).get(j);
+
+                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                } else if (i == y-1) {
+                    GVertex<Pixel> upper = grid.get(i-1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j-1);
+                    GVertex<Pixel> right = grid.get(i).get(j+1);
+
+                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                } else if (j == x-1) {
+                    GVertex<Pixel> upper = grid.get(i-1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j-1);
+                    GVertex<Pixel> lower = grid.get(i+1).get(j);
+
+                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                } else {
+                    //general case
+
+                    GVertex<Pixel> upper = grid.get(i-1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j-1);
+                    GVertex<Pixel> right = grid.get(i).get(j+1);
+                    GVertex<Pixel> lower = grid.get(i+1).get(j);
+
+                    //graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
+                    //graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
+                    //graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    //graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+
+
                 }
             }
+        }
+    
+        System.out.println("vertices: " + graph.numVerts() + "\tedges: " + graph.numEdges());
 
         //TODO: Distance<Pixel> confusion as second parameter
-        return null;
+        return graph;
     }
 
 
@@ -51,6 +164,13 @@ public class P4C {
 
             BufferedImage image = ImageIO.read(new File(args[0]));
             WGraph<Pixel> g = imageToGraph(image, new PixelDistance());
+
+            
+
+
+
+
+            /*
             List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
 
             System.out.print("result =  " + res.size() + "\n");
@@ -78,13 +198,17 @@ public class P4C {
             // You'll need to do that for each connected component,
             // writing each one to a different file, clearing the
             // image buffer first
-
+   */
         } catch (IOException e) {
             System.out.print("Missing File!\n");
 
             // log the exception
             // re-throw if desired
         }
+     
+
+
+
     }
 
 }
