@@ -313,6 +313,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
     	while (!stack.isEmpty()) {
     		GVertex<VT> curr = stack.pop();
+    		System.out.println("current vertex: " + curr);
     		if (!curr.isVisited()) {
     			curr.markVisited();
     			result.add(curr);
@@ -342,54 +343,6 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return a list of the edges in the minimum spanning forest
      */
     public List<WEdge<VT>> kruskals() {
-        // create list of output edges == minimum spanning tree
-        ArrayList<WEdge<VT>> mst = new ArrayList<WEdge<VT>>();
-        // empty graph case
-        if (this.numVerts() == 0) {
-            return mst;
-        } 
-        // unconnected graph case
-        if (this.numEdges() == 0) {
-            return mst;
-        }
-
-        // first renumber all vertices, pray that objects are linked in edges
-        int i = 0;
-        for (GVertex<VT> curr : this.vertices) {
-            curr.setId(i);
-            i++;
-        }
-        // create a partition
-        Partition P = new Partition(this.vertices.size());
-        // create a priority heap, fill with edges
-        // TODO: incorporate Ryan's PQHeap
-        PriorityQueue<WEdge<VT>> Q = new PriorityQueue<>(this.edges.size());
-        //PQHeap<WEdge<VT>> Q = new PQHeap<>();
-        // fill priority heap with edges
-        for (WEdge<VT> e : this.edges) {
-            Q.add(e);
-        }
-        // perform Kruskal's on everything
-        while(!Q.isEmpty()) {
-            WEdge<VT> currE = Q.poll();
-            GVertex<VT> v = currE.source();
-            GVertex<VT> u = currE.end();
-            // check if v & u are in same partition
-            // if not, add current edge to spanning tree
-            if (P.find(v.id()) != P.find(u.id())) {
-                mst.add(currE);
-                P.union(v.id(), u.id());
-            }
-        }
-    return mst;
-    }
-
-    /** Return a list of edges in a minimum spanning forest by
-     *  implementing Kruskal's algorithm using fast union/finds.
-     *  
-     *  @return a list of the edges in the minimum spanning forest
-     */
-    public List<WEdge<VT>> segmenter() {
         // create list of output edges == minimum spanning tree
         ArrayList<WEdge<VT>> mst = new ArrayList<WEdge<VT>>();
         // empty graph case
