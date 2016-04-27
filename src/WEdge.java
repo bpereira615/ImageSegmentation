@@ -1,7 +1,7 @@
 /** Implementation of an edge class (for graphs), could be directed or not.
  */
 //TODO: generics defined in WGraph interface
-public class WEdge<VT> implements Comparable<VT>{
+public class WEdge<VT> implements Comparable<VT> {
 
     /** Starting vertex of an edge. */
     private GVertex<VT> source;
