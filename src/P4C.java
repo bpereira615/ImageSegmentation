@@ -14,8 +14,44 @@ public class P4C {
 
 
     static int [] Diff(ArrayList<GVertex<Pixel>> list) {
+        // initialize maxes and mins
+        int maxR = 0; // less than expected max
+        int maxG = 0;
+        int maxB = 0;
+        int minR = 1000; // larger than expected min
+        int minG = 1000;
+        int minB = 1000;
+        // initialize differences array
+        int[] diffs = new int[3];
+        for (GVertex<Pixel> vert : list) {
+            Pixel pix = vert.getData();
+            // check if any are new maxes
+            if (pix.r() > maxR){
+                maxR = pix.r();
+            }
+            if (pix.g() > maxG) {
+                maxG = pix.g();
+            }
+            if (pix.b() > maxB) {
+                maxB = pix.b();
+            }
+            // check if any new mins
+           if (pix.r() < minR) {
+                minR = pix.r();
+           }
+           if (pix.g() < minG) {
+                minG = pix.g();
+           }
+           if (pix.b() < minB) {
+                minB = pix.b();
+           }
+        }
+        // find differences between maxes and mins
+        diffs[0] = maxR - minR;
+        diffs[1] = maxB - minB;
+        diffs[2] = maxG - minG;
         
-        return null;
+        return diffs;
     }
 
     /** Convert an image to a graph of Pixels with edges between
@@ -231,7 +267,33 @@ public class P4C {
                     i++;
                 }
                 // now you know which lists contain u and v
-                // decide if those lists pass joining conditions
+                ArrayList<GVertex<Pixel>> listU = megaList.get(megaIndexU);
+                ArrayList<GVertex<Pixel>> listV = megaList.get(megaIndexV);
+                // create a union of lists U and V to check
+                ArrayList<GVertex<Pixel>> listUV = new ArrayList<>();
+                listUV.addAll(listU);
+                listUV.addAll(listV);
+                // get differences for each list
+                int[] diffUV = Diff(listUV);
+                int[] diffU = Diff(listU);
+                int[] diffV = Diff(listV);
+                // decide if lists pass joining conditions
+                boolean[] join = new boolean[3]; // initializes false
+                for (i=0; i<3; i++) {
+                    // if pass joining conditions
+                    if (diffUV[i] <= Math.min(diffU[i], diffV[i]) + 
+                        (kvalue/(listU.size() + listV.size()))) {
+                        // add edge to spanning tree
+                        mst.add(currE);
+                        // union partitions
+                        P.union(u.id(), v.id());
+                        // union lists
+                        // TODO: add smaller list to longer list?
+                        megaList.remove(listU);
+                        megaList.remove(listV);
+                        megaList.add(listUV);
+                    }
+                }
             }
         }
             // check if u,v in same partition. if so, done. if not, cont DONE
