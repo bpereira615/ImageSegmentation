@@ -1,3 +1,12 @@
+/********************************************************************
+ * Lydia Carroll, Benjamin Hoertnagl-Pereira, Ryan Walter
+ * JHED: lcarro12, bhoertn1, rwalte25
+ * lcarro12 @jhu.edu, bhoertn1@jhu.edu, rwalte25@jhu.edu
+ *
+ * 600.226.01 | CS226 Data Structures
+ * Project 4 - Image Segmentation
+ *******************************************************************/
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
@@ -13,6 +22,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
 
 /** JUnit tests for the MaxPriorityQueue interface.
  */
@@ -21,13 +31,19 @@ public class WGraphP4Test {
     static WGraphP4<Integer> intGraph;
     static WGraphP4<String> strGraph;
     static Integer[] iray = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //size = 11
-    static String[] sray = {"zro", "one", "two", "tre", "for", "fyv", "six", "svn", "ate", "nyn", "ten"};
+    static String[] sray = {"zro", "one", "two", "tre", "for",
+         "fyv", "six", "svn", "ate", "nyn", "ten"};
     static GVertex<String> s1;
     static GVertex<String> s2;
     static GVertex<String> s3;
     static GVertex<Integer> i1;
     static GVertex<Integer> i2;
     static GVertex<Integer> i3;
+
+    static List<WEdge<Integer>> mstInt;
+    static List<WEdge<String>> mstStr;
+    static ArrayList<GVertex<Integer>> intVerts;
+    static ArrayList<GVertex<String>> strVerts;
 
     @BeforeClass
     public static void init() {
@@ -45,11 +61,6 @@ public class WGraphP4Test {
         s2 = new GVertex<>("b", strGraph.nextID());
         s3 = new GVertex<>("c", strGraph.nextID());
     }
-
-
-
-
-
 
 //--------------------  numEdges() --------------------
     @Test
@@ -82,7 +93,6 @@ public class WGraphP4Test {
 
     	assertEquals(1, intGraph.numEdges());
     	assertEquals(1, strGraph.numEdges());
-
     }
 
     @Test
@@ -100,7 +110,6 @@ public class WGraphP4Test {
         edges--;
         assertEquals(strGraph.numEdges(), edges);
     }
-
 
 //--------------------  hasData() --------------------
 
@@ -134,12 +143,6 @@ public class WGraphP4Test {
     	assertFalse(intGraph.hasData((Integer) 3));
     	assertFalse(strGraph.hasData("three"));
     }
-
-
-
-
-
-
 
 //--------------------  numVerts() --------------------
 	@Test
@@ -190,10 +193,6 @@ public class WGraphP4Test {
         
     }
 
-
-
-
-
 //--------------------  nextID() --------------------
 	@Test
     public void nextIDNew() {
@@ -212,9 +211,6 @@ public class WGraphP4Test {
         assertEquals(1, strGraph.nextID());
     	}
 
-
-
-
 //--------------------  addVertex(VT d) --------------------
     @Test
     public void addVertexNew() {
@@ -224,8 +220,6 @@ public class WGraphP4Test {
     	assertTrue(strGraph.hasData("zro"));
 
     }
-
-
 
 //--------------------  addVertex(GVertex<VT> v) --------------------
     @Test
@@ -253,13 +247,11 @@ public class WGraphP4Test {
     	assertTrue(intGraph.addVertex(gInt2));
     	assertTrue(strGraph.addVertex(gStr2));
 
-    	//vertices with the same ID as other vertices already contained cannot be added
+    	//vertices with the same ID as other vertices 
+        //already contained cannot be added
     	assertFalse(intGraph.addVertex(gInt));
     	assertFalse(strGraph.addVertex(gStr));
     }
-
-
-
 
 //--------------------  addEdge(WEdge e) --------------------
 	@Test
@@ -292,8 +284,7 @@ public class WGraphP4Test {
         assertFalse(strGraph.addEdge(wStr));
 	}
 
-
-//--------------------  addEdge(GVertex<VT> v, GVertex<VT> u, double weight) --------------------
+//--------  addEdge(GVertex<VT> v, GVertex<VT> u, double weight) ---------
 
 public void addEdgeFromVertsDuplicate() {
     // should be able to add vertices
@@ -307,7 +298,6 @@ public void addEdgeFromVertsDuplicate() {
     // try to add edge again, should fail
     assertFalse(strGraph.addEdge(s1,s2,weight));
 }
-
 
 //--------------------  deleteEdge() --------------------
 	@Test
@@ -355,8 +345,6 @@ public void addEdgeFromVertsDuplicate() {
         assertTrue(intGraph.deleteEdge(gInt1, gInt2));
         assertTrue(strGraph.deleteEdge(gStr1, gStr2));
 	}
-
-
 
 //--------------------  areAdjacent() --------------------
 
@@ -410,8 +398,6 @@ public void addEdgeFromVertsDuplicate() {
 
 	}
 
-
-
 //--------------------  neighbors() --------------------
 	@Test
     public void neighborsEmptyList(){
@@ -462,8 +448,6 @@ public void addEdgeFromVertsDuplicate() {
 
         assertEquals(list, intGraph.neighbors(gInt1));
 	}
-
-	
 
 	@Test
 	public void neighborsRemoveEdge() {
@@ -522,16 +506,6 @@ public void addEdgeFromVertsDuplicate() {
 
 
 	}
-
-
-
-
-
-
-
-
-
-
 
 //--------------------  degree() --------------------
 
@@ -718,9 +692,106 @@ public void addEdgeFromVertsDuplicate() {
 
 //--------------------  kruskals() --------------------
 
+@Test
+    public void testEmptyKruskals() {
+        System.out.println("\nEmpty");
+        // make mst on empty graph
+        mstInt = intGraph.kruskals();
+        // check that mst is empty
+        assertTrue(mstInt.isEmpty());
+        // repeat for string
+        mstStr = strGraph.kruskals();
+        assertTrue(mstStr.isEmpty());
+    }
 
+    @Test
+    public void testSingleEdgeKruskals() {
+        System.out.println("\nSingleEdge");
+        // add one edge to graph
+        double weight = 0.5;
+        GVertex<Integer> g0 = intVerts.get(0);
+        GVertex<Integer> g1 = intVerts.get(1);
+        WEdge<Integer> wInt = new WEdge<>(g0, g1, weight);
+        intGraph.addEdge(wInt);
+        // check that adds were successful
+        assertTrue(intGraph.hasVertex(g0));
+        assertTrue(intGraph.hasVertex(g1));
+        // check that there's an edge between g0 and g1
+        assertTrue(intGraph.areAdjacent(g0,g1));
+        // try Kruskal's now that everything worked
+        mstInt = intGraph.kruskals();
+        // check that desired edge is contained
+        assertTrue(mstInt.contains(wInt));
+        System.out.println(mstInt.toString());
+        // check that mstInt has one edge
+        assertEquals(mstInt.size(),1); // line that fails
+        // check that mstInt has the edge you want
+        //WEdge<Integer> myEdge = mstInt.get(0);
+        //assertEquals(myEdge,wInt);
 
+    }
 
+    @Test
+    public void testMinimumEdgesChosen() {
+        System.out.println("\nMinEdgesChosen");
+        // weights for edges
+        double w1 = 0.95;
+        double w2 = 0.8;
+        double w3 = 0.4;
+        // make 3 vertices
+        GVertex<Integer> g0 = intVerts.get(0);
+        GVertex<Integer> g1 = intVerts.get(1);
+        GVertex<Integer> g2 = intVerts.get(2);
+        // make 3 edges of dif weight, add to graph
+        WEdge<Integer> e1 = new WEdge<>(g0, g1, w1); 
+        WEdge<Integer> e2 = new WEdge<>(g1, g2, w2);
+        WEdge<Integer> e3 = new WEdge<>(g2, g0, w3);
+        intGraph.addEdge(e1); // should not be in Kruskal's
+        intGraph.addEdge(e2);
+        intGraph.addEdge(e3);
+        // get Kruskal's
+        mstInt = intGraph.kruskals();
+        // check that 2 edges of least weight are returned
+        assertTrue(mstInt.contains(e2));
+        assertTrue(mstInt.contains(e3));
+        // check that e1 is excluded
+        assertFalse(mstInt.contains(e1)); 
+        
+    }
 
+    @Test
+    public void testSimpleForest() {
+        System.out.println("\nSimpleForest");
+        // weights for edges
+        double w1 = 0.95;
+        double w2 = 0.8;
+        double w3 = 0.4;
+        // make 5 vertices
+        GVertex<Integer> g0 = intVerts.get(0);
+        GVertex<Integer> g1 = intVerts.get(1);
+        GVertex<Integer> g2 = intVerts.get(2);
+        GVertex<Integer> g3 = intVerts.get(3);
+        GVertex<Integer> g4 = intVerts.get(4);
+        // make 4 edges
+        WEdge<Integer> e01 = new WEdge<>(g0, g1, w1); // should be excluded
+        WEdge<Integer> e23 = new WEdge<>(g2, g3, w2); 
+        WEdge<Integer> e04 = new WEdge<>(g0, g4, w3);
+        WEdge<Integer> e41 = new WEdge<>(g4, g1, w3);
+        // add to graph
+        intGraph.addEdge(e01);
+        intGraph.addEdge(e23);
+        intGraph.addEdge(e04);
+        intGraph.addEdge(e41);
+        // get Kruskal's
+        System.out.println("At Kruskals");
+        mstInt = intGraph.kruskals();
+        System.out.println("Done w/ Kruskals");
 
+        // check that e23, e04, and e41 included
+        assertTrue(mstInt.contains(e23));
+        assertTrue(mstInt.contains(e04));
+        assertTrue(mstInt.contains(e41));
+        // check that e01 is excluded
+        assertFalse(mstInt.contains(e01));
+    }
 }

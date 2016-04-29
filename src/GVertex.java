@@ -1,3 +1,12 @@
+/********************************************************************
+ * Lydia Carroll, Benjamin Hoertnagl-Pereira, Ryan Walter
+ * JHED: lcarro12, bhoertn1, rwalte25
+ * lcarro12 @jhu.edu, bhoertn1@jhu.edu, rwalte25@jhu.edu
+ *
+ * 600.226.01 | CS226 Data Structures
+ * Project 4 - Image Segmentation
+ *******************************************************************/
+
 import java.util.LinkedList;
 import java.util.HashSet;
 

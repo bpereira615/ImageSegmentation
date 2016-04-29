@@ -1,22 +1,45 @@
+/**
+ * Lydia Carroll, JHED: lcarro12
+ * Ben Periera, JHED: bhoertn1
+ * Ryan Walter, rwalte25
+ *
+ * Data Structures 
+ * EN.600.226(01) 
+ * Project 4, Part C
+ */
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.HashSet;
 import java.util.LinkedList;
 
-
+/**
+ * Performs image segmentation.
+ * Run from command line with image name and desire kvalue.
+ * We have found kvalue = 100 to be very effective.
+ */
 public class P4C {
+    /** Number of primary colors, three. */
+    static final int THREE = 3;
 
+    /** Optimal number for pixel ratio. */
+    static final int THOU = 1000;
 
-    static int[] Diff(StoreInfo info) {
-        int[] diffs = new int[3];
+    /** Empty constructor for checkstyle. */
+    public P4C() {
+        // don't know how to get rid of this error
+    }
+
+    /** 
+     * Return the maximum different in red, green and blue values.
+     * @param  info stores max and min info for each color
+     * @return      array of ints [r g b]
+     */
+    static int[] diff(StoreInfo info) {
+        int[] diffs = new int[THREE];
         // find differences between maxes and mins
         diffs[0] = info.getMaxR() - info.getMinR();
         diffs[1] = info.getMaxG() - info.getMinG();
@@ -39,7 +62,8 @@ public class P4C {
 
         int y = image.getHeight();
         int x = image.getWidth();
-        ArrayList<ArrayList<GVertex<Pixel>>> grid = new ArrayList<ArrayList<GVertex<Pixel>>>(); 
+        ArrayList<ArrayList<GVertex<Pixel>>> grid = 
+            new ArrayList<ArrayList<GVertex<Pixel>>>(); 
 
         int rgb;
         //make gird of pixels
@@ -56,12 +80,6 @@ public class P4C {
         }
 
 
-
-        System.out.println("vertices: " + graph.numVerts() + "\tedges: " + graph.numEdges());
-    
-
-
-
         //add edges
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
@@ -69,85 +87,100 @@ public class P4C {
 
                 //edge cases 
                 if (i == 0 && j == 0) {
-                    GVertex<Pixel> lower = grid.get(i+1).get(j);
-                    GVertex<Pixel> right = grid.get(i).get(j+1);
+                    GVertex<Pixel> lower = grid.get(i + 1).get(j);
+                    GVertex<Pixel> right = grid.get(i).get(j + 1);
 
-                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
-                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                } else if (i == y-1 && j == x-1) {
-                    GVertex<Pixel> upper = grid.get(i-1).get(j);
-                    GVertex<Pixel> left = grid.get(i).get(j-1);
-    
-                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                } else if (i == 0 && j == x-1) {
-                    GVertex<Pixel> lower = grid.get(i+1).get(j);
-                    GVertex<Pixel> left = grid.get(i).get(j-1);
-
-                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
-                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                } else if (i == y-1 && j == 0) {
-                    GVertex<Pixel> upper = grid.get(i-1).get(j);
-                    GVertex<Pixel> right = grid.get(i).get(j+1);
-
-                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
+                    graph.addEdge(curr, lower, 
+                        pd.distance(curr.data(), lower.data()));
+                    graph.addEdge(curr, right, 
+                        pd.distance(curr.data(), right.data()));
+                } else if (i == y - 1 && j == x - 1) {
+                    GVertex<Pixel> upper = grid.get(i - 1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j - 1);
+                    graph.addEdge(curr, upper, 
+                        pd.distance(curr.data(), upper.data()));
+                    graph.addEdge(curr, left, 
+                        pd.distance(curr.data(), left.data()));
+                } else if (i == 0 && j == x - 1) {
+                    GVertex<Pixel> lower = grid.get(i + 1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j - 1);
+                    graph.addEdge(curr, lower, 
+                        pd.distance(curr.data(), lower.data()));
+                    graph.addEdge(curr, left, 
+                        pd.distance(curr.data(), left.data()));
+                } else if (i == y - 1 && j == 0) {
+                    GVertex<Pixel> upper = grid.get(i - 1).get(j);
+                    GVertex<Pixel> right = grid.get(i).get(j + 1);
+                    graph.addEdge(curr, upper, 
+                        pd.distance(curr.data(), upper.data()));
+                    graph.addEdge(curr, right, 
+                        pd.distance(curr.data(), right.data()));
                 } else if (i == 0) {
-                    
-
-                    GVertex<Pixel> left = grid.get(i).get(j-1);
-                    GVertex<Pixel> right = grid.get(i).get(j+1);
-                    GVertex<Pixel> lower = grid.get(i+1).get(j);
-
-                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    GVertex<Pixel> left = grid.get(i).get(j - 1);
+                    GVertex<Pixel> right = grid.get(i).get(j + 1);
+                    GVertex<Pixel> lower = grid.get(i + 1).get(j);
+                    graph.addEdge(curr, left, 
+                        pd.distance(curr.data(), left.data()));
+                    graph.addEdge(curr, right, 
+                        pd.distance(curr.data(), right.data()));
+                    graph.addEdge(curr, lower, 
+                        pd.distance(curr.data(), lower.data()));
                 } else if (j == 0) {
-                    GVertex<Pixel> upper = grid.get(i-1).get(j);
-                    GVertex<Pixel> right = grid.get(i).get(j+1);
-                    GVertex<Pixel> lower = grid.get(i+1).get(j);
-
-                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
-                } else if (i == y-1) {
-                    GVertex<Pixel> upper = grid.get(i-1).get(j);
-                    GVertex<Pixel> left = grid.get(i).get(j-1);
-                    GVertex<Pixel> right = grid.get(i).get(j+1);
-
-                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                } else if (j == x-1) {
-                    GVertex<Pixel> upper = grid.get(i-1).get(j);
-                    GVertex<Pixel> left = grid.get(i).get(j-1);
-                    GVertex<Pixel> lower = grid.get(i+1).get(j);
-
-                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    GVertex<Pixel> upper = grid.get(i - 1).get(j);
+                    GVertex<Pixel> right = grid.get(i).get(j + 1);
+                    GVertex<Pixel> lower = grid.get(i + 1).get(j);
+                    graph.addEdge(curr, upper, 
+                        pd.distance(curr.data(), upper.data()));
+                    graph.addEdge(curr, right, 
+                        pd.distance(curr.data(), right.data()));
+                    graph.addEdge(curr, lower, 
+                        pd.distance(curr.data(), lower.data()));
+                } else if (i == y - 1) {
+                    GVertex<Pixel> upper = grid.get(i - 1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j - 1);
+                    GVertex<Pixel> right = grid.get(i).get(j + 1);
+                    graph.addEdge(curr, upper, 
+                        pd.distance(curr.data(), upper.data()));
+                    graph.addEdge(curr, left, 
+                        pd.distance(curr.data(), left.data()));
+                    graph.addEdge(curr, right, 
+                        pd.distance(curr.data(), right.data()));
+                } else if (j == x - 1) {
+                    GVertex<Pixel> upper = grid.get(i - 1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j - 1);
+                    GVertex<Pixel> lower = grid.get(i + 1).get(j);
+                    graph.addEdge(curr, upper, 
+                        pd.distance(curr.data(), upper.data()));
+                    graph.addEdge(curr, left, 
+                        pd.distance(curr.data(), left.data()));
+                    graph.addEdge(curr, lower, 
+                        pd.distance(curr.data(), lower.data()));
                 } else {
                     //general case
 
-                    GVertex<Pixel> upper = grid.get(i-1).get(j);
-                    GVertex<Pixel> left = grid.get(i).get(j-1);
-                    GVertex<Pixel> right = grid.get(i).get(j+1);
-                    GVertex<Pixel> lower = grid.get(i+1).get(j);
+                    GVertex<Pixel> upper = grid.get(i - 1).get(j);
+                    GVertex<Pixel> left = grid.get(i).get(j - 1);
+                    GVertex<Pixel> right = grid.get(i).get(j + 1);
+                    GVertex<Pixel> lower = grid.get(i + 1).get(j);
 
-                    graph.addEdge(curr, upper, pd.distance(curr.data(),upper.data()));
-                    graph.addEdge(curr, left, pd.distance(curr.data(),left.data()));
-                    graph.addEdge(curr, right, pd.distance(curr.data(),right.data()));
-                    graph.addEdge(curr, lower, pd.distance(curr.data(),lower.data()));
+                    graph.addEdge(curr, upper, 
+                        pd.distance(curr.data(), upper.data()));
+                    graph.addEdge(curr, left, 
+                        pd.distance(curr.data(), left.data()));
+                    graph.addEdge(curr, right, 
+                        pd.distance(curr.data(), right.data()));
+                    graph.addEdge(curr, lower, 
+                        pd.distance(curr.data(), lower.data()));
 
                 }
             }
         }
     
-        System.out.println("vertices: " + graph.numVerts() + "\tedges: " + graph.numEdges());
+    
 
-        System.out.println(graph.depthFirst(graph.kruskals().get(0).source()).size());
+        
 
-        //TODO: Distance<Pixel> confusion as second parameter
+
         return graph;
     }
 
@@ -160,7 +193,7 @@ public class P4C {
      */
 
     static List<WEdge<Pixel>> segmenter(WGraph<Pixel> g, double kvalue) {
-        System.out.println("segmenter");
+        System.out.println("Running segmenter...");
         // create list of output edges == minimum spanning tree
         ArrayList<WEdge<Pixel>> mst = new ArrayList<WEdge<Pixel>>();
         // empty graph case
@@ -178,42 +211,36 @@ public class P4C {
             i++;
         }
         // create a partition to track unions
-        Partition P = new Partition(g.allVertices().size());
+        Partition p = new Partition(g.allVertices().size());
         // create a priority queue
-        // TODO: implement Ryan's PQHeap
-        PriorityQueue<WEdge<Pixel>> Q = new PriorityQueue<>(g.numEdges());
+        
+        //PriorityQueue<WEdge<Pixel>> Q = new PriorityQueue<>(g.numEdges());
+        PQHeap<WEdge<Pixel>> q = new PQHeap<WEdge<Pixel>>();
         // fill priority heap with edges
         for (WEdge<Pixel> e : g.allEdges()) {
-            Q.add(e);
+            q.insert(e);
         }
         // initialize list of lists to track vertex partitions
-        //ArrayList<ArrayList<GVertex<Pixel>>> megaList = new ArrayList<>();
         ArrayList<StoreInfo> megaList = new ArrayList<>(g.numVerts());
-        for (i=0; i<g.numVerts(); i++) {
+        for (i = 0; i < g.numVerts(); i++) {
             megaList.add(new StoreInfo());
         }
 
-        System.out.println("size of mega: " + megaList.size());
-        // details: need mega list of lists<vertex<pixel>>
-        //TODO: how to quickly find which list contains u1/v1?
-        System.out.println ("About to enter loop");
+        
         // while PQ not empty
-        while (!Q.isEmpty()) {
-            System.out.println(Q.size());
-            WEdge<Pixel> currE = Q.poll();
+        while (!q.isEmpty()) {
+            //System.out.println(Q.size());
+            WEdge<Pixel> currE = q.remove();
             GVertex<Pixel> u = currE.source();
             GVertex<Pixel> v = currE.end();
             // get clouds that u and v are in
-            int u1 = P.find(u.id());
-            System.out.println("u1: " + u1);
-            int v1 = P.find(v.id());
+            int u1 = p.find(u.id());
+            //System.out.println("u1: " + u1);
+            int v1 = p.find(v.id());
             // if u1 = v1, done
             // else, find vertices with given IDs
-            // TODO: can we make this quicker? quadratic time
+            // constant time
             if (u1 != v1) {
-                // iterate through mega-lists 
-                //int megaIndexU = -1;
-                //int megaIndexV = -1;
                 // updata u's in megaList
                 StoreInfo currU = megaList.get(u1);
                 currU.setMaxR(Math.max(currU.getMaxR(), u.getData().r()));
@@ -233,58 +260,6 @@ public class P4C {
                 currV.setMinB(Math.min(currV.getMinB(), v.getData().b()));
                 currV.addVert();
 
-                // for (ArrayList<GVertex<Pixel>> list : megaList) {
-                //     // iterate through sublist
-                //     //for (int j=0; j<list.size(); j++) {
-                //     for (GVertex<Pixel> elem : list) {
-                //         //GVertex<Pixel> elem = list.get(j);
-                //         // if elem is u1, report
-                //         if (elem.id() == u1) {
-                //             megaIndexU = i;
-                //             //list.add(u);
-                //         }
-                //         // if elem is v1, report
-                //         if (elem.id() == v1) {
-                //             megaIndexV = i;
-                //             //list.add(v);
-                //         }
-                //     }
-                //     i++;
-                //}
-                // decide where to put u and v
-                // if (megaIndexU != -1) {
-                //     ArrayList<GVertex<Pixel>> uList = megaList.get(megaIndexU);
-
-                //     uList.add(u);
-                //     megaList.set(megaIndexU, uList);
-                // }
-                // // if u1 not found, new list
-                // else if (megaIndexU == -1) {
-                //     ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
-                //     newList.add(u);
-                //     megaList.add(i, newList);
-                //     megaIndexU = i;
-                //     i++; // increment counter
-                // }
-
-                // if (megaIndexV != -1) {
-                //     ArrayList<GVertex<Pixel>> vList = megaList.get(megaIndexV);
-                //     vList.add(v);
-                //     megaList.set(megaIndexV, vList);
-                // }
-                // // if v1 not found, new list
-                // if (megaIndexV == -1) {
-                //     ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
-                //     newList.add(v);
-                //     megaList.add(i, newList);
-                //     megaIndexV = i;
-                //     i++;
-                // }
-                // add u and v to their lists
-                
-                // now you know which lists contain u and v
-                //ArrayList<GVertex<Pixel>> listU = megaList.get(megaIndexU);
-                //ArrayList<GVertex<Pixel>> listV = megaList.get(megaIndexV);
                 // create a union of lists U and V to check
                 StoreInfo uv = new StoreInfo();
                 uv.setMaxR(Math.max(currU.getMaxR(), currV.getMaxR()));
@@ -293,34 +268,29 @@ public class P4C {
                 uv.setMinR(Math.min(currU.getMinR(), currV.getMinR()));
                 uv.setMinG(Math.min(currU.getMinG(), currV.getMinG()));
                 uv.setMinB(Math.min(currU.getMinB(), currV.getMinB()));
-                //listUV.addAll(listU);
-                //listUV.addAll(listV);
+        
                 // get differences for each list
-                int[] diffUV = Diff(uv);
-                int[] diffU = Diff(currU);
-                int[] diffV = Diff(currV);
+                int[] diffUV = diff(uv);
+                int[] diffU = diff(currU);
+                int[] diffV = diff(currV);
+
                 // decide if lists pass joining conditions
-                boolean[] join = new boolean[3]; // initializes false
-                for (i=0; i<3; i++) {
+                boolean[] join = new boolean[THREE]; // initializes false
+                for (i = 0; i < THREE; i++) {
                     // if pass joining conditions
-                    if (diffUV[i] <= Math.min(diffU[i], diffV[i]) + 
-                        (kvalue/(currU.getVerts() + currV.getVerts()))) {
+                    if (diffUV[i] <= Math.min(diffU[i], diffV[i]) 
+                        + (kvalue / (currU.getVerts() + currV.getVerts()))) {
                         join[i] = true;
                     }
                 }
                  // add edge to spanning tree
-                 if (join[0] && join[1] && join[2]) {
+                if (join[0] && join[1] && join[2]) {
                     mst.add(currE);
                     // union partitions
-                    P.union(u.id(), v.id());
+                    p.union(u.id(), v.id());
                     megaList.set(u1, uv);
                     megaList.set(v1, uv);
-                    // union lists
-                    // TODO: add smaller list to longer list?
-                    //megaList.remove(listU);
-                    //megaList.remove(listV);
-                    //megaList.add(listUV);
-                 }
+                }
             }
         }
             // check if u,v in same partition. if so, done. if not, cont DONE
@@ -331,9 +301,15 @@ public class P4C {
             
         return mst;
     }
-
-
-    public static void writeImage(List<GVertex<Pixel>> pixels, BufferedImage image, String filename, int num) {
+    /**
+     * Creates an output image.
+     * @param pixels   Vertices found by depth-first search.
+     * @param image    File to write into
+     * @param filename Name of output file
+     * @param num      Tracks sequential output number
+     */
+    public static void writeImage(List<GVertex<Pixel>> pixels, 
+        BufferedImage image, String filename, int num) {
 
         final int gray = 0x0DCDCDC;
 
@@ -352,17 +328,20 @@ public class P4C {
         }
 
         try {
-            //TODO: proper file naming
             File f = new File(filename + num + ".png");
             ImageIO.write(image, "png", f);
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("IMAGE WRITE");
         }
         // You'll need to do that for each connected component,
         // writing each one to a different file, clearing the
         // image buffer first
     }
-
+    /**
+     * Segment an image by color.
+     * Works for rounded edges!
+     * @param args command line, file name and kvalue for Kruskals's.
+     */
     public static void main(String[] args) {
 
 
@@ -373,13 +352,7 @@ public class P4C {
             WGraph<Pixel> g = imageToGraph(image, new PixelDistance());
             
             List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
-            //TODO: try with 
-            //List<WEdge<Pixel>> res = g.kruskals();
-
-
-            System.out.print("result =  " + res.size() + "\n");
-            System.out.print("NSegments =  "
-                             + (g.numVerts() - res.size()) + "\n");
+            System.out.println("Segmenter complete, generating image...");
 
 
             // After you have a spanning tree connected component x, 
@@ -399,18 +372,6 @@ public class P4C {
                 //reset connectedness of vertices
                 subgraph.addEdge(w);
             }
-            
-
-            System.out.println(subgraph.numVerts() + " " + subgraph.numEdges());
-
-            //System.out.println(subgraph.depthFirst(subgraph.kruskals().get(0).source()).size());
-
-
-
-
-
-
-            
 
 
             //depth first portion
@@ -425,7 +386,7 @@ public class P4C {
 
                 if (!w.end().isVisited()) {
                     vertexList = subgraph.depthFirstSegmenter(w.end());
-                    if (vertexList.size() >= subgraph.numVerts()/100) {
+                    if (vertexList.size() >= subgraph.numVerts() / THOU) {
                         writeImage(vertexList,  image, file.getName(), i);
                         i++;
                     }
@@ -434,7 +395,7 @@ public class P4C {
 
                 if (!w.source().isVisited()) {
                     vertexList = subgraph.depthFirstSegmenter(w.source());
-                    if (vertexList.size() >= subgraph.numVerts()/100) {
+                    if (vertexList.size() >= subgraph.numVerts() / THOU) {
                         writeImage(vertexList,  image, file.getName(), i);
                         i++;
                     }
