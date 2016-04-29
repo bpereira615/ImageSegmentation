@@ -205,7 +205,7 @@ public class P4C {
             GVertex<Pixel> v = currE.end();
             // get clouds that u and v are in
             int u1 = P.find(u.id());
-            System.out.println("u1: " + u1);
+            //System.out.println("u1: " + u1);
             int v1 = P.find(v.id());
             // if u1 = v1, done
             // else, find vertices with given IDs
