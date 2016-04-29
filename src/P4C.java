@@ -304,17 +304,20 @@ public class P4C {
                     // if pass joining conditions
                     if (diffUV[i] <= Math.min(diffU[i], diffV[i]) + 
                         (kvalue/(listU.size() + listV.size()))) {
-                        // add edge to spanning tree
-                        mst.add(currE);
-                        // union partitions
-                        P.union(u.id(), v.id());
-                        // union lists
-                        // TODO: add smaller list to longer list?
-                        megaList.remove(listU);
-                        megaList.remove(listV);
-                        megaList.add(listUV);
+                        join[i] = true;
                     }
                 }
+                 // add edge to spanning tree
+                 if (join[0] && join[1] && join[2]) {
+                    mst.add(currE);
+                    // union partitions
+                    P.union(u.id(), v.id());
+                    // union lists
+                    // TODO: add smaller list to longer list?
+                    megaList.remove(listU);
+                    megaList.remove(listV);
+                    megaList.add(listUV);
+                 }
             }
         }
             // check if u,v in same partition. if so, done. if not, cont DONE
