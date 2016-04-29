@@ -62,7 +62,7 @@ public class P4C {
      *  @param pd the distance object for pixels
      *  @return the graph that was created
      */
-    static WGraph<Pixel> imageToGraph(BufferedImage image, PixelDistance pd) {
+    static WGraph<Pixel> imageToGraph(BufferedImage image, Distance<Pixel> pd) {
 
         WGraphP4<Pixel> graph = new WGraphP4<Pixel>();
 
