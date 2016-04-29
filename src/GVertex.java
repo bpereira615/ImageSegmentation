@@ -45,6 +45,13 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
         return this.num;
     }
 
+
+    public void reset() {
+        this.edges = new LinkedList<>();
+        this.neighbors = new HashSet<>();
+        this.visited = false;
+    }
+
     /**
      * Change the ID number of a vertex.
      * @param  id new identification number

@@ -357,10 +357,9 @@ public class P4C {
 
             
             for (WEdge<Pixel> w : res) {
-                GVertex<Pixel> newEnd = new GVertex<Pixel>(w.end().data(), subset.nextID());
-                GVertex<Pixel> newSource = new GVertex<Pixel>(w.source().data(), subset.nextID());
-                double weight = w.weight();
-                subset.addEdge(newSource, newEnd, weight);
+                w.source().reset();
+                w.end().reset();
+                subset.addEdge(w);
             }
             
             System.out.println("NEW: vertices: " + subset.numVerts() + "\tedges: " + subset.numEdges());
