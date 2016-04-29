@@ -330,6 +330,42 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	return result;
     }
 
+
+
+
+    /** Return a list of all the vertices that compose the spanning 
+     * 	tree for one of the trees in the spanning forest.
+     *  @param v the starting vertex
+     *  @return the list of reachable vertices
+     */
+    public List<GVertex<VT>> depthFirstSegmenter(GVertex<VT> v) {
+    	Stack<GVertex<VT>> stack = new Stack<>();
+    	LinkedList<GVertex<VT>> result = new LinkedList<>();
+
+    	stack.push(v);
+
+    	while (!stack.isEmpty()) {
+    		GVertex<VT> curr = stack.pop();
+    		//System.out.println("current vertex: " + curr);
+    		if (!curr.isVisited()) {
+    			curr.markVisited();
+    			result.add(curr);
+    			for (GVertex<VT> ver : curr.getNeighbors()){
+    					stack.push(ver);
+    				
+    			}
+    		}
+
+    	}
+
+
+    	return result;
+    }
+
+
+
+
+
     /** Return a list of all the edges incident on vertex v.  
      *  @param v the starting vertex
      *  @return the incident edges
