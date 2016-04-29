@@ -191,6 +191,7 @@ public class P4C {
      */
 
     static List<WEdge<Pixel>> segmenter(WGraph<Pixel> g, double kvalue) {
+        System.out.println("segmenter");
         // create list of output edges == minimum spanning tree
         ArrayList<WEdge<Pixel>> mst = new ArrayList<WEdge<Pixel>>();
         // empty graph case
@@ -220,9 +221,10 @@ public class P4C {
         ArrayList<ArrayList<GVertex<Pixel>>> megaList = new ArrayList<>();
         // details: need mega list of lists<vertex<pixel>>
         //TODO: how to quickly find which list contains u1/v1?
-        
+        System.out.println ("About to enter loop");
         // while PQ not empty
         while (!Q.isEmpty()) {
+            System.out.println(Q.size());
             WEdge<Pixel> currE = Q.poll();
             GVertex<Pixel> u = currE.source();
             GVertex<Pixel> v = currE.end();
@@ -239,28 +241,41 @@ public class P4C {
                 i = 0; // initialize counter
                 for (ArrayList<GVertex<Pixel>> list : megaList) {
                     // iterate through sublist
+                    //for (int j=0; j<list.size(); j++) {
                     for (GVertex<Pixel> elem : list) {
+                        //GVertex<Pixel> elem = list.get(j);
                         // if elem is u1, report
                         if (elem.id() == u1) {
                             megaIndexU = i;
-                            list.add(u);
+                            //list.add(u);
                         }
                         // if elem is v1, report
                         if (elem.id() == v1) {
                             megaIndexV = i;
-                            list.add(v);
+                            //list.add(v);
                         }
                     }
                     i++;
                 }
                 // decide where to put u and v
+                if (megaIndexU != -1) {
+                    ArrayList<GVertex<Pixel>> uList = megaList.get(megaIndexU);
+                    uList.add(u);
+                    megaList.set(megaIndexU, uList);
+                }
                 // if u1 not found, new list
-                if (megaIndexU == -1) {
+                else if (megaIndexU == -1) {
                     ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
                     newList.add(u);
                     megaList.add(i, newList);
                     megaIndexU = i;
                     i++; // increment counter
+                }
+
+                if (megaIndexV != -1) {
+                    ArrayList<GVertex<Pixel>> vList = megaList.get(megaIndexV);
+                    vList.add(v);
+                    megaList.set(megaIndexV, vList);
                 }
                 // if v1 not found, new list
                 if (megaIndexV == -1) {
@@ -270,6 +285,8 @@ public class P4C {
                     megaIndexV = i;
                     i++;
                 }
+                // add u and v to their lists
+                
                 // now you know which lists contain u and v
                 ArrayList<GVertex<Pixel>> listU = megaList.get(megaIndexU);
                 ArrayList<GVertex<Pixel>> listV = megaList.get(megaIndexV);
@@ -287,17 +304,20 @@ public class P4C {
                     // if pass joining conditions
                     if (diffUV[i] <= Math.min(diffU[i], diffV[i]) + 
                         (kvalue/(listU.size() + listV.size()))) {
-                        // add edge to spanning tree
-                        mst.add(currE);
-                        // union partitions
-                        P.union(u.id(), v.id());
-                        // union lists
-                        // TODO: add smaller list to longer list?
-                        megaList.remove(listU);
-                        megaList.remove(listV);
-                        megaList.add(listUV);
+                        join[i] = true;
                     }
                 }
+                 // add edge to spanning tree
+                 if (join[0] && join[1] && join[2]) {
+                    mst.add(currE);
+                    // union partitions
+                    P.union(u.id(), v.id());
+                    // union lists
+                    // TODO: add smaller list to longer list?
+                    megaList.remove(listU);
+                    megaList.remove(listV);
+                    megaList.add(listUV);
+                 }
             }
         }
             // check if u,v in same partition. if so, done. if not, cont DONE
@@ -309,31 +329,54 @@ public class P4C {
         return mst;
     }
 
+
+    public static void writeImage(List<GVertex<Pixel>> pixels, BufferedImage image, String filename, int num) {
+
+        final int gray = 0x0DCDCDC;
+
+        // make a background image to put a segment into
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                image.setRGB(j, i, gray);
+            }
+        }
+
+
+
+        for (GVertex<Pixel> p : pixels) {
+            Pixel d = p.data();
+            image.setRGB(d.row(), d.col(), d.value());
+        }
+
+        try {
+            //TODO: proper file naming
+            File f = new File(filename + num + ".png");
+            ImageIO.write(image, "png", f);
+        } catch(Exception e) {
+            System.out.println("IMAGE WRITE");
+        }
+        // You'll need to do that for each connected component,
+        // writing each one to a different file, clearing the
+        // image buffer first
+    }
+
     public static void main(String[] args) {
 
-        final int gray = 0x202020;
 
         try {
           // the line that reads the image file
-
-            BufferedImage image = ImageIO.read(new File(args[0]));
+            File file = new File(args[0]);
+            BufferedImage image = ImageIO.read(file);
             WGraph<Pixel> g = imageToGraph(image, new PixelDistance());
             
-            //List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
+            List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
             //TODO: try with 
-            List<WEdge<Pixel>> res = g.kruskals();
+            //List<WEdge<Pixel>> res = g.kruskals();
 
 
             System.out.print("result =  " + res.size() + "\n");
             System.out.print("NSegments =  "
                              + (g.numVerts() - res.size()) + "\n");
-
-            // make a background image to put a segment into
-            for (int i = 0; i < image.getHeight(); i++) {
-                for (int j = 0; j < image.getWidth(); j++) {
-                    image.setRGB(j, i, gray);
-                }
-            }
 
 
             // After you have a spanning tree connected component x, 
@@ -341,33 +384,57 @@ public class P4C {
 
 
 
-            WGraphP4<Pixel> subset = new WGraphP4<Pixel>();
+            WGraphP4<Pixel> subgraph = new WGraphP4<Pixel>();
 
-            
+            List<WEdge<Pixel>> reset = new LinkedList<WEdge<Pixel>>();
             for (WEdge<Pixel> w : res) {
-                w.source().reset();
                 w.end().reset();
-                subset.addEdge(w);
+                w.source().reset();
+            }
+
+            for (WEdge<Pixel> w : res) {
+                //reset connectedness of vertices
+                subgraph.addEdge(w);
             }
             
-            //System.out.println("NEW: vertices: " + subset.numVerts() + "\tedges: " + subset.numEdges());
 
-            GVertex<Pixel> first = res.get(0).source();
+            System.out.println(subgraph.numVerts() + " " + subgraph.numEdges());
 
-            System.out.println(subset.depthFirst(first).size());
+            //System.out.println(subgraph.depthFirst(subgraph.kruskals().get(0).source()).size());
 
-            for (GVertex<Pixel> i: subset.depthFirst(first))  {
-                Pixel d = i.data();
-                image.setRGB(d.row(), d.col(), d.value());
+
+
+
+
+
+            
+
+
+            //depth first portion
+            //reset the visited flags for all vertices
+            for (GVertex<Pixel> ver : subgraph.allVertices()) {
+                ver.clearVisited();
             }
 
-            File f = new File("a.png");
-            ImageIO.write(image, "png", f);
+            int i = 0;
+            for (WEdge<Pixel> w : res)  {
+                List<GVertex<Pixel>> vertexList;
 
-            // You'll need to do that for each connected component,
-            // writing each one to a different file, clearing the
-            // image buffer first
-   
+                if (!w.end().isVisited()) {
+                    vertexList = subgraph.depthFirstSegmenter(w.end());
+                    writeImage(vertexList,  image, file.getName(), i);
+                    i++;
+                }
+
+                if (!w.source().isVisited()) {
+                    vertexList = subgraph.depthFirstSegmenter(w.source());
+                    writeImage(vertexList,  image, file.getName(), i);
+                    i++;
+                }
+            }
+
+
+
         } catch (IOException e) {
             System.out.print("Missing File!\n");
 
