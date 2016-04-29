@@ -1,6 +1,15 @@
+/********************************************************************
+ * Lydia Carroll, Benjamin Hoertnagl-Pereira, Ryan Walter
+ * JHED: lcarro12, bhoertn1, rwalte25
+ * lcarro12 @jhu.edu, bhoertn1@jhu.edu, rwalte25@jhu.edu
+ *
+ * 600.226.01 | CS226 Data Structures
+ * Project 4 - Image Segmentation
+ *******************************************************************/
+
 /** Implementation of an edge class (for graphs), could be directed or not.
  */
-//TODO: generics defined in WGraph interface
+
 public class WEdge<VT> implements Comparable<WEdge<VT>> {
 
     /** Starting vertex of an edge. */
@@ -100,9 +109,6 @@ public class WEdge<VT> implements Comparable<WEdge<VT>> {
             } else {
                 return 0;
             }
-        // }
-        // System.out.println("ERROR: " + other.toString() + " is not a WEdge object!");
-        // return -2;
     }
 
 

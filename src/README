@@ -7,3 +7,7 @@
  * Project 4 - Image Segmentation
  *******************************************************************/
 
+“Discuss your process for implementing this part of the assignment, including which team members worked on which classes and tests, and why you chose that particular approach in your README file for this assignment.”
+
+GVertex.java was worked on by Lydia. Originally there were some issues with generics and implementing Comparable properly so that it could be used in the later-written PQHeap class, but this was fixed. Each vertex holds a list of neighboring vertices as well as a list of incident edges. 
+WEdge.java was worked on by Ryan and Ben. Again, troubles properly using generics were had, but then were fixed in tandem with writing part B of the project. 
