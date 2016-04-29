@@ -191,6 +191,7 @@ public class P4C {
      */
 
     static List<WEdge<Pixel>> segmenter(WGraph<Pixel> g, double kvalue) {
+        System.out.println("segmenter");
         // create list of output edges == minimum spanning tree
         ArrayList<WEdge<Pixel>> mst = new ArrayList<WEdge<Pixel>>();
         // empty graph case
@@ -220,9 +221,10 @@ public class P4C {
         ArrayList<ArrayList<GVertex<Pixel>>> megaList = new ArrayList<>();
         // details: need mega list of lists<vertex<pixel>>
         //TODO: how to quickly find which list contains u1/v1?
-        
+        System.out.println ("About to enter loop");
         // while PQ not empty
         while (!Q.isEmpty()) {
+            System.out.println(Q.size());
             WEdge<Pixel> currE = Q.poll();
             GVertex<Pixel> u = currE.source();
             GVertex<Pixel> v = currE.end();
@@ -239,28 +241,41 @@ public class P4C {
                 i = 0; // initialize counter
                 for (ArrayList<GVertex<Pixel>> list : megaList) {
                     // iterate through sublist
+                    //for (int j=0; j<list.size(); j++) {
                     for (GVertex<Pixel> elem : list) {
+                        //GVertex<Pixel> elem = list.get(j);
                         // if elem is u1, report
                         if (elem.id() == u1) {
                             megaIndexU = i;
-                            list.add(u);
+                            //list.add(u);
                         }
                         // if elem is v1, report
                         if (elem.id() == v1) {
                             megaIndexV = i;
-                            list.add(v);
+                            //list.add(v);
                         }
                     }
                     i++;
                 }
                 // decide where to put u and v
+                if (megaIndexU != -1) {
+                    ArrayList<GVertex<Pixel>> uList = megaList.get(megaIndexU);
+                    uList.add(u);
+                    megaList.set(megaIndexU, uList);
+                }
                 // if u1 not found, new list
-                if (megaIndexU == -1) {
+                else if (megaIndexU == -1) {
                     ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
                     newList.add(u);
                     megaList.add(i, newList);
                     megaIndexU = i;
                     i++; // increment counter
+                }
+
+                if (megaIndexV != -1) {
+                    ArrayList<GVertex<Pixel>> vList = megaList.get(megaIndexV);
+                    vList.add(v);
+                    megaList.set(megaIndexV, vList);
                 }
                 // if v1 not found, new list
                 if (megaIndexV == -1) {
@@ -270,6 +285,8 @@ public class P4C {
                     megaIndexV = i;
                     i++;
                 }
+                // add u and v to their lists
+                
                 // now you know which lists contain u and v
                 ArrayList<GVertex<Pixel>> listU = megaList.get(megaIndexU);
                 ArrayList<GVertex<Pixel>> listV = megaList.get(megaIndexV);
@@ -311,7 +328,7 @@ public class P4C {
 
     public static void main(String[] args) {
 
-        final int gray = 0x202020;
+        final int gray = 0x0DCDCDC;
 
         try {
           // the line that reads the image file
@@ -319,9 +336,9 @@ public class P4C {
             BufferedImage image = ImageIO.read(new File(args[0]));
             WGraph<Pixel> g = imageToGraph(image, new PixelDistance());
             
-            //List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
+            List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
             //TODO: try with 
-            List<WEdge<Pixel>> res = g.kruskals();
+            //List<WEdge<Pixel>> res = g.kruskals();
 
 
             System.out.print("result =  " + res.size() + "\n");
