@@ -330,7 +330,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  implementing Kruskal's algorithm using fast union/finds.
      *  @return a list of the edges in the minimum spanning forest
      */
-    public List<WEdge<VT>> kruskals() {
+    public ArrayList<WEdge<VT>> kruskals() {
         // create list of output edges == minimum spanning tree
         ArrayList<WEdge<VT>> mst = new ArrayList<WEdge<VT>>();
         // empty graph case
