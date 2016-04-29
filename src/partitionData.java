@@ -1,4 +1,4 @@
-public class partitionData {
+public class storeInfo {
 
     /** Starting vertex of an edge. */
     public int maxR;
@@ -11,7 +11,20 @@ public class partitionData {
 
     private int numVerts;
 
-    public partitionData(int upR, int downR, int upG, int downG, int upB, int downB) {
+    public PartitionData(){
+        this.maxR = -1;
+        this.minR = 1000;
+
+        this.maxG = -1;
+        this.minG = 1000;
+
+        this.maxB = -1;
+        this.minB = 1000;
+
+        this.numVerts = 0;
+    }
+
+    public PartitionData(int upR, int downR, int upG, int downG, int upB, int downB) {
         this.maxR = upR;
         this.minR = downR;
 
