@@ -322,7 +322,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
 
     /** Return a list of all the vertices that compose the spanning 
-     * 	tree for one of the trees in the spanning forest.
+     * 	tree for one of the trees in the spanning forest. Keeps flag
+     * 	data outside of so that vertices added to images already are
+     * 	not searched again.
      *  @param v the starting vertex
      *  @return the list of reachable vertices
      */

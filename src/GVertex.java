@@ -1,9 +1,9 @@
 import java.util.LinkedList;
 import java.util.HashSet;
 
-/** 
- * Class to represent a vertex (in a graph).
+/** Class to represent a vertex (in a graph).
  * Modified from Vertex.java to implement generics.
+ * @param <VT> the data to be stored
  *
  */
 
@@ -17,20 +17,20 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
     /** Data stored in the vertex. */
     private VT data;
 
-    /** List of edges incident to this vertex */
+    /** List of edges incident to this vertex. */
     private LinkedList<WEdge<VT>> edges;
 
-    /** Set of vertices that are neighbors to this vertex */
+    /** Set of vertices that are neighbors to this vertex. */
     private HashSet<GVertex<VT>> neighbors;
 
-    /** Flag for traversals */
+    /** Flag for traversals. */
     private boolean visited;
 
     /** Create a new vertex.
      *  @param d the data to store in the node
      *  @param id the unique id of the node
      */
-    public GVertex (VT d, int id) {
+    public GVertex(VT d, int id) {
         this.data = d;
         this.num = id;
         this.edges = new LinkedList<>();
@@ -45,7 +45,9 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
         return this.num;
     }
 
-
+    /** Reset connectedness of graph, used when creating a new
+     *  graph from a set of edges that have already been connected.
+     */
     public void reset() {
         this.edges = new LinkedList<>();
         this.neighbors = new HashSet<>();
@@ -103,47 +105,49 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
         return this.data;
     }
 
-    //TODO: fix this 
+    /** Return the value of data stored.
+     *  @return negative if this < other, 0 if equal, positive if this > other
+     */
     public VT data() {
         return this.data;
     }
 
-    /** Add edge to list of incident edges for this vertex
+    /** Add edge to list of incident edges for this vertex.
      *  @param e the edge to be added
+     *  @return true if added, false if not
      */
     public boolean addEdge(WEdge<VT> e) {
-        //TODO: when should this fail?
-        edges.add(e);
+        this.edges.add(e);
         if (e.source().id() == this.num) {
-            neighbors.add(e.end());
+            this.neighbors.add(e.end());
         } else {
-            neighbors.add(e.source());
+            this.neighbors.add(e.source());
         }
         return true;
     }
 
-    /** Add edge to list of incident edges for this vertex
+    /** Add edge to list of incident edges for this vertex.
      *  @param e the edge to be added
+     *  @return true if added, false if not
      */
     public boolean removeEdge(WEdge<VT> e) {
-        //TODO: when should this fail?
-        edges.remove(e);
+        this.edges.remove(e);
         if (e.source().id() == this.num) {
-            neighbors.remove(e.end());
+            this.neighbors.remove(e.end());
         } else {
-            neighbors.remove(e.source());
+            this.neighbors.remove(e.source());
         }
         return true;
     }
 
-    /** Return list of edges
+    /** Return list of edges.
      *  @return list of edges
      */
     public LinkedList<WEdge<VT>> getEdges() {
         return this.edges;
     }
 
-    /** Return set of neighbors
+    /** Return set of neighbors.
      *  @return set of neighbors
      */
     public HashSet<GVertex<VT>> getNeighbors() {
@@ -151,7 +155,7 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
     }
 
 
-    /** Checks if vertex has been visited
+    /** Checks if vertex has been visited.
      *  @return true if visited, false if not
      */
     public boolean isVisited() {
@@ -159,13 +163,13 @@ public class GVertex<VT> implements Comparable<GVertex<VT>> {
     }
 
 
-    /** Mark vertex as visited
+    /** Mark vertex as visited.
      */
     public void markVisited() {
         this.visited = true;
     }
 
-    /** Set flag to not visited
+    /** Set flag to not visited.
      */
     public void clearVisited() {
         this.visited = false;

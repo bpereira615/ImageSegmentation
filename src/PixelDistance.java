@@ -1,7 +1,11 @@
-public class PixelDistance {
+public class PixelDistance implements Distance<Pixel>{
 	
+	public PixelDistance() {
+
+	}
 	public double distance (Pixel one, Pixel two) {
-		return Math.pow(one.r() - two.r(), 2) + Math.pow(one.g() - two.g(), 2) +
+		double square = Math.pow(one.r() - two.r(), 2) + Math.pow(one.g() - two.g(), 2) +
 			Math.pow(one.b() - two.b(), 2);
+		return Math.pow(square, 0.5);
 	}
 }
