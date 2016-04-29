@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
-import java.util.PriorityQueue;
+// import java.util.PriorityQueue;
 import java.util.ListIterator;
 import java.util.HashSet;
 import java.util.Stack;
@@ -110,22 +110,13 @@ public class WGraphP4<VT> implements WGraph<VT> {
     	return true;
     }
 
-
-
-
     //TODO: no deleteVertex method?
-
-
-
-
-
-
 
     /** Add a weighted edge, may also add the incident vertices. 
      *  @param e the edge to add
      *  @return false if already there, true if added
      */
-    public boolean addEdge(WEdge e) {
+    public boolean addEdge(WEdge<VT> e) {
     	boolean added = false;
         added = addEdge(e.source(), e.end(), e.weight());
         return added;
@@ -319,14 +310,11 @@ public class WGraphP4<VT> implements WGraph<VT> {
     			curr.markVisited();
     			result.add(curr);
     			for (GVertex<VT> ver : curr.getNeighbors()){
-    					stack.push(ver);
-    				
+    					stack.push(ver);		
     			}
     		}
 
     	}
-
-
     	return result;
     }
 
@@ -393,29 +381,35 @@ public class WGraphP4<VT> implements WGraph<VT> {
         // first renumber all vertices, pray that objects are linked in edges
         int i = 0;
         for (GVertex<VT> curr : this.vertices) {
-            curr.setId(i);
+            curr.setId(i); //does this somehow make them harder to access later?
             i++;
         }
         // create a partition
-        Partition P = new Partition(this.vertices.size());
+        Partition p = new Partition(this.vertices.size());
         // create a priority heap, fill with edges
-        // TODO: incorporate Ryan's PQHeap
-        PriorityQueue<WEdge<VT>> Q = new PriorityQueue<>(this.edges.size());
-        //PQHeap<WEdge<VT>> Q = new PQHeap<>();
+        // TODO: incorporate Ryan's PQHeap (DONE)
+        // PriorityQueue<WEdge<VT>> q = new PriorityQueue<WEdge<VT>>(this.edges.size());
+        PQHeap<WEdge<VT>> q = new PQHeap<WEdge<VT>>(); //using Ryan's PQHeap
+        // System.out.println("\nCreated Heap");
         // fill priority heap with edges
-        for (WEdge<VT> e : this.edges) {
-            Q.add(e);
-        }
+        // for (WEdge<VT> e : this.edges) {
+        //     q.add(e);
+        // }
+        q.init(this.edges);
+        // System.out.println("Filled Heap");
         // perform Kruskal's on everything
-        while(!Q.isEmpty()) {
-            WEdge<VT> currE = Q.poll();
+        while(!q.isEmpty()) {
+            //System.out.println(q.toString());
+            // WEdge<VT> currE = q.poll();
+            WEdge<VT> currE = q.remove();//q.poll();
+
             GVertex<VT> v = currE.source();
             GVertex<VT> u = currE.end();
             // check if v & u are in same partition
             // if not, add current edge to spanning tree
-            if (P.find(v.id()) != P.find(u.id())) {
+            if (p.find(v.id()) != p.find(u.id())) {
                 mst.add(currE);
-                P.union(v.id(), u.id());
+                p.union(v.id(), u.id());
             }
         }
     return mst;

@@ -36,7 +36,7 @@ public interface WGraph<VT> {
      *  @param e the edge to add
      *  @return false if already there, true if added
      */
-    boolean addEdge(WEdge e);
+    boolean addEdge(WEdge<VT> e);
 
     /** Add a weighted edge, may also add vertices. 
      *  @param v the starting vertex

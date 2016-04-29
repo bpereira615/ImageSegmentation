@@ -52,6 +52,7 @@ public class WGraphKruskalsTest {
 
     @Test
     public void testEmptyKruskals() {
+        System.out.println("\nEmpty");
     	// make mst on empty graph
     	mstInt = intGraph.kruskals();
     	// check that mst is empty
@@ -63,6 +64,7 @@ public class WGraphKruskalsTest {
 
     @Test
     public void testSingleEdgeKruskals() {
+        System.out.println("\nSingleEdge");
     	// add one edge to graph
     	double weight = 0.5;
     	GVertex<Integer> g0 = intVerts.get(0);
@@ -89,6 +91,7 @@ public class WGraphKruskalsTest {
 
     @Test
     public void testMinimumEdgesChosen() {
+        System.out.println("\nMinEdgesChosen");
         // weights for edges
         double w1 = 0.95;
         double w2 = 0.8;
@@ -116,6 +119,7 @@ public class WGraphKruskalsTest {
 
     @Test
     public void testSimpleForest() {
+        System.out.println("\nSimpleForest");
         // weights for edges
         double w1 = 0.95;
         double w2 = 0.8;
@@ -136,8 +140,11 @@ public class WGraphKruskalsTest {
         intGraph.addEdge(e23);
         intGraph.addEdge(e04);
         intGraph.addEdge(e41);
-        // get Kruskal;s
+        // get Kruskal's
+        System.out.println("At Kruskals");
         mstInt = intGraph.kruskals();
+        System.out.println("Done w/ Kruskals");
+
         // check that e23, e04, and e41 included
         assertTrue(mstInt.contains(e23));
         assertTrue(mstInt.contains(e04));
