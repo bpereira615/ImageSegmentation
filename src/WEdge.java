@@ -61,7 +61,7 @@ public class WEdge<VT> implements Comparable<WEdge<VT>> {
      *  @param other the edge to compare to this
      *  @return true if directedness and endpoints match, false otherwise
      */
-    @Override
+    @Override   
     public boolean equals(Object other) {
         if (other instanceof WEdge) {
             WEdge e = (WEdge) other;

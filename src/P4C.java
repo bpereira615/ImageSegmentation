@@ -15,43 +15,12 @@ import java.util.LinkedList;
 public class P4C {
 
 
-    static int [] Diff(ArrayList<GVertex<Pixel>> list) {
-        // initialize maxes and mins
-        int maxR = 0; // less than expected max
-        int maxG = 0;
-        int maxB = 0;
-        int minR = 1000; // larger than expected min
-        int minG = 1000;
-        int minB = 1000;
-        // initialize differences array
+    static int[] Diff(StoreInfo info) {
         int[] diffs = new int[3];
-        for (GVertex<Pixel> vert : list) {
-            Pixel pix = vert.getData();
-            // check if any are new maxes
-            if (pix.r() > maxR){
-                maxR = pix.r();
-            }
-            if (pix.g() > maxG) {
-                maxG = pix.g();
-            }
-            if (pix.b() > maxB) {
-                maxB = pix.b();
-            }
-            // check if any new mins
-           if (pix.r() < minR) {
-                minR = pix.r();
-           }
-           if (pix.g() < minG) {
-                minG = pix.g();
-           }
-           if (pix.b() < minB) {
-                minB = pix.b();
-           }
-        }
         // find differences between maxes and mins
-        diffs[0] = maxR - minR;
-        diffs[1] = maxB - minB;
-        diffs[2] = maxG - minG;
+        diffs[0] = info.getMaxR() - info.getMinR();
+        diffs[1] = info.getMaxG() - info.getMinG();
+        diffs[2] = info.getMaxB() - info.getMinB();
         
         return diffs;
     }
@@ -218,7 +187,13 @@ public class P4C {
             Q.add(e);
         }
         // initialize list of lists to track vertex partitions
-        ArrayList<ArrayList<GVertex<Pixel>>> megaList = new ArrayList<>();
+        //ArrayList<ArrayList<GVertex<Pixel>>> megaList = new ArrayList<>();
+        ArrayList<StoreInfo> megaList = new ArrayList<>(g.numVerts());
+        for (i=0; i<g.numVerts(); i++) {
+            megaList.add(new StoreInfo());
+        }
+
+        System.out.println("size of mega: " + megaList.size());
         // details: need mega list of lists<vertex<pixel>>
         //TODO: how to quickly find which list contains u1/v1?
         System.out.println ("About to enter loop");
@@ -230,80 +205,106 @@ public class P4C {
             GVertex<Pixel> v = currE.end();
             // get clouds that u and v are in
             int u1 = P.find(u.id());
+            System.out.println("u1: " + u1);
             int v1 = P.find(v.id());
             // if u1 = v1, done
             // else, find vertices with given IDs
             // TODO: can we make this quicker? quadratic time
             if (u1 != v1) {
                 // iterate through mega-lists 
-                int megaIndexU = -1;
-                int megaIndexV = -1;
-                i = 0; // initialize counter
-                for (ArrayList<GVertex<Pixel>> list : megaList) {
-                    // iterate through sublist
-                    //for (int j=0; j<list.size(); j++) {
-                    for (GVertex<Pixel> elem : list) {
-                        //GVertex<Pixel> elem = list.get(j);
-                        // if elem is u1, report
-                        if (elem.id() == u1) {
-                            megaIndexU = i;
-                            //list.add(u);
-                        }
-                        // if elem is v1, report
-                        if (elem.id() == v1) {
-                            megaIndexV = i;
-                            //list.add(v);
-                        }
-                    }
-                    i++;
-                }
-                // decide where to put u and v
-                if (megaIndexU != -1) {
-                    ArrayList<GVertex<Pixel>> uList = megaList.get(megaIndexU);
-                    uList.add(u);
-                    megaList.set(megaIndexU, uList);
-                }
-                // if u1 not found, new list
-                else if (megaIndexU == -1) {
-                    ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
-                    newList.add(u);
-                    megaList.add(i, newList);
-                    megaIndexU = i;
-                    i++; // increment counter
-                }
+                //int megaIndexU = -1;
+                //int megaIndexV = -1;
+                // updata u's in megaList
+                StoreInfo currU = megaList.get(u1);
+                currU.setMaxR(Math.max(currU.getMaxR(), u.getData().r()));
+                currU.setMaxG(Math.max(currU.getMaxG(), u.getData().g()));
+                currU.setMaxB(Math.max(currU.getMaxB(), u.getData().b()));
+                currU.setMinR(Math.min(currU.getMinR(), u.getData().r()));
+                currU.setMinG(Math.min(currU.getMinG(), u.getData().g()));
+                currU.setMinB(Math.min(currU.getMinB(), u.getData().b()));
+                currU.addVert();
+                // update v's
+                StoreInfo currV = megaList.get(v1);
+                currV.setMaxR(Math.max(currV.getMaxR(), v.getData().r()));
+                currV.setMaxG(Math.max(currV.getMaxG(), v.getData().g()));
+                currV.setMaxB(Math.max(currV.getMaxB(), v.getData().b()));
+                currV.setMinR(Math.min(currV.getMinR(), v.getData().r()));
+                currV.setMinG(Math.min(currV.getMinG(), v.getData().g()));
+                currV.setMinB(Math.min(currV.getMinB(), v.getData().b()));
+                currV.addVert();
 
-                if (megaIndexV != -1) {
-                    ArrayList<GVertex<Pixel>> vList = megaList.get(megaIndexV);
-                    vList.add(v);
-                    megaList.set(megaIndexV, vList);
-                }
-                // if v1 not found, new list
-                if (megaIndexV == -1) {
-                    ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
-                    newList.add(v);
-                    megaList.add(i, newList);
-                    megaIndexV = i;
-                    i++;
-                }
+                // for (ArrayList<GVertex<Pixel>> list : megaList) {
+                //     // iterate through sublist
+                //     //for (int j=0; j<list.size(); j++) {
+                //     for (GVertex<Pixel> elem : list) {
+                //         //GVertex<Pixel> elem = list.get(j);
+                //         // if elem is u1, report
+                //         if (elem.id() == u1) {
+                //             megaIndexU = i;
+                //             //list.add(u);
+                //         }
+                //         // if elem is v1, report
+                //         if (elem.id() == v1) {
+                //             megaIndexV = i;
+                //             //list.add(v);
+                //         }
+                //     }
+                //     i++;
+                //}
+                // decide where to put u and v
+                // if (megaIndexU != -1) {
+                //     ArrayList<GVertex<Pixel>> uList = megaList.get(megaIndexU);
+
+                //     uList.add(u);
+                //     megaList.set(megaIndexU, uList);
+                // }
+                // // if u1 not found, new list
+                // else if (megaIndexU == -1) {
+                //     ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
+                //     newList.add(u);
+                //     megaList.add(i, newList);
+                //     megaIndexU = i;
+                //     i++; // increment counter
+                // }
+
+                // if (megaIndexV != -1) {
+                //     ArrayList<GVertex<Pixel>> vList = megaList.get(megaIndexV);
+                //     vList.add(v);
+                //     megaList.set(megaIndexV, vList);
+                // }
+                // // if v1 not found, new list
+                // if (megaIndexV == -1) {
+                //     ArrayList<GVertex<Pixel>> newList = new ArrayList<>();
+                //     newList.add(v);
+                //     megaList.add(i, newList);
+                //     megaIndexV = i;
+                //     i++;
+                // }
                 // add u and v to their lists
                 
                 // now you know which lists contain u and v
-                ArrayList<GVertex<Pixel>> listU = megaList.get(megaIndexU);
-                ArrayList<GVertex<Pixel>> listV = megaList.get(megaIndexV);
+                //ArrayList<GVertex<Pixel>> listU = megaList.get(megaIndexU);
+                //ArrayList<GVertex<Pixel>> listV = megaList.get(megaIndexV);
                 // create a union of lists U and V to check
-                ArrayList<GVertex<Pixel>> listUV = new ArrayList<>();
-                listUV.addAll(listU);
-                listUV.addAll(listV);
+                StoreInfo uv = new StoreInfo();
+                uv.setMaxR(Math.max(currU.getMaxR(), currV.getMaxR()));
+                uv.setMaxG(Math.max(currU.getMaxG(), currV.getMaxG()));
+                uv.setMaxB(Math.max(currU.getMaxB(), currV.getMaxB()));
+                uv.setMinR(Math.min(currU.getMinR(), currV.getMinR()));
+                uv.setMinG(Math.min(currU.getMinG(), currV.getMinG()));
+                uv.setMinB(Math.min(currU.getMinB(), currV.getMinB()));
+                //listUV.addAll(listU);
+                //listUV.addAll(listV);
                 // get differences for each list
-                int[] diffUV = Diff(listUV);
-                int[] diffU = Diff(listU);
-                int[] diffV = Diff(listV);
+                int[] diffUV = Diff(uv);
+                int[] diffU = Diff(currU);
+                int[] diffV = Diff(currV);
                 // decide if lists pass joining conditions
                 boolean[] join = new boolean[3]; // initializes false
                 for (i=0; i<3; i++) {
                     // if pass joining conditions
                     if (diffUV[i] <= Math.min(diffU[i], diffV[i]) + 
-                        (kvalue/(listU.size() + listV.size()))) {
+                        (kvalue/(currU.getVerts() + currV.getVerts()))) {
                         join[i] = true;
                     }
                 }
@@ -312,11 +313,13 @@ public class P4C {
                     mst.add(currE);
                     // union partitions
                     P.union(u.id(), v.id());
+                    megaList.set(u1, uv);
+                    megaList.set(v1, uv);
                     // union lists
                     // TODO: add smaller list to longer list?
-                    megaList.remove(listU);
-                    megaList.remove(listV);
-                    megaList.add(listUV);
+                    //megaList.remove(listU);
+                    //megaList.remove(listV);
+                    //megaList.add(listUV);
                  }
             }
         }
