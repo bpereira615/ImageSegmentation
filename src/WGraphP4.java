@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
-// import java.util.PriorityQueue;
+import java.util.PriorityQueue;
 import java.util.ListIterator;
 import java.util.HashSet;
 import java.util.Stack;
@@ -353,15 +353,18 @@ public class WGraphP4<VT> implements WGraph<VT> {
         Partition p = new Partition(this.vertices.size());
         // create a priority heap, fill with edges
         // TODO: incorporate Ryan's PQHeap (DONE)
-        // PriorityQueue<WEdge<VT>> q = new PriorityQueue<WEdge<VT>>(this.edges.size());
-        PQHeap<WEdge<VT>> q = new PQHeap<WEdge<VT>>();
+        PriorityQueue<WEdge<VT>> q = new PriorityQueue<WEdge<VT>>(this.edges.size());
+        //PQHeap<WEdge<VT>> q = new PQHeap<WEdge<VT>>(); //using Ryan's PQHeap
         // fill priority heap with edges
         for (WEdge<VT> e : this.edges) {
-            q.insert(e);//q.add(e);
+            q.add(e);
         }
+        // q.init(this.edges);
         // perform Kruskal's on everything
         while(!q.isEmpty()) {
-            WEdge<VT> currE = q.peek();//q.poll();
+            WEdge<VT> currE = q.poll();
+            // WEdge<VT> currE = q.peek();//q.poll();
+
             GVertex<VT> v = currE.source();
             GVertex<VT> u = currE.end();
             // check if v & u are in same partition
