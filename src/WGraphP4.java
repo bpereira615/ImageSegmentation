@@ -343,11 +343,11 @@ public class WGraphP4<VT> implements WGraph<VT> {
         }
 
         // first renumber all vertices, pray that objects are linked in edges
-        // int i = 0;
-        // for (GVertex<VT> curr : this.vertices) {
-        //     curr.setId(i); //does this somehow make them harder to access later?
-        //     i++;
-        // }
+        int i = 0;
+        for (GVertex<VT> curr : this.vertices) {
+            curr.setId(i); //does this somehow make them harder to access later?
+            i++;
+        }
         // create a partition
         Partition p = new Partition(this.vertices.size());
         // create a priority heap, fill with edges
