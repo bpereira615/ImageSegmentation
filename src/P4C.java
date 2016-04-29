@@ -422,14 +422,19 @@ public class P4C {
 
                 if (!w.end().isVisited()) {
                     vertexList = subgraph.depthFirstSegmenter(w.end());
-                    writeImage(vertexList,  image, file.getName(), i);
-                    i++;
+                    if (vertexList.size() >= subgraph.numVerts()/100) {
+                        writeImage(vertexList,  image, file.getName(), i);
+                        i++;
+                    }
+                    
                 }
 
                 if (!w.source().isVisited()) {
                     vertexList = subgraph.depthFirstSegmenter(w.source());
-                    writeImage(vertexList,  image, file.getName(), i);
-                    i++;
+                    if (vertexList.size() >= subgraph.numVerts()/100) {
+                        writeImage(vertexList,  image, file.getName(), i);
+                        i++;
+                    }
                 }
             }
 
