@@ -176,6 +176,8 @@ public class P4C {
     
         System.out.println("vertices: " + graph.numVerts() + "\tedges: " + graph.numEdges());
 
+        System.out.println(graph.depthFirst(graph.kruskals().get(0).source()).size());
+
         //TODO: Distance<Pixel> confusion as second parameter
         return graph;
     }
@@ -344,14 +346,6 @@ public class P4C {
             // you can generate an output image like this:
 
 
-            /*
-            HashSet<GVertex<Pixel>> pixSet = new HashSet<>();
-
-            for (WEdge<Pixel> w : res) {
-                pixSet.add(w.source());
-                pixSet.add(w.end());
-            }
-            */
 
             WGraphP4<Pixel> subset = new WGraphP4<Pixel>();
 
@@ -362,10 +356,11 @@ public class P4C {
                 subset.addEdge(w);
             }
             
-            System.out.println("NEW: vertices: " + subset.numVerts() + "\tedges: " + subset.numEdges());
+            //System.out.println("NEW: vertices: " + subset.numVerts() + "\tedges: " + subset.numEdges());
 
             GVertex<Pixel> first = res.get(0).source();
 
+            System.out.println(subset.depthFirst(first).size());
 
             for (GVertex<Pixel> i: subset.depthFirst(first))  {
                 Pixel d = i.data();

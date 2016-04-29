@@ -319,14 +319,13 @@ public class WGraphP4<VT> implements WGraph<VT> {
     			curr.markVisited();
     			result.add(curr);
     			for (GVertex<VT> ver : curr.getNeighbors()){
-    				if (!ver.isVisited()) {
     					stack.push(ver);
-    				}
     				
     			}
     		}
 
     	}
+
 
     	return result;
     }
