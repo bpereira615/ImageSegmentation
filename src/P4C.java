@@ -318,12 +318,6 @@ public class P4C {
 
             BufferedImage image = ImageIO.read(new File(args[0]));
             WGraph<Pixel> g = imageToGraph(image, new PixelDistance());
-
-            
-
-
-
-
             
             //List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
             //TODO: try with 
@@ -380,9 +374,6 @@ public class P4C {
             // log the exception
             // re-throw if desired
         }
-     
-
-
 
     }
 
