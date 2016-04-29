@@ -53,11 +53,6 @@ public class WGraphP4Test {
         s3 = new GVertex<>("c", strGraph.nextID());
     }
 
-
-
-
-
-
 //--------------------  numEdges() --------------------
     @Test
     public void numEdgesEmpty() {
@@ -89,7 +84,6 @@ public class WGraphP4Test {
 
     	assertEquals(1, intGraph.numEdges());
     	assertEquals(1, strGraph.numEdges());
-
     }
 
     @Test
@@ -107,7 +101,6 @@ public class WGraphP4Test {
         edges--;
         assertEquals(strGraph.numEdges(), edges);
     }
-
 
 //--------------------  hasData() --------------------
 
@@ -141,12 +134,6 @@ public class WGraphP4Test {
     	assertFalse(intGraph.hasData((Integer) 3));
     	assertFalse(strGraph.hasData("three"));
     }
-
-
-
-
-
-
 
 //--------------------  numVerts() --------------------
 	@Test
@@ -197,10 +184,6 @@ public class WGraphP4Test {
         
     }
 
-
-
-
-
 //--------------------  nextID() --------------------
 	@Test
     public void nextIDNew() {
@@ -219,9 +202,6 @@ public class WGraphP4Test {
         assertEquals(1, strGraph.nextID());
     	}
 
-
-
-
 //--------------------  addVertex(VT d) --------------------
     @Test
     public void addVertexNew() {
@@ -231,8 +211,6 @@ public class WGraphP4Test {
     	assertTrue(strGraph.hasData("zro"));
 
     }
-
-
 
 //--------------------  addVertex(GVertex<VT> v) --------------------
     @Test
@@ -265,9 +243,6 @@ public class WGraphP4Test {
     	assertFalse(strGraph.addVertex(gStr));
     }
 
-
-
-
 //--------------------  addEdge(WEdge e) --------------------
 	@Test
 	public void addEdgeObjectFromVertexObject() {
@@ -299,7 +274,6 @@ public class WGraphP4Test {
         assertFalse(strGraph.addEdge(wStr));
 	}
 
-
 //--------------------  addEdge(GVertex<VT> v, GVertex<VT> u, double weight) --------------------
 
 public void addEdgeFromVertsDuplicate() {
@@ -314,7 +288,6 @@ public void addEdgeFromVertsDuplicate() {
     // try to add edge again, should fail
     assertFalse(strGraph.addEdge(s1,s2,weight));
 }
-
 
 //--------------------  deleteEdge() --------------------
 	@Test
@@ -362,8 +335,6 @@ public void addEdgeFromVertsDuplicate() {
         assertTrue(intGraph.deleteEdge(gInt1, gInt2));
         assertTrue(strGraph.deleteEdge(gStr1, gStr2));
 	}
-
-
 
 //--------------------  areAdjacent() --------------------
 
@@ -417,8 +388,6 @@ public void addEdgeFromVertsDuplicate() {
 
 	}
 
-
-
 //--------------------  neighbors() --------------------
 	@Test
     public void neighborsEmptyList(){
@@ -469,8 +438,6 @@ public void addEdgeFromVertsDuplicate() {
 
         assertEquals(list, intGraph.neighbors(gInt1));
 	}
-
-	
 
 	@Test
 	public void neighborsRemoveEdge() {
@@ -529,16 +496,6 @@ public void addEdgeFromVertsDuplicate() {
 
 
 	}
-
-
-
-
-
-
-
-
-
-
 
 //--------------------  degree() --------------------
 
@@ -827,8 +784,4 @@ public void addEdgeFromVertsDuplicate() {
         // check that e01 is excluded
         assertFalse(mstInt.contains(e01));
     }
-
-
-
-
 }
