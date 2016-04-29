@@ -1,3 +1,12 @@
+/********************************************************************
+ * Lydia Carroll, Benjamin Hoertnagl-Pereira, Ryan Walter
+ * JHED: lcarro12, bhoertn1, rwalte25
+ * lcarro12 @jhu.edu, bhoertn1@jhu.edu, rwalte25@jhu.edu
+ *
+ * 600.226.01 | CS226 Data Structures
+ * Project 4 - Image Segmentation
+ *******************************************************************/
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -382,27 +391,18 @@ public class WGraphP4<VT> implements WGraph<VT> {
         // first renumber all vertices, pray that objects are linked in edges
         int i = 0;
         for (GVertex<VT> curr : this.vertices) {
-            curr.setId(i); //does this somehow make them harder to access later?
+            curr.setId(i); 
             i++;
         }
         // create a partition
         Partition p = new Partition(this.vertices.size());
         // create a priority heap, fill with edges
-        // TODO: incorporate Ryan's PQHeap (DONE)
-        // PriorityQueue<WEdge<VT>> q = new PriorityQueue<WEdge<VT>>(this.edges.size());
         PQHeap<WEdge<VT>> q = new PQHeap<WEdge<VT>>(); //using Ryan's PQHeap
-        // System.out.println("\nCreated Heap");
         // fill priority heap with edges
-        // for (WEdge<VT> e : this.edges) {
-        //     q.add(e);
-        // }
         q.init(this.edges);
-        // System.out.println("Filled Heap");
         // perform Kruskal's on everything
         while(!q.isEmpty()) {
-            //System.out.println(q.toString());
-            // WEdge<VT> currE = q.poll();
-            WEdge<VT> currE = q.remove();//q.poll();
+            WEdge<VT> currE = q.remove();
 
             GVertex<VT> v = currE.source();
             GVertex<VT> u = currE.end();
