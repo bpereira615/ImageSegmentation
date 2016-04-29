@@ -326,14 +326,44 @@ public class P4C {
         return mst;
     }
 
-    public static void main(String[] args) {
+
+    public static void writeImage(List<GVertex<Pixel>> pixels, BufferedImage image, String filename, int num) {
 
         final int gray = 0x0DCDCDC;
 
+        // make a background image to put a segment into
+        for (int i = 0; i < image.getHeight(); i++) {
+            for (int j = 0; j < image.getWidth(); j++) {
+                image.setRGB(j, i, gray);
+            }
+        }
+
+
+
+        for (GVertex<Pixel> p : pixels) {
+            Pixel d = p.data();
+            image.setRGB(d.row(), d.col(), d.value());
+        }
+
+        try {
+            //TODO: proper file naming
+            File f = new File(filename + num + ".png");
+            ImageIO.write(image, "png", f);
+        } catch(Exception e) {
+            System.out.println("IMAGE WRITE");
+        }
+        // You'll need to do that for each connected component,
+        // writing each one to a different file, clearing the
+        // image buffer first
+    }
+
+    public static void main(String[] args) {
+
+
         try {
           // the line that reads the image file
-
-            BufferedImage image = ImageIO.read(new File(args[0]));
+            File file = new File(args[0]);
+            BufferedImage image = ImageIO.read(file);
             WGraph<Pixel> g = imageToGraph(image, new PixelDistance());
             
             List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
@@ -345,46 +375,63 @@ public class P4C {
             System.out.print("NSegments =  "
                              + (g.numVerts() - res.size()) + "\n");
 
-            // make a background image to put a segment into
-            for (int i = 0; i < image.getHeight(); i++) {
-                for (int j = 0; j < image.getWidth(); j++) {
-                    image.setRGB(j, i, gray);
-                }
-            }
-
 
             // After you have a spanning tree connected component x, 
             // you can generate an output image like this:
 
 
 
-            WGraphP4<Pixel> subset = new WGraphP4<Pixel>();
+            WGraphP4<Pixel> subgraph = new WGraphP4<Pixel>();
 
-            
+            List<WEdge<Pixel>> reset = new LinkedList<WEdge<Pixel>>();
             for (WEdge<Pixel> w : res) {
-                w.source().reset();
                 w.end().reset();
-                subset.addEdge(w);
+                w.source().reset();
+            }
+
+            for (WEdge<Pixel> w : res) {
+                //reset connectedness of vertices
+                subgraph.addEdge(w);
             }
             
-            //System.out.println("NEW: vertices: " + subset.numVerts() + "\tedges: " + subset.numEdges());
 
-            GVertex<Pixel> first = res.get(0).source();
+            System.out.println(subgraph.numVerts() + " " + subgraph.numEdges());
 
-            System.out.println(subset.depthFirst(first).size());
+            //System.out.println(subgraph.depthFirst(subgraph.kruskals().get(0).source()).size());
 
-            for (GVertex<Pixel> i: subset.depthFirst(first))  {
-                Pixel d = i.data();
-                image.setRGB(d.row(), d.col(), d.value());
+
+
+
+
+
+            
+
+
+            //depth first portion
+            //reset the visited flags for all vertices
+            for (GVertex<Pixel> ver : subgraph.allVertices()) {
+                ver.clearVisited();
             }
 
-            File f = new File("a.png");
-            ImageIO.write(image, "png", f);
+            int i = 0;
+            for (WEdge<Pixel> w : res)  {
+                List<GVertex<Pixel>> vertexList;
 
-            // You'll need to do that for each connected component,
-            // writing each one to a different file, clearing the
-            // image buffer first
-   
+                if (!w.end().isVisited()) {
+                    vertexList = subgraph.depthFirstSegmenter(w.end());
+                    writeImage(vertexList,  image, file.getName(), i);
+                    i++;
+                }
+
+                if (!w.source().isVisited()) {
+                    vertexList = subgraph.depthFirstSegmenter(w.source());
+                    writeImage(vertexList,  image, file.getName(), i);
+                    i++;
+                }
+            }
+
+
+
         } catch (IOException e) {
             System.out.print("Missing File!\n");
 
