@@ -1,7 +1,7 @@
 /** Implementation of an edge class (for graphs), could be directed or not.
  */
 //TODO: generics defined in WGraph interface
-public class WEdge<VT> implements Comparable<VT> {
+public class WEdge<VT> implements Comparable<WEdge<VT>> {
 
     /** Starting vertex of an edge. */
     private GVertex<VT> source;
@@ -89,10 +89,10 @@ public class WEdge<VT> implements Comparable<VT> {
      *  @return the hashCode
      */
     @Override
-    public int compareTo(Object other) {
+    public int compareTo(WEdge<VT> other) {
         //TODO: what to return when not WEdge?
-        if (other instanceof WEdge) {
-            WEdge e = (WEdge) other;
+        // if (other instanceof WEdge) {
+            WEdge<VT> e = other; //(WEdge)
             if (this.weight < e.weight) {
                 return -1;
             } else if (this.weight > e.weight) {
@@ -100,9 +100,9 @@ public class WEdge<VT> implements Comparable<VT> {
             } else {
                 return 0;
             }
-        }
-        System.out.println("ERROR: " + other.toString() + " is not a WEdge object!");
-        return -2;
+        // }
+        // System.out.println("ERROR: " + other.toString() + " is not a WEdge object!");
+        // return -2;
     }
 
 
