@@ -1,15 +1,12 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
-//<<<<<<< HEAD              
-//TODO: Ben/Ryan wtf is this shit????
 import java.util.Iterator;
 import java.util.PriorityQueue;
-//=======
 import java.util.ListIterator;
 import java.util.HashSet;
 import java.util.Stack;
-//>>>>>>> b85a4bfe10d9ea0312554aa966364007a4732a32
+
 
 public class WGraphP4<VT> implements WGraph<VT> {
 
@@ -152,6 +149,8 @@ public class WGraphP4<VT> implements WGraph<VT> {
         }
         if (!success) {
         	//when one of vertices cannot be added, edge cannot be added
+
+        	
             return false;
         }
 
@@ -165,11 +164,13 @@ public class WGraphP4<VT> implements WGraph<VT> {
         if (this.degree(v) <= this.degree(u)) {
         	if (v.getEdges().contains(add)) {
         		// edge already exists
+
         		return false;
         	}
         } else {
         	if (u.getEdges().contains(add)) {
         		//edge already exists
+
         		return false;
         	}
         }
@@ -313,7 +314,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
     	while (!stack.isEmpty()) {
     		GVertex<VT> curr = stack.pop();
-    		System.out.println("current vertex: " + curr);
+    		//System.out.println("current vertex: " + curr);
     		if (!curr.isVisited()) {
     			curr.markVisited();
     			result.add(curr);

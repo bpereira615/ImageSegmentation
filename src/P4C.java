@@ -8,6 +8,8 @@ import java.awt.Toolkit;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 
 public class P4C {
@@ -215,7 +217,7 @@ public class P4C {
         // initialize list of lists to track vertex partitions
         ArrayList<ArrayList<GVertex<Pixel>>> megaList = new ArrayList<>();
         // details: need mega list of lists<vertex<pixel>>
-        // how to quickly find which list contains u1/v1?
+        //TODO: how to quickly find which list contains u1/v1?
         
         // while PQ not empty
         while (!Q.isEmpty()) {
@@ -320,8 +322,11 @@ public class P4C {
 
 
 
-            /*
-            List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
+            
+            //List<WEdge<Pixel>> res = segmenter(g, Double.parseDouble(args[1]));
+            //TODO: try with 
+            List<WEdge<Pixel>> res = g.kruskals();
+
 
             System.out.print("result =  " + res.size() + "\n");
             System.out.print("NSegments =  "
@@ -334,21 +339,47 @@ public class P4C {
                 }
             }
 
+
             // After you have a spanning tree connected component x, 
             // you can generate an output image like this:
-            List<GVertex<Pixel>> x = null;
-            for (GVertex<Pixel> i: x)  {
+
+
+            /*
+            HashSet<GVertex<Pixel>> pixSet = new HashSet<>();
+
+            for (WEdge<Pixel> w : res) {
+                pixSet.add(w.source());
+                pixSet.add(w.end());
+            }
+            */
+
+            WGraphP4<Pixel> subset = new WGraphP4<Pixel>();
+
+            
+            for (WEdge<Pixel> w : res) {
+                GVertex<Pixel> newEnd = new GVertex<Pixel>(w.end().data(), subset.nextID());
+                GVertex<Pixel> newSource = new GVertex<Pixel>(w.source().data(), subset.nextID());
+                double weight = w.weight();
+                subset.addEdge(newSource, newEnd, weight);
+            }
+            
+            System.out.println("NEW: vertices: " + subset.numVerts() + "\tedges: " + subset.numEdges());
+
+            GVertex<Pixel> first = res.get(0).source();
+
+
+            for (GVertex<Pixel> i: subset.depthFirst(first))  {
                 Pixel d = i.data();
-                image.setRGB(d.col(), d.row(), d.value());
+                image.setRGB(d.row(), d.col(), d.value());
             }
 
-            File f = new File("output.png");
+            File f = new File("a.png");
             ImageIO.write(image, "png", f);
 
             // You'll need to do that for each connected component,
             // writing each one to a different file, clearing the
             // image buffer first
-   */
+   
         } catch (IOException e) {
             System.out.print("Missing File!\n");
 
