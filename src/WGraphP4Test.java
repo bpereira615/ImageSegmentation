@@ -238,7 +238,8 @@ public class WGraphP4Test {
     	assertTrue(intGraph.addVertex(gInt2));
     	assertTrue(strGraph.addVertex(gStr2));
 
-    	//vertices with the same ID as other vertices already contained cannot be added
+    	//vertices with the same ID as other vertices 
+        //already contained cannot be added
     	assertFalse(intGraph.addVertex(gInt));
     	assertFalse(strGraph.addVertex(gStr));
     }
@@ -274,7 +275,7 @@ public class WGraphP4Test {
         assertFalse(strGraph.addEdge(wStr));
 	}
 
-//--------------------  addEdge(GVertex<VT> v, GVertex<VT> u, double weight) --------------------
+//--------  addEdge(GVertex<VT> v, GVertex<VT> u, double weight) ---------
 
 public void addEdgeFromVertsDuplicate() {
     // should be able to add vertices
@@ -780,7 +781,7 @@ public void addEdgeFromVertsDuplicate() {
         // check that e23, e04, and e41 included
         assertTrue(mstInt.contains(e23));
         assertTrue(mstInt.contains(e04));
-        assertTrue(mstInt.contains(e41)); // line currently fails
+        assertTrue(mstInt.contains(e41));
         // check that e01 is excluded
         assertFalse(mstInt.contains(e01));
     }
