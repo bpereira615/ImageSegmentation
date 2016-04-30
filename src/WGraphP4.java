@@ -10,122 +10,128 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.HashSet;
 import java.util.Stack;
 
-
+/**
+ * Implements a weighted, undirected graph.
+ * @param VT type of data stored by vertices
+ */
 public class WGraphP4<VT> implements WGraph<VT> {
 
-	/** The number of unique edges in graph */
-	private int numEdges;
+    /** The number of unique edges in graph. */
+    private int numEdges;
 
-	/** The number of vertices in graph */
-	private int numVerts;
+    /** The number of vertices in graph. */
+    private int numVerts;
 
-	/** The ID of the next vertex */
-	private int nextID;
+    /** The ID of the next vertex. */
+    private int nextID;
 
-	/** The list of vertices */
-	private HashSet<GVertex<VT>> vertices;
+    /** The list of vertices. */
+    private HashSet<GVertex<VT>> vertices;
 
-	/** The list of unique edges */
-	private ArrayList<WEdge<VT>> edges;
+    /** The list of unique edges. */
+    private ArrayList<WEdge<VT>> edges;
 
 
-	/** Constructor for weighted graph implementation */
-	public WGraphP4() {
-		this.numEdges = 0;
-		this.numVerts = 0;
-		this.nextID = 0;
-		this.vertices = new HashSet<>();
-		this.edges = new ArrayList<>();
-	}
+    /** Constructor for weighted graph implementation. */
+    public WGraphP4() {
+        this.numEdges = 0;
+        this.numVerts = 0;
+        this.nextID = 0;
+        this.vertices = new HashSet<>();
+        this.edges = new ArrayList<>();
+    }
 
-	/** Get the number of edges. 
-     *  @return the number
+    /** 
+     * Get the number of edges. 
+     * @return the number
      */
     public int numEdges() {
-    	return numEdges;
+        return this.numEdges;
     }
 
-    /** Get the number of vertices. 
-     *  @return the number
+    /** 
+     * Get the number of vertices. 
+     * @return the number
      */
     public int numVerts() {
-    	return numVerts;
+        return this.numVerts;
     }
 
-    /** Get the next ID to use in making a vertex. 
-     *  @return the id
+    /** 
+     * Get the next ID to use in making a vertex. 
+     * @return the id
      */
     public int nextID() {
-    	return nextID++;
+        return this.nextID++;
     }
 
 
-    /** Check vertices for given data.
-     *  @param d data to be searched for
-     *  @return true if data contained, false if not
+    /** 
+     * Check vertices for given data.
+     * @param d data to be searched for
+     * @return true if data contained, false if not
      */
     public boolean hasData(VT d) {
-    	for (GVertex<VT> v : vertices) {
-    		if (v.getData().equals(d)) {
-    			return true;
-    		}
-    	}
-    	return false;
+        for (GVertex<VT> v : this.vertices) {
+            if (v.getData().equals(d)) {
+                return true;
+            }
+        }
+        return false;
     }
-
+    /**
+     * Returns true if graph has vertex.
+     * @param  curr vertex being tested
+     * @return      true if vertex in graph
+     */
     public boolean hasVertex(GVertex<VT> curr) {
         return (this.vertices.contains(curr));
     }
 
-    /** Create and add a vertex to the graph.
-     *  @param d the data to store in the vertex
-     *  @return true if successful, false otherwise
+    /** 
+     * Create and add a vertex to the graph.
+     * @param d the data to store in the vertex
+     * @return true if successful, false otherwise
      */
     public boolean addVertex(VT d) {
 
-    	//TODO: what sorts of tests should this have?
+        GVertex<VT> add = new GVertex<VT>(d, this.nextID());
+        //check if the vertex is there
+        if (this.vertices.contains(add)) {
+            return false;
+        }
 
-    	GVertex<VT> add = new GVertex<VT>(d, nextID());
-    	//check if the vertex is there
-    	if (this.vertices.contains(add)) {
-    		return false;
-    	}
-
-		vertices.add(add);
-		this.numVerts++;
-		return true;
+        this.vertices.add(add);
+        this.numVerts++;
+        return true;
 
     }
 
-    /** Add a vertex if it doesn't exist yet. 
-     *  @param v the vertex to add
-     *  @return false if already there, true if added
+    /** 
+     * Add a vertex if it doesn't exist yet. 
+     * @param v the vertex to add
+     * @return false if already there, true if added
      */
     public boolean addVertex(GVertex<VT> v) {
-    	//TODO: what happens if v has same ID as already present vertex?
-
-    	//check if the vertex is there
-    	if (this.vertices.contains(v)) {
-    		return false;
-    	}
-    	this.vertices.add(v);
-    	this.numVerts++;
-    	return true;
+        
+        //check if the vertex is there
+        if (this.vertices.contains(v)) {
+            return false;
+        }
+        this.vertices.add(v);
+        this.numVerts++;
+        return true;
     }
-
-    //TODO: no deleteVertex method?
 
     /** Add a weighted edge, may also add the incident vertices. 
      *  @param e the edge to add
      *  @return false if already there, true if added
      */
     public boolean addEdge(WEdge<VT> e) {
-    	boolean added = false;
+        boolean added = false;
         added = addEdge(e.source(), e.end(), e.weight());
         return added;
     }
@@ -137,7 +143,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return false if already there, true if added
      */
     public boolean addEdge(GVertex<VT> v, GVertex<VT> u, double weight) {
-    	boolean success = true; 
+        boolean success = true; 
         // TODO: might need to initialize false, what if both vertices
         // are already in the graph????
         if (!this.vertices.contains(v)) {
@@ -147,9 +153,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
             success = this.addVertex(u);
         }
         if (!success) {
-        	//when one of vertices cannot be added, edge cannot be added
+            //when one of vertices cannot be added, edge cannot be added
 
-        	
+            
             return false;
         }
 
@@ -161,17 +167,17 @@ public class WGraphP4<VT> implements WGraph<VT> {
 
         // check if edge is already in lists, look in shorter vertex list
         if (this.degree(v) <= this.degree(u)) {
-        	if (v.getEdges().contains(add)) {
-        		// edge already exists
+            if (v.getEdges().contains(add)) {
+                // edge already exists
 
-        		return false;
-        	}
+                return false;
+            }
         } else {
-        	if (u.getEdges().contains(add)) {
-        		//edge already exists
+            if (u.getEdges().contains(add)) {
+                //edge already exists
 
-        		return false;
-        	}
+                return false;
+            }
         }
         edges.add(add);
         v.addEdge(add);
@@ -187,38 +193,38 @@ public class WGraphP4<VT> implements WGraph<VT> {
      */
     public boolean deleteEdge(GVertex<VT> v, GVertex<VT> u) {
 
-    	//if either vertex not present, do not look for edge
-    	if (!vertices.contains(v) || !vertices.contains(u)) {
-    		return false;
-    	}
+        //if either vertex not present, do not look for edge
+        if (!vertices.contains(v) || !vertices.contains(u)) {
+            return false;
+        }
 
 
-    	// edge will be in both lists, check list of smaller vertex degree
+        // edge will be in both lists, check list of smaller vertex degree
         if (this.degree(v) <= this.degree(u)) {
-        	//if the vertices are not neighbors, do not try to remove
-        	if (!v.getNeighbors().contains(u)) {
-        		return false;
-        	}
+            //if the vertices are not neighbors, do not try to remove
+            if (!v.getNeighbors().contains(u)) {
+                return false;
+            }
         } else {
-        	//if the vertices are not neighbors, do not try to remove
-        	if (!u.getNeighbors().contains(v)) {
-        		return false;
-        	}
+            //if the vertices are not neighbors, do not try to remove
+            if (!u.getNeighbors().contains(v)) {
+                return false;
+            }
         }
 
 
         //remove edge from both lists
         for (WEdge<VT> e : v.getEdges()) {
-        	if (e.isIncident(u)) {
-        		v.removeEdge(e);
-        		break;
-        	}
+            if (e.isIncident(u)) {
+                v.removeEdge(e);
+                break;
+            }
         }
         for (WEdge<VT> e : u.getEdges()) {
-        	if (e.isIncident(v)) {
-        		v.removeEdge(e);
-        		break;
-        	}
+            if (e.isIncident(v)) {
+                v.removeEdge(e);
+                break;
+            }
         }
 
 
@@ -246,21 +252,21 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return true if there is an edge between them, false otherwise
      */
     public boolean areAdjacent(GVertex<VT> v, GVertex<VT> u) {
-    	//TODO: w.isIncident(u) giving warning
+        //TODO: w.isIncident(u) giving warning
 
-    	//search the list of edges of vertex with lesser degree
+        //search the list of edges of vertex with lesser degree
 
-    	//if either vertex not present, do not check
-    	if (!vertices.contains(v) || !vertices.contains(u)) {
-    		return false;
-    	}
+        //if either vertex not present, do not check
+        if (!vertices.contains(v) || !vertices.contains(u)) {
+            return false;
+        }
 
-    	//v has lesser degree
-    	if (this.degree(v) <= this.degree(u)) {
-    		return v.getNeighbors().contains(u);
-    	} else {
-    		return u.getNeighbors().contains(v);
-    	}
+        //v has lesser degree
+        if (this.degree(v) <= this.degree(u)) {
+            return v.getNeighbors().contains(u);
+        } else {
+            return u.getNeighbors().contains(v);
+        }
     }
 
     /** Return a list of all the neighbors of vertex v.  
@@ -269,10 +275,10 @@ public class WGraphP4<VT> implements WGraph<VT> {
      */
     public List<GVertex<VT>> neighbors(GVertex<VT> v) {
 
-    	LinkedList<GVertex<VT>> list = new LinkedList<>();
-    	list.addAll(v.getNeighbors());
-    	
-    	return list;
+        LinkedList<GVertex<VT>> list = new LinkedList<>();
+        list.addAll(v.getNeighbors());
+        
+        return list;
     }
 
     /** Return the number of edges incident to v.  
@@ -280,8 +286,8 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the number of incident edges
      */
     public int degree(GVertex<VT> v) {
-    	//degree is defined as number of edges on given vertex
-    	return v.getEdges().size();
+        //degree is defined as number of edges on given vertex
+        return v.getEdges().size();
     }
 
     /** See if an edge and vertex are incident to each other.
@@ -290,23 +296,23 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return true if v is an endpoint of edge e
      */
     public boolean areIncident(WEdge<VT> e, GVertex<VT> v) {
-    	return e.isIncident(v);
+        return e.isIncident(v);
     }
 
     /** Return a list of all the edges.  
      *  @return the list
      */
     public List<WEdge<VT>> allEdges() {
-    	return edges;
+        return edges;
     }
 
     /** Return a list of all the vertices.  
      *  @return the list
      */
     public List<GVertex<VT>> allVertices() {
-    	LinkedList<GVertex<VT>> list = new LinkedList<>();
-    	list.addAll(vertices);
-    	return list;
+        LinkedList<GVertex<VT>> list = new LinkedList<>();
+        list.addAll(vertices);
+        return list;
     }
 
     /** Return a list of all the vertices that can be reached from v,
@@ -316,63 +322,63 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the list of reachable vertices
      */
     public List<GVertex<VT>> depthFirst(GVertex<VT> v) {
-    	//reset the visited flags for all vertices
-    	for (GVertex<VT> ver : this.vertices) {
-    		ver.clearVisited();
-    	}
+        //reset the visited flags for all vertices
+        for (GVertex<VT> ver : this.vertices) {
+            ver.clearVisited();
+        }
 
-    	Stack<GVertex<VT>> stack = new Stack<>();
-    	LinkedList<GVertex<VT>> result = new LinkedList<>();
+        Stack<GVertex<VT>> stack = new Stack<>();
+        LinkedList<GVertex<VT>> result = new LinkedList<>();
 
-    	stack.push(v);
+        stack.push(v);
 
-    	while (!stack.isEmpty()) {
-    		GVertex<VT> curr = stack.pop();
-    		//System.out.println("current vertex: " + curr);
-    		if (!curr.isVisited()) {
-    			curr.markVisited();
-    			result.add(curr);
-    			for (GVertex<VT> ver : curr.getNeighbors()){
-    					stack.push(ver);		
-    			}
-    		}
+        while (!stack.isEmpty()) {
+            GVertex<VT> curr = stack.pop();
+            //System.out.println("current vertex: " + curr);
+            if (!curr.isVisited()) {
+                curr.markVisited();
+                result.add(curr);
+                for (GVertex<VT> ver : curr.getNeighbors()){
+                        stack.push(ver);        
+                }
+            }
 
-    	}
-    	return result;
+        }
+        return result;
     }
 
 
 
 
     /** Return a list of all the vertices that compose the spanning 
-     * 	tree for one of the trees in the spanning forest. Keeps flag
-     * 	data outside of so that vertices added to images already are
-     * 	not searched again.
+     *  tree for one of the trees in the spanning forest. Keeps flag
+     *  data outside of so that vertices added to images already are
+     *  not searched again.
      *  @param v the starting vertex
      *  @return the list of reachable vertices
      */
     public List<GVertex<VT>> depthFirstSegmenter(GVertex<VT> v) {
-    	Stack<GVertex<VT>> stack = new Stack<>();
-    	LinkedList<GVertex<VT>> result = new LinkedList<>();
+        Stack<GVertex<VT>> stack = new Stack<>();
+        LinkedList<GVertex<VT>> result = new LinkedList<>();
 
-    	stack.push(v);
+        stack.push(v);
 
-    	while (!stack.isEmpty()) {
-    		GVertex<VT> curr = stack.pop();
-    		//System.out.println("current vertex: " + curr);
-    		if (!curr.isVisited()) {
-    			curr.markVisited();
-    			result.add(curr);
-    			for (GVertex<VT> ver : curr.getNeighbors()){
-    					stack.push(ver);
-    				
-    			}
-    		}
+        while (!stack.isEmpty()) {
+            GVertex<VT> curr = stack.pop();
+            //System.out.println("current vertex: " + curr);
+            if (!curr.isVisited()) {
+                curr.markVisited();
+                result.add(curr);
+                for (GVertex<VT> ver : curr.getNeighbors()){
+                        stack.push(ver);
+                    
+                }
+            }
 
-    	}
+        }
 
 
-    	return result;
+        return result;
     }
 
 
@@ -384,7 +390,7 @@ public class WGraphP4<VT> implements WGraph<VT> {
      *  @return the incident edges
      */
     public List<WEdge<VT>> incidentEdges(GVertex<VT> v) {
-    	return v.getEdges();
+        return v.getEdges();
     }
 
     /** Return a list of edges in a minimum spanning forest by

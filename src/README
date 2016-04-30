@@ -7,7 +7,48 @@
  * Project 4 - Image Segmentation
  *******************************************************************/
 
+Files included in submission:
+
+Distance.java
+GVertex.java
+GVertexTest.java
+P4C.java
+Partition.java
+Pixel.java
+PixelDistance.java
+PQHeap.java
+QueueEmptyException.java
+StoreInfo.java
+WEdge.java
+WGraphP4.java
+WGraphP4Test.java
+
+*******************************************************************
+
+Command line needed to run program:
+java P4C [pic_file_name].png [k_value]
+
+PIcture files passed to program should be of type png. K is a tuning variable and is chosen by user—-results will vary depending on K. Usually K ~100 works. Test4 picture as input (blue background, orange circles/ ovals) works beautifully at K=100.
+
+*******************************************************************
+Part A
+
 “Discuss your process for implementing this part of the assignment, including which team members worked on which classes and tests, and why you chose that particular approach in your README file for this assignment.”
 
 GVertex.java was worked on by Lydia. Originally there were some issues with generics and implementing Comparable properly so that it could be used in the later-written PQHeap class, but this was fixed. Each vertex holds a list of neighboring vertices as well as a list of incident edges. 
-WEdge.java was worked on by Ryan and Ben. Again, troubles properly using generics were had, but then were fixed in tandem with writing part B of the project. 
+WEdge.java was worked on by Ryan and Ben. Again, troubles properly using generics were had, but then were fixed in tandem with writing part B of the project.  
+
+WEdge.java was worked on by Ryan and Ben. Again, troubles properly using generics were had, but then were fixed in tandem with writing part B of the project.
+
+WGraphP4.java was largely worked on by Ben after WEdge was completed and later also by Lydia once GVertex was done while Ryan worked on PQHeap (next section). Testing was largely written by Lydia. The vanilla graph implementation using an adjacency matrix was modified to work with the adjacency lists present in GVertex. Adjacency lists were chosen because we thought they would be easiest to implement down the line despite the additional upfront bookkeeping. 
+
+*******************************************************************
+Part B
+
+PQHeap.java was written and tested by Ryan alongside Part A's WGraph being worked on by Ben and Lydia. The PQHeap implementation uses the Priority Queue interface given in the assignment. Creating the Comparator constructor and default constructor was initially difficult and somewhat unclear, but eventually happened. Overall, the PQHeap is represented via an ArrayList for a bottoms-up construction. 
+
+
+
+
+
+
