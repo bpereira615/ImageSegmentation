@@ -707,21 +707,166 @@ public void addEdgeFromVertsDuplicate() {
 		WEdge<Integer> wInt5 = new WEdge<>(gInt3, gInt6, weight);
 		WEdge<String> wStr5 = new WEdge<>(gStr3, gStr6, weight);
 
+        //add cycle to graph
+        WEdge<Integer> wInt6 = new WEdge<>(gInt1, gInt6, weight);
+        WEdge<String> wStr6 = new WEdge<>(gStr1, gStr6, weight);
+
 		intGraph.addEdge(wInt4);
 		strGraph.addEdge(wStr4);
 		intGraph.addEdge(wInt5);
 		strGraph.addEdge(wStr5);
 
-		System.out.println(intGraph.depthFirst(gInt1));
+        //cycle added
+        intGraph.addEdge(wInt6);
+        strGraph.addEdge(wStr6);
+
+		LinkedList<GVertex<Integer>> intList = new LinkedList<>();
+        LinkedList<GVertex<String>> strList = new LinkedList<>();
+
+        intList.add(gInt1);
+        strList.add(gStr1);
+
+        intList.add(gInt2);
+        strList.add(gStr2);
+
+        intList.add(gInt3);
+        strList.add(gStr3);
+
+        intList.add(gInt4);
+        strList.add(gStr4);
+
+        intList.add(gInt5);
+        strList.add(gStr5);
+
+        intList.add(gInt6);
+        strList.add(gStr6);
+
+        //all vertices in graph are present, so all should be in depth
+        //first search result
+        for (GVertex<Integer> v : intGraph.depthFirst(gInt1)) {
+            assertTrue(intList.contains(v));
+        }
+        for (GVertex<String> v : strGraph.depthFirst(gStr1)) {
+            assertTrue(strList.contains(v));
+        }
+
+
+
+        //test search after edge deletion, 5 should not be present
+        intGraph.deleteEdge(wInt4.source(), wInt4.end());
+        strGraph.deleteEdge(wStr4.source(), wStr4.end());
+
+        intList.remove(gInt5);
+        strList.remove(gStr5);
+
+        //all vertices in graph are present, so all should be in depth
+        //first search result
+
+        assertEquals(intList.size(), intGraph.depthFirst(gInt1).size());
+        for (GVertex<Integer> v : intGraph.depthFirst(gInt1)) {
+            assertTrue(intList.contains(v));
+        }
+        for (GVertex<String> v : strGraph.depthFirst(gStr1)) {
+            assertTrue(strList.contains(v));
+        }
+        
+
+
+
 	}
 
 //--------------------  incidentEdges() --------------------
+    @Test
+    public void incidentEdges() {
+        GVertex<Integer> gInt1 = new GVertex<>((Integer) 1, intGraph.nextID());
+        GVertex<String> gStr1 = new GVertex<>("one", strGraph.nextID());
+        GVertex<Integer> gInt2 = new GVertex<>((Integer) 2, intGraph.nextID());
+        GVertex<String> gStr2 = new GVertex<>("two", strGraph.nextID());
+        double weight = (double) 1;
 
+        WEdge<Integer> wInt = new WEdge<>(gInt1, gInt2, weight);
+        WEdge<String> wStr = new WEdge<>(gStr1, gStr2, weight);
+
+        assertTrue(intGraph.addEdge(wInt));
+        assertTrue(strGraph.addEdge(wStr));
+
+        GVertex<Integer> gInt3 = new GVertex<>((Integer) 3, intGraph.nextID());
+        GVertex<String> gStr3 = new GVertex<>("three", strGraph.nextID());
+        GVertex<Integer> gInt4 = new GVertex<>((Integer) 4, intGraph.nextID());
+        GVertex<String> gStr4 = new GVertex<>("four", strGraph.nextID());
+
+
+        WEdge<Integer> wInt2 = new WEdge<>(gInt1, gInt3, weight);
+        WEdge<String> wStr2 = new WEdge<>(gStr1, gStr3, weight);
+
+        assertTrue(intGraph.addEdge(wInt2));
+        assertTrue(strGraph.addEdge(wStr2));
+
+        WEdge<Integer> wInt3 = new WEdge<>(gInt1, gInt4, weight);
+        WEdge<String> wStr3 = new WEdge<>(gStr1, gStr4, weight);
+
+        assertTrue(intGraph.addEdge(wInt3));
+        assertTrue(strGraph.addEdge(wStr3));
+
+        GVertex<Integer> gInt5 = new GVertex<>((Integer) 5, intGraph.nextID());
+        GVertex<String> gStr5 = new GVertex<>("six", strGraph.nextID());
+        GVertex<Integer> gInt6 = new GVertex<>((Integer) 6, intGraph.nextID());
+        GVertex<String> gStr6 = new GVertex<>("five", strGraph.nextID());
+
+        WEdge<Integer> wInt4 = new WEdge<>(gInt2, gInt5, weight);
+        WEdge<String> wStr4 = new WEdge<>(gStr2, gStr5, weight);
+
+
+        WEdge<Integer> wInt5 = new WEdge<>(gInt3, gInt6, weight);
+        WEdge<String> wStr5 = new WEdge<>(gStr3, gStr6, weight);
+
+        //add cycle to graph
+        WEdge<Integer> wInt6 = new WEdge<>(gInt1, gInt6, weight);
+        WEdge<String> wStr6 = new WEdge<>(gStr1, gStr6, weight);
+
+        intGraph.addEdge(wInt4);
+        strGraph.addEdge(wStr4);
+        intGraph.addEdge(wInt5);
+        strGraph.addEdge(wStr5);
+
+        //cycle added
+        intGraph.addEdge(wInt6);
+        strGraph.addEdge(wStr6);
+
+        LinkedList<WEdge<Integer>> incident1 = new LinkedList<>();
+        incident1.add(wInt);
+        incident1.add(wInt2);
+        incident1.add(wInt3);
+        incident1.add(wInt6);
+
+        for (WEdge<Integer> e : intGraph.incidentEdges(gInt1)) {
+            assertTrue(incident1.contains(e));
+        }
+
+
+        LinkedList<WEdge<Integer>> incident6 = new LinkedList<>();
+        incident1.add(wInt);
+        incident1.add(wInt5);
+
+        for (WEdge<Integer> e : intGraph.incidentEdges(gInt6)) {
+            assertTrue(incident1.contains(e));
+        }
+
+
+
+        //test edges after remove
+        intGraph.deleteEdge(wInt3.source(), wInt3.end());
+        incident1.remove(gInt4);
+        for (WEdge<Integer> e : intGraph.incidentEdges(gInt1)) {
+            assertTrue(incident1.contains(e));
+        }
+
+    }
 
 
 //--------------------  kruskals() --------------------
 
-@Test
+    @Test
     public void testEmptyKruskals() {
         System.out.println("\nEmpty");
         // make mst on empty graph
