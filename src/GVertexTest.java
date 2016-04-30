@@ -28,15 +28,15 @@ import org.junit.Test;
 public class GVertexTest {
 
     /** Integer Vertex to test on. */
-    static Vertex vint;
+    static GVertex vint;
     /** Integer GVertex to test on. */
     static GVertex<Integer> gvint;
     /** String Vertex to test on. */
-    static Vertex vstr;
+    static GVertex vstr;
     /** String GVertex to test on. */
     static GVertex<String> gvstr;
     /** Empty Vertex to test on. */
-    static Vertex vnull;
+    static GVertex vnull;
     /** Empty GVertex to test on. */
     static GVertex<Integer> gvnull;
     /** Integer to put in vertices. */
@@ -50,10 +50,10 @@ public class GVertexTest {
     @BeforeClass
         public static void init() {
         // integer vertices should be identical
-        vint = new Vertex(myInt, ids[0]);
+        vint = new GVertex(myInt, ids[0]);
         gvint = new GVertex(myInt, ids[0]);
         // string vertices should be identical
-        vstr = new Vertex(myStr, ids[1]);
+        vstr = new GVertex(myStr, ids[1]);
         gvstr = new GVertex(myStr, ids[1]);
         // create weird null vertices to test???
     }
@@ -110,8 +110,8 @@ public class GVertexTest {
         // create other vertices to check
         GVertex<Integer> i1 = new GVertex(0, ids[2]); // greater
         GVertex<String> s1 = new GVertex("yo", ids[2]); // greater
-        Vertex i2 = new Vertex(0, ids[2]); // greater
-        Vertex s2 = new Vertex("yo", ids[2]); // greater
+        GVertex i2 = new GVertex(0, ids[2]); // greater
+        GVertex s2 = new GVertex("yo", ids[2]); // greater
         // make sure comparisons work
         assertSame(gvint.compareTo(i1), vint.compareTo(i2));
         assertSame(gvstr.compareTo(s1), vstr.compareTo(s2));

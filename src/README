@@ -45,7 +45,7 @@ WEdge.java - Ryan and Ben
 Early problems with generics were resolved as Part B was written.
 
 WGraphP4.java - Ben, everything but Kruskal’s
-The given graph implementation using an adjacency matrix was modified to work with the adjacency lists present in GVertex. Adjacency lists were chosen because we thought they would be easiest to implement down the line despite the additional upfront bookkeeping. 
+The given graph implementation using an adjacency matrix was modified to work with the adjacency lists present in GVertex. Adjacency lists were chosen because we thought they would be easiest to implement down the line despite the additional upfront bookkeeping. The graph was implemented to best support insertion operations of vertices and edges at the expense of making removal operations on these objects more expenseive. This design choice was made because our appication did not utilize removal operations, so we wanted to make sure the core operations used were as fast as possible.
 
 *******************************************************************
 Part B
