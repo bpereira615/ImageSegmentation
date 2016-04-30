@@ -15,6 +15,7 @@ import java.util.Stack;
 
 /**
  * Implements a weighted, undirected graph.
+ * @param VT type of data stored by vertices
  */
 public class WGraphP4<VT> implements WGraph<VT> {
 
@@ -74,14 +75,18 @@ public class WGraphP4<VT> implements WGraph<VT> {
      * @return true if data contained, false if not
      */
     public boolean hasData(VT d) {
-        for (GVertex<VT> v : vertices) {
+        for (GVertex<VT> v : this.vertices) {
             if (v.getData().equals(d)) {
                 return true;
             }
         }
         return false;
     }
-
+    /**
+     * Returns true if graph has vertex.
+     * @param  curr vertex being tested
+     * @return      true if vertex in graph
+     */
     public boolean hasVertex(GVertex<VT> curr) {
         return (this.vertices.contains(curr));
     }
@@ -93,13 +98,13 @@ public class WGraphP4<VT> implements WGraph<VT> {
      */
     public boolean addVertex(VT d) {
 
-        GVertex<VT> add = new GVertex<VT>(d, nextID());
+        GVertex<VT> add = new GVertex<VT>(d, this.nextID());
         //check if the vertex is there
         if (this.vertices.contains(add)) {
             return false;
         }
 
-        vertices.add(add);
+        this.vertices.add(add);
         this.numVerts++;
         return true;
 
