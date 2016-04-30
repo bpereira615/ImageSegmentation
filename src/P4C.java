@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import java.io.IOException;
+
 /**
  * Performs image segmentation.
  * Run from command line with image name and desire kvalue.
@@ -328,10 +330,11 @@ public class P4C {
         }
 
         try {
-            File f = new File(filename + num + ".png");
+            String newName = filename.substring(0, filename.length() - 4);
+            File f = new File(newName + num + ".png");
             ImageIO.write(image, "png", f);
-        } catch (Exception e) {
-            System.out.println("IMAGE WRITE");
+        } catch (IOException e) {
+            System.out.println("IMAGE FAILED TO BE WRITTEN!");
         }
         // You'll need to do that for each connected component,
         // writing each one to a different file, clearing the
