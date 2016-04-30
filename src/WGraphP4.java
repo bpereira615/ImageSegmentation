@@ -221,8 +221,9 @@ public class WGraphP4<VT> implements WGraph<VT> {
         	}
         }
 
+
+
         //delete edge from master list
-        //TODO: efficient method of doing this?
         int index = 0;
         for (WEdge<VT> e : this.edges) {
         	if (e.isIncident(v) && e.isIncident(u)) {
@@ -230,10 +231,10 @@ public class WGraphP4<VT> implements WGraph<VT> {
         	}
         	index++;
         }
-        e.remove(e.get(index));
+        edges.remove(edges.get(index));
 
-        //delete neighbors from respective vertices
-        
+
+
         numEdges--;
         return true;
         

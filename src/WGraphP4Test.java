@@ -60,6 +60,20 @@ public class WGraphP4Test {
         s1 = new GVertex<>("a",strGraph.nextID());
         s2 = new GVertex<>("b", strGraph.nextID());
         s3 = new GVertex<>("c", strGraph.nextID());
+
+
+
+        mstInt = new ArrayList<WEdge<Integer>>();
+        mstStr = new ArrayList<WEdge<String>>();
+        // make arrays of vertices
+        intVerts = new ArrayList<GVertex<Integer>>();
+        strVerts = new ArrayList<GVertex<String>>();
+        for (Integer i : iray) {
+            GVertex<Integer> vInt = new GVertex<Integer>(i, i);
+            GVertex<String> vStr = new GVertex<String>(sray[i],i);
+            intVerts.add(vInt);
+            strVerts.add(vStr);
+        }
     }
 
 //--------------------  numEdges() --------------------
@@ -196,12 +210,19 @@ public class WGraphP4Test {
 //--------------------  nextID() --------------------
 	@Test
     public void nextIDNew() {
+        //fresh graphes for each test
+        intGraph = new WGraphP4<>();
+        strGraph = new WGraphP4<>();
+
         assertEquals(0, intGraph.nextID());
         assertEquals(0, strGraph.nextID());
     }
 
     @Test
     public void nextIDAdd() {
+        //fresh graphes for each test
+        intGraph = new WGraphP4<>();
+        strGraph = new WGraphP4<>();
 	   	//check ID after adding vertex
 	    GVertex<Integer> gInt = new GVertex<>((Integer) 1, intGraph.nextID());
         GVertex<String> gStr = new GVertex<>("one", strGraph.nextID());
@@ -316,6 +337,10 @@ public void addEdgeFromVertsDuplicate() {
 
         assertTrue(intGraph.deleteEdge(gInt1, gInt2));
         assertTrue(strGraph.deleteEdge(gStr1, gStr2));
+
+        //make sure that edges removed from master list
+        assertFalse(intGraph.allEdges().contains(wInt));
+        assertFalse(strGraph.allEdges().contains(wStr));
 
         //edge will have been deleted, should be false
         assertFalse(intGraph.deleteEdge(gInt1, gInt2));
@@ -621,6 +646,10 @@ public void addEdgeFromVertsDuplicate() {
         // check that degree decremented
         assertEquals(i, intGraph.degree(gInt1));
         assertEquals(i, strGraph.degree(gStr1));
+
+
+        assertEquals(intGraph.degree(gInt1), gInt1.getNeighbors().size());
+        assertEquals(strGraph.degree(gStr1), gStr1.getNeighbors().size());
     }
 //--------------------  areIncident() --------------------
 // this is covered by the edge class
