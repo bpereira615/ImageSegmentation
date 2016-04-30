@@ -14,6 +14,11 @@
  * @param col number of column in image
  * @param val color value
  */
+
+
+
+
+
 public class Pixel {
 
     /** Row index of pixel. */

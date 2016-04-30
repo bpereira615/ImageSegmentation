@@ -226,6 +226,21 @@ public class WGraphP4<VT> implements WGraph<VT> {
                 break;
             }
         }
+
+
+
+        //delete edge from master list
+        int index = 0;
+        for (WEdge<VT> e : this.edges) {
+        	if (e.isIncident(v) && e.isIncident(u)) {
+        		break;
+        	}
+        	index++;
+        }
+        edges.remove(edges.get(index));
+
+
+
         numEdges--;
         return true;
         
