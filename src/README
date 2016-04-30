@@ -8,9 +8,20 @@
  *******************************************************************/
 
 Files included in submission:
-Java:
 
-Testing:
+Distance.java
+GVertex.java
+GVertexTest.java
+P4C.java
+Partition.java
+Pixel.java
+PixelDistance.java
+PQHeap.java
+QueueEmptyException.java
+StoreInfo.java
+WEdge.java
+WGraphP4.java
+WGraphP4Test.java
 
 *******************************************************************
 
@@ -24,7 +35,8 @@ Part A
 
 “Discuss your process for implementing this part of the assignment, including which team members worked on which classes and tests, and why you chose that particular approach in your README file for this assignment.”
 
-GVertex.java was worked on by Lydia. Originally there were some issues with generics and implementing Comparable properly so that it could be used in the later-written PQHeap class, but this was fixed. Each vertex holds a list of neighboring vertices as well as a list of incident edges. Lydia wrote the class and the tests for this class. 
+GVertex.java was worked on by Lydia. Originally there were some issues with generics and implementing Comparable properly so that it could be used in the later-written PQHeap class, but this was fixed. Each vertex holds a list of neighboring vertices as well as a list of incident edges. 
+WEdge.java was worked on by Ryan and Ben. Again, troubles properly using generics were had, but then were fixed in tandem with writing part B of the project.  
 
 WEdge.java was worked on by Ryan and Ben. Again, troubles properly using generics were had, but then were fixed in tandem with writing part B of the project.
 
@@ -34,3 +46,9 @@ WGraphP4.java was largely worked on by Ben after WEdge was completed and later a
 Part B
 
 PQHeap.java was written and tested by Ryan alongside Part A's WGraph being worked on by Ben and Lydia. The PQHeap implementation uses the Priority Queue interface given in the assignment. Creating the Comparator constructor and default constructor was initially difficult and somewhat unclear, but eventually happened. Overall, the PQHeap is represented via an ArrayList for a bottoms-up construction. 
+
+
+
+
+
+
