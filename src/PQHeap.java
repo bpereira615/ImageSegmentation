@@ -60,10 +60,6 @@ public class PQHeap<T extends Comparable<? super T>>
             } else { //odd
                 newLoc = (index - 1) / 2;
             }
-            // if (newLoc < 1) { //have reached root
-            //     this.location++;
-            //     return;
-            // }
             if (this.comp.compare(this.list.get(index), 
                 this.list.get(newLoc)) < 0) {
                 //T temp = this.list.get(index);
@@ -192,8 +188,75 @@ public class PQHeap<T extends Comparable<? super T>>
         if (this.location != 1) { //if values present, clear/ create new array
             this.clear();
         }
-        for (T t: values) {
-            this.insert(t);
+        //old, non bottom-up implementation. 
+        // for (T t: values) {
+        //     this.insert(t);
+        // }
+        // New bottom-up implementation. 
+        // In hindsight (always 20/20), should have written Heapify method. 
+        // Oh well ¯\_(ツ)_/¯ 
+        this.list.addAll(values);
+        this.location = this.list.size();
+        int index = this.location - 1;
+        int newLoc;
+        while (index > 1) {
+            if (index % 2 == 0) { //even
+                newLoc = index / 2;
+            } else { //odd
+                newLoc = (index - 1) / 2;
+            }
+            if (this.comp.compare(this.list.get(index), 
+                this.list.get(newLoc)) < 0) {
+                T temp = this.list.set(index, this.list.get(newLoc));
+                this.list.set(newLoc, temp);
+
+                int backIndex = index;
+                T currentVal;
+                T childVal;
+                int newIndex;
+                T left;
+                int leftIndex;
+                T right;
+                int rightIndex;
+
+                //while there is a left child, not @ end of branch
+                while (backIndex * 2 <= this.location - 1 && backIndex !=0) { 
+                    currentVal = this.list.get(backIndex);
+                    leftIndex = backIndex * 2;
+                    rightIndex = backIndex * 2 + 1;
+
+                    //need to determine if current index has 1 or 2 children
+                    if (rightIndex > this.location - 1) { //only left child
+                        newIndex = leftIndex;
+                        childVal = this.list.get(newIndex);
+                    } else { //both present, need to choose which to switch
+                        left = this.list.get(leftIndex); 
+                        right = this.list.get(rightIndex);
+
+                        //left is smaller or equal
+                        if (this.comp.compare(left, right) <= 0) { 
+                            childVal = left;
+                            newIndex = leftIndex;
+                        } else { //right is smaller
+                            childVal = right;
+                            newIndex = rightIndex;
+                        }
+                    }
+
+                    //compare "best child" (above) w/ current and switch
+                    //if current > child (larger above smaller)
+                    if (this.comp.compare(currentVal, childVal) > 0) { 
+                        //switch current to child val
+                        this.list.set(backIndex, childVal); 
+                        //push current val to child
+                        this.list.set(newIndex, currentVal); 
+                        backIndex = newIndex;
+                    } else {
+                        backIndex = 0;
+                    }
+                }
+            }
+            index--;
         }
     }
 

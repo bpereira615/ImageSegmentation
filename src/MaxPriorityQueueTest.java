@@ -474,7 +474,7 @@ public class MaxPriorityQueueTest {
     public void reverseInit() {
         Collections.reverse(ivals);
         intEmpty.init(ivals);
-        System.out.println(intEmpty.toString());
+        System.out.println("\n" + intEmpty.toString());
         for (int i = 11; i > 0; i--) { //called 11 times
             assertEquals(i, intEmpty.size());
             assertEquals(11 - i, (int) intEmpty.remove());
