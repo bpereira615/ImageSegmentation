@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 /** JUnit tests for the MaxPriorityQueue interface.
  */
-public class MaxPriorityQueueTest {
+public class PQHeapTest {
 
     PQHeap<Integer> intFull, intEmpty;
     PQHeap<String> strFull, strEmpty;
