@@ -1,99 +1,36 @@
 ***
-Lydia Carroll, Benjamin Hoertnagl-Pereira, Ryan Walter
-JHED: lcarro12, bhoertn1, rwalte25
-lcarro12 @jhu.edu, bhoertn1@jhu.edu, rwalte25@jhu.edu
- 
-600.226.01 | CS226 Data Structures
-Project 4 - Image Segmentation
+    Lydia Carroll, Benjamin Hoertnagl-Pereira, Ryan Walter
+    JHED: lcarro12, bhoertn1, rwalte25
+    lcarro12 @jhu.edu, bhoertn1@jhu.edu, rwalte25@jhu.edu
+    600.226.01 | CS226 Data Structures
+    Project 4 - Image Segmentation
 
 
-Files included in submission:
+    Files:
+    Distance.java 
+    GVertex.java 
+    P4C.java
+    Partition.java
+    Pixel.java
+    PixelDistance.java
+    PQHeap.java 
+    QueueEmptyException.java
+    StoreInfo.java 
+    WEdge.java 
+    WGraphP4.java 
+    WGraphP4Test.java
 
-Distance.java 
-GVertex.java 
-P4C.java
-Partition.java
-Pixel.java
-PixelDistance.java
-PQHeap.java 
-QueueEmptyException.java
-StoreInfo.java 
-WEdge.java 
-WGraphP4.java 
-WGraphP4Test.java
+    *--------------------------------------------------------------------------------*
 
---------------------------------------------------------------------------------------------
+    Command line needed to run program:
+    java P4C [pic_file_name].png [k_value]
 
-Command line needed to run program:
-java P4C [pic_file_name].png [k_value]
+    Picture files passed to program should be of type png. Kvalue is a tuning variable and is chosen by user—-results will vary depending on K. Usually K ~100 works. Test4 picture as input (blue background, orange circles/ ovals) works beautifully at K=100.
 
-Picture files passed to program should be of type png. Kvalue is a tuning variable and is chosen by user—-results will vary depending on K. Usually K ~100 works. Test4 picture as input (blue background, orange circles/ ovals) works beautifully at K=100.
+    *--------------------------------------------------------------------------------*
+    Discussion
 
------------------------------------------------------------------------------------------------
-Part A
-
-Summary : Our greatest challenge for Part A was understanding the Java syntax to implement generics. Once this was understood we proceeded rapidly.
-
-GVertex.java - Lydia 
-There were early problems with generics and implementing comparable which were quickly resolved. Each instance of GVertex holds a holds a list of neighboring vertices as well as a list of incident edges. 
-
-GVertexTest.java - Ben and Lydia 
-It tests GVertex by comparing the results of its methods to the results of the Vertex methods.
-
-WEdge.java - Ryan and Ben
-Early problems with generics were resolved as Part B was written.
-
-WGraphP4.java - Ben, everything but Kruskal’s
-The given graph implementation using an adjacency matrix was modified to work with the adjacency lists present in GVertex. Adjacency lists were chosen because we thought they would be easiest to implement down the line despite the additional upfront bookkeeping. The graph was implemented to best support insertion operations of vertices and edges at the expense of making removal operations on these objects more expenseive. This design choice was made because our appication did not utilize removal operations, so we wanted to make sure the core operations used were as fast as possible.
-
--------------------------------------------------------------------------------------------------
-Part B
-
-PQHeap.java - Ryan
-This priority queue implementation uses the Priority Queue interface given in the assignment. Creating the Comparator constructor and default constructor was initially difficult and somewhat unclear. The PQHeap is represented via an ArrayList for a bottom-up construction. 
-
-PQHeapTest.java - Ryan
-Extensively tests the written PQHeap implementation. 
-
-WGraphP4.java - Lydia, Kruskal’s
-This algorithm returns a spanning forest of edges for an input graph. It was not difficult to implement thanks to the excellent slides given in class. 
-
-WGraphP4Test.java - Ben and Lydia
-We extensively tested our graph implementation before moving on to Part C. We first wrote our own tests then looked at the tests given by Prof. Selinski and added them.
-
------------------------------------------------------------------------------------------------------
-Part C
-
-Distance.java - N/A
-This interface was given for the color difference between pixels in the starter code.
-
-P4C.java
-- Lydia, segmenter, diff
-- Ben, readImage, writeImage, and depth-first search
-- Ryan, readImage, writeImage, and depth-first search
-Initially we were confused because the depth-first search of the segmented output was only showing 7 edges, but then we realized we were accidentally resetting all edges every call in the graph construction loop. Once we fixed this the main function ran and worked but was exceptionally slow. To speed it up, we switched from storing lists of vertices in segmenter to only storing the minimum, maximum and size of each partition. We then improved our output images by excluding any subtrees of less than 50 vertices. This eliminated the results of over-segmentation.
-
-Partition.java - N/A
-This class tracks which vertices are in the same cloud. It was given in the starter code.
-
-Pixel.java - Ben
-This class stores the color, row and column values of a pixel in an image.
-
-PixelDistance.java - Ben
-This implements the given Distance interface to find the color difference between pixels.
-
-QueueEmptyException.java - Ryan
-This exception is thrown by PQHeap if remove() is attempted when it is empty.
-
-StoreInfo.java - Ryan and Lydia
-This class holds the minimum, maximum, and number of vertices in a given partition. It is used to calculate the difference between partitions used in segmenter.
-
-------------------------------------------------------------------------------------------------
-Discussion
-
-Our original graph implementation was fairly easy to integrate into Part C. Because we stored a list of neighboring vertices and incident edges in each vertex, it was easy to go from the list of edges returned by segementer() to a graph, then from a graph to a depth-first search. Our greatest challenge for this part was writing efficiently to reduce run time. We ultimately were able to progress from quadratic time to near-constant time by changing from storing lists of vertices in segmenter() to only storing the minimum, maximum and size of each partition. After this change our solution was slowest at the depth-first search, which we were not sure how to make faster. We tested k-values from 20 to 1000 and were happiest with a k-value of 100. It worked particularly well for the given input file test4.png and produced nicely rounded edges. Our function runs in under 7 seconds for the largest test file that we were given so we are happy with our time complexity.
-
-Oddly, our largest challenge with this project was check style. For some reason we could not run the given check style checks on Pixel, PixelDistance, WEdge or P4C. Nothing we tried would change this. It was very strange.
+    Our original graph implementation was fairly easy to integrate into Part C. Because we stored a list of neighboring vertices and incident edges in each vertex, it was easy to go from the list of edges returned by segementer() to a graph, then from a graph to a depth-first search. Our greatest challenge for this part was writing efficiently to reduce run time. We ultimately were able to progress from quadratic time to near-constant time by changing from storing lists of vertices in segmenter() to only storing the minimum, maximum and size of each partition. After this change our solution was slowest at the depth-first search, which we were not sure how to make faster. We tested k-values from 20 to 1000 and were happiest with a k-value of 100. It worked particularly well for the given input file test4.png and produced nicely rounded edges. Our function runs in under 7 seconds for the largest test file that we were given so we are happy with our time complexity.
 
 ***
 
@@ -154,3 +91,66 @@ Apply your algorithm to our test images and write out the results, one connected
 Once you read the image and find the connected components, you should zero out all the pixels in an image of the same size as the input image (it could be the BufferedImage you started with), and then write back the values from all of the pixels from a single connected component. Now, you should write that image to a file. The files should be numbered sequentially up to the number of components you found. Use the input file name as a base. So, if you had three components and the input file was RGBImage.png, the output files would be called "RGBImage1.png", "RGBImage2.png" and "RGBImage3.png".
 
 You will apply this to (EDIT - only one) RGB images. In this case, each pixel stores a red, green, and blue value as the first, second, and third bytes of the integer. Color values in each band range therefore from 0 to 255. The difference function has to keep track of the color range for each band, and the "Diff" condition above has to be true for all three bands.
+
+
+***
+    *--------------------------------------------------------------------------------*
+    Part A
+
+    Summary : Our greatest challenge for Part A was understanding the Java syntax to implement generics. Once this was understood we proceeded rapidly.
+
+    GVertex.java - Lydia 
+    There were early problems with generics and implementing comparable which were quickly resolved. Each instance of GVertex holds a holds a list of neighboring vertices as well as a list of incident edges. 
+
+    GVertexTest.java - Ben and Lydia 
+    It tests GVertex by comparing the results of its methods to the results of the Vertex methods.
+
+    WEdge.java - Ryan and Ben
+    Early problems with generics were resolved as Part B was written.
+
+    WGraphP4.java - Ben, everything but Kruskal’s
+    The given graph implementation using an adjacency matrix was modified to work with the adjacency lists present in GVertex. Adjacency lists were chosen because we thought they would be easiest to implement down the line despite the additional upfront bookkeeping. The graph was implemented to best support insertion operations of vertices and edges at the expense of making removal operations on these objects more expenseive. This design choice was made because our appication did not utilize removal operations, so we wanted to make sure the core operations used were as fast as possible.
+
+    *--------------------------------------------------------------------------------*
+    Part B
+
+    PQHeap.java - Ryan
+    This priority queue implementation uses the Priority Queue interface given in the assignment. Creating the Comparator constructor and default constructor was initially difficult and somewhat unclear. The PQHeap is represented via an ArrayList for a bottom-up construction. 
+
+    PQHeapTest.java - Ryan
+    Extensively tests the written PQHeap implementation. 
+
+    WGraphP4.java - Lydia, Kruskal’s
+    This algorithm returns a spanning forest of edges for an input graph. It was not difficult to implement thanks to the excellent slides given in class. 
+
+    WGraphP4Test.java - Ben and Lydia
+    We extensively tested our graph implementation before moving on to Part C. We first wrote our own tests then looked at the tests given by Prof. Selinski and added them.
+
+    *--------------------------------------------------------------------------------*
+    Part C
+
+    Distance.java - N/A
+    This interface was given for the color difference between pixels in the starter code.
+
+    P4C.java
+    - Lydia, segmenter, diff
+    - Ben, readImage, writeImage, and depth-first search
+    - Ryan, readImage, writeImage, and depth-first search
+    Initially we were confused because the depth-first search of the segmented output was only showing 7 edges, but then we realized we were accidentally resetting all edges every call in the graph construction loop. Once we fixed this the main function ran and worked but was exceptionally slow. To speed it up, we switched from storing lists of vertices in segmenter to only storing the minimum, maximum and size of each partition. We then improved our output images by excluding any subtrees of less than 50 vertices. This eliminated the results of over-segmentation.
+
+    Partition.java - N/A
+    This class tracks which vertices are in the same cloud. It was given in the starter code.
+
+    Pixel.java - Ben
+    This class stores the color, row and column values of a pixel in an image.
+
+    PixelDistance.java - Ben
+    This implements the given Distance interface to find the color difference between pixels.
+
+    QueueEmptyException.java - Ryan
+    This exception is thrown by PQHeap if remove() is attempted when it is empty.
+
+    StoreInfo.java - Ryan and Lydia
+    This class holds the minimum, maximum, and number of vertices in a given partition. It is used to calculate the difference between partitions used in segmenter.
+
+***
