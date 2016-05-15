@@ -64,6 +64,39 @@ This project solves 3 problems:
 * Implement a minimally weighted spanning tree algorithm using Kruskal's Algorithm.
 * Adapt this algorithm to image segmentation as we describe below and apply the segmentation algorithm to real images.
 
+## Some Results
+##### test1.png - Input: 
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test1.png)
+
+
+##### test1.png - Output:
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test12.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test14.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test16.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test17.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test19.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test111.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test114.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test115.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test118.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test120.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test123.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test124.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test125.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test126.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test127.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test130.png)
+
+
+
+##### test4.png - Input:
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test4.png)
+##### test4.png - Output:
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test40.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test42.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test43.png)
+![alt tag](https://raw.githubusercontent.com/bpereira615/ImageSegmentation/master/results/test44.png)
+
 ## Part A: Graph Implementation
 
 For this project, we chose to implement the graph abstraction of images via an adjacency list due to its superior performance in 
