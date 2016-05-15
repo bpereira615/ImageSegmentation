@@ -155,10 +155,13 @@ total number of pixels of an image), so that anomalies were not considered and o
     *--------------------------------------------------------------------------------*
     Part A
 
-    Summary : Our greatest challenge for Part A was understanding the Java syntax to implement generics. Once this was understood we proceeded rapidly.
+    Summary : Our greatest challenge for Part A was understanding the Java syntax to implement 
+    generics. Once this was understood we proceeded rapidly.
 
     GVertex.java - Lydia 
-    There were early problems with generics and implementing comparable which were quickly resolved. Each instance of GVertex holds a holds a list of neighboring vertices as well as a list of incident edges. 
+    There were early problems with generics and implementing comparable which were quickly 
+    resolved. Each instance of GVertex holds a holds a list of neighboring vertices as well 
+    as a list of incident edges. 
 
     GVertexTest.java - Ben and Lydia 
     It tests GVertex by comparing the results of its methods to the results of the Vertex methods.
@@ -167,22 +170,32 @@ total number of pixels of an image), so that anomalies were not considered and o
     Early problems with generics were resolved as Part B was written.
 
     WGraphP4.java - Ben, everything but Kruskal’s
-    The given graph implementation using an adjacency matrix was modified to work with the adjacency lists present in GVertex. Adjacency lists were chosen because we thought they would be easiest to implement down the line despite the additional upfront bookkeeping. The graph was implemented to best support insertion operations of vertices and edges at the expense of making removal operations on these objects more expenseive. This design choice was made because our appication did not utilize removal operations, so we wanted to make sure the core operations used were as fast as possible.
+    The given graph implementation using an adjacency matrix was modified to work with the 
+    adjacency lists present in GVertex. Adjacency lists were chosen because we thought they 
+    would be easiest to implement down the line despite the additional upfront bookkeeping. The 
+    graph was implemented to best support insertion operations of vertices and edges at the expense 
+    of making removal operations on these objects more expenseive. This design choice was made 
+    because our appication did not utilize removal operations, so we wanted to make sure the core 
+    operations used were as fast as possible.
 
     *--------------------------------------------------------------------------------*
     Part B
 
     PQHeap.java - Ryan
-    This priority queue implementation uses the Priority Queue interface given in the assignment. Creating the Comparator constructor and default constructor was initially difficult and somewhat unclear. The PQHeap is represented via an ArrayList for a bottom-up construction. 
+    This priority queue implementation uses the Priority Queue interface given in the assignment. 
+    Creating the Comparator constructor and default constructor was initially difficult and somewhat 
+    unclear. The PQHeap is represented via an ArrayList for a bottom-up construction. 
 
     PQHeapTest.java - Ryan
     Extensively tests the written PQHeap implementation. 
 
     WGraphP4.java - Lydia, Kruskal’s
-    This algorithm returns a spanning forest of edges for an input graph. It was not difficult to implement thanks to the excellent slides given in class. 
+    This algorithm returns a spanning forest of edges for an input graph. It was not difficult to 
+    implement thanks to the excellent slides given in class. 
 
     WGraphP4Test.java - Ben and Lydia
-    We extensively tested our graph implementation before moving on to Part C. We first wrote our own tests then looked at the tests given by Prof. Selinski and added them.
+    We extensively tested our graph implementation before moving on to Part C. We first wrote our 
+    own tests then looked at the tests given by Prof. Selinski and added them.
 
     *--------------------------------------------------------------------------------*
     Part C
@@ -194,7 +207,13 @@ total number of pixels of an image), so that anomalies were not considered and o
     - Lydia, segmenter, diff
     - Ben, readImage, writeImage, and depth-first search
     - Ryan, readImage, writeImage, and depth-first search
-    Initially we were confused because the depth-first search of the segmented output was only showing 7 edges, but then we realized we were accidentally resetting all edges every call in the graph construction loop. Once we fixed this the main function ran and worked but was exceptionally slow. To speed it up, we switched from storing lists of vertices in segmenter to only storing the minimum, maximum and size of each partition. We then improved our output images by excluding any subtrees of less than 50 vertices. This eliminated the results of over-segmentation.
+    Initially we were confused because the depth-first search of the segmented output was only 
+    showing 7 edges, but then we realized we were accidentally resetting all edges every call in 
+    the graph construction loop. Once we fixed this the main function ran and worked but was 
+    exceptionally slow. To speed it up, we switched from storing lists of vertices in segmenter 
+    to only storing the minimum, maximum and size of each partition. We then improved our output 
+    images by excluding any subtrees of less than 50 vertices. This eliminated the results of 
+    over-segmentation.
 
     Partition.java - N/A
     This class tracks which vertices are in the same cloud. It was given in the starter code.
@@ -209,6 +228,7 @@ total number of pixels of an image), so that anomalies were not considered and o
     This exception is thrown by PQHeap if remove() is attempted when it is empty.
 
     StoreInfo.java - Ryan and Lydia
-    This class holds the minimum, maximum, and number of vertices in a given partition. It is used to calculate the difference between partitions used in segmenter.
+    This class holds the minimum, maximum, and number of vertices in a given partition. It is 
+    used to calculate the difference between partitions used in segmenter.
 
 ***
