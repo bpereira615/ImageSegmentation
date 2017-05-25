@@ -11,6 +11,7 @@
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.PriorityQueue;
 
 /**
  * Priority heap: root is "best" as determined by comparator.
@@ -18,7 +19,7 @@ import java.util.Collection;
  * @param <T> the data type that is being heaped (edge, int, etc)
  */
 public class PQHeap<T extends Comparable<? super T>> 
-            implements PriorityQueue<T> {
+            extends PriorityQueue<T> {
 
     /** Comparator used--changed by passing argument to constructor. */
     private Comparator<T> comp;
